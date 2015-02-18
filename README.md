@@ -1,2 +1,2 @@
-# inpowi
-web platform, INgineered with POwer and WIsdom
+# Enpowi
+web platform, Engineered with power & wisdom
