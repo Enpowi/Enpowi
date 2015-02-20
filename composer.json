@@ -1,0 +1,20 @@
+{
+    "name": "inpowi/inpowi",
+    "description": "web platform, INgineered with POwer and WIsdom",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Robert Lee Plummer Jr",
+            "email": "robertleeplummerjr@gmail.com"
+        }
+    ],
+    "require": {
+        "narrowspark/redbean": "~4.0",
+        "slim/slim": "~2.5"
+    },
+    "autoload": {
+        "psr-0": {
+            "mynamespace": "src/"
+        }
+    }
+}
