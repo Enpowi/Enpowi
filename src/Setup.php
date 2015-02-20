@@ -3,6 +3,12 @@
 namespace Enpowi;
 
 
-class Setup {
+class Setup
+{
+	public $clientScripts;
 
+	function __construct()
+	{
+		$this->clientScripts = new ClientScripts();
+	}
 }
