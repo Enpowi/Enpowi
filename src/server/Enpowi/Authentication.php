@@ -10,10 +10,23 @@ namespace Enpowi;
 
 use Slim;
 
-class Authentication {
+class Authentication
+{
+	public $segment;
 	public function __construct()
 	{
-		session_start();
+		$app = App::get();
+
+		$this->segment = $app->session->newSegment(__CLASS__);
+	}
+
+	public function getUser()
+	{
+		if (isset($this->segment->user)) {
+			return User::fromId($this->segment->user);
+		}
+
+		return null;
 	}
 
 	public function login($user, $password)
@@ -22,7 +35,7 @@ class Authentication {
 		$user = new User($user, $password);
 
 		if ($user->exists()) {
-			$_SESSION['user'] = $user;
+			$this->segment->user = $user->bean->getID();
 			return true;
 		} else {
 			return false;
@@ -32,11 +45,11 @@ class Authentication {
 
 	public function logout()
 	{
-		unset($_SESSION['user']);
+		$this->segment->clear();
 	}
 
 	public function isAuthenticated()
 	{
-		return isset($_SESSION['user']);
+		return isset($this->segment->user);
 	}
 }

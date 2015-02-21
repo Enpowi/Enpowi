@@ -13,7 +13,7 @@ class App
 	{
 		$this->clientScripts = new ClientScripts();
 		$this->authentication = new Authentication();
-		$this->session = include dirname(__FILE__) . '/../vendor/aura/session/scripts/instance.php';
+		$this->session = include dirname(__FILE__) . '/../../../vendor/aura/session/scripts/instance.php';
 	}
 
 	public static function get()

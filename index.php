@@ -1,7 +1,4 @@
-<?php
-require_once 'vendor/autoload.php';
-
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head lang="en">
 	<meta charset="UTF-8">
@@ -14,7 +11,11 @@ require_once 'vendor/autoload.php';
 </head>
 
 <body>
-	<div id=""></div>
+	<header></header>
+	<nav></nav>
+	<article id="main"></article>
+	<aside id="left"></aside>
+	<aside id="right"></aside>
 	<footer></footer>
 </body>
 
@@ -23,6 +24,10 @@ require_once 'vendor/autoload.php';
 <script src="vendor/hasher/dist/js/hasher.js"></script>
 <script src="vendor/crossroads.js/dist/crossroads.js"></script>
 <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="vendor/vue/dist/vue.js"></script>
+<script src="vendor/class/Class.js"></script>
 
-<script src="app.js"></script>
+<script src="src/client/Enpowi.js"></script>
+<script src="src/client/Utilities.js"></script>
+<script src="src/client/app.js"></script>
 </html>
