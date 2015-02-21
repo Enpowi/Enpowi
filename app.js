@@ -1,6 +1,13 @@
 //setup crossroads
 crossroads.addRoute('foo');
-crossroads.addRoute('lorem/ipsum');
+crossroads.addRoute('lorem/ipsum', function() {
+	$('body').load('modules/lorem/');
+	$('title').text('lorem/ipsum');
+});
+crossroads.addRoute('user/new', function() {
+	$('body').load('modules/user/new.php');
+});
+
 crossroads.routed.add(console.log, console); //log all routes
 
 //setup hasher
@@ -12,4 +19,4 @@ hasher.changed.add(parseHash); //parse hash changes
 hasher.init(); //start listening for history change
 
 //update URL fragment generating new history record
-hasher.setHash('lorem/ipsum');
+hasher.setHash('user/new');

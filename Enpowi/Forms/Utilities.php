@@ -8,22 +8,28 @@ namespace Enpowi\Forms;
  * Time: 4:36 PM
  */
 
+use Enpowi;
 use Gregwar\Captcha\CaptchaBuilder;
+use Aura\Session;
 
 class Utilities
 {
 
 	public static function captcha()
 	{
-		if (!isset($_SESSION['Enpowi.Utilities.captcha.phrase'])) {
+		$app = Enpowi\App::get();
+
+		$segment = $app->session->newSegment(__CLASS__);
+
+		if (!isset($segment->phrase)) {
 			$builder = new CaptchaBuilder();
 			$builder->build();
 
-			$_SESSION['Enpowi.Utilities.captcha.phrase'] = $builder->getPhrase();
-			$_SESSION['Enpowi.Utilities.captcha.img'] = $builder->inline();
+			$segment->phrase = $builder->getPhrase();
+			$segment->image = $builder->inline();
 		}
 
-		return $_SESSION['Enpowi.Utilities.captcha.img'];
+		return $segment->image;
 	}
 
 	public static function isCaptchaMatch($phrase)

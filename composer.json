@@ -10,11 +10,13 @@
     ],
     "require": {
         "narrowspark/redbean": "~4.0",
-        "slim/slim": "~2.5"
+        "slim/slim": "~2.5",
+        "gregwar/captcha": "~1.0",
+        "aura/session": "dev-master"
     },
     "autoload": {
         "psr-0": {
-            "mynamespace": "src/"
+            "Enpowi\\": "./"
         }
     }
 }

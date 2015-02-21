@@ -1,4 +1,7 @@
-<!DOCTYPE html>
+<?php
+require_once 'vendor/autoload.php';
+
+?><!DOCTYPE html>
 <html>
 <head lang="en">
 	<meta charset="UTF-8">
