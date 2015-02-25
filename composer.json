@@ -8,15 +8,33 @@
             "email": "robertleeplummerjr@gmail.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "gabordemooij/redbean",
+                "version": "dev-master",
+                "dist": {
+                    "url": "http://www.redbeanphp.com/downloadredbean.php",
+                    "type": "tar"
+                }
+            }
+        }
+    ],
     "require": {
-        "narrowspark/redbean": "~4.0",
         "slim/slim": "~2.5",
         "gregwar/captcha": "~1.0",
-        "aura/session": "dev-master"
+        "aura/session": "dev-master",
+        "wikilingo/wikilingo": "0.12.*",
+        "respect/validation": "0.8.*",
+        "gabordemooij/redbean": "dev-master"
     },
     "autoload": {
         "psr-0": {
             "Enpowi\\": "./src/server/"
-        }
+        },
+        "files": [
+            "vendor/gabordemooij/redbean/rb.php"
+        ]
     }
 }

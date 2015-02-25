@@ -34,8 +34,11 @@ class Utilities
 
 	public static function isCaptchaMatch($phrase)
 	{
-		if (empty($_SESSION['Enpowi.Utilities.captcha.phrase'])) {
-			return $_SESSION['Enpowi.Utilities.captcha.phrase'] === $phrase;
+		$app = Enpowi\App::get();
+		$segment = $app->session->newSegment(__CLASS__);
+
+		if (isset($segment->phrase)) {
+			return $segment->phrase === $phrase;
 		}
 		return false;
 	}

@@ -13,9 +13,11 @@ use Slim;
 class Authentication
 {
 	public $segment;
-	public function __construct()
+	public function __construct($app = null)
 	{
-		$app = App::get();
+		if ($app === null) {
+			$app = App::get();
+		}
 
 		$this->segment = $app->session->newSegment(__CLASS__);
 	}
@@ -29,13 +31,10 @@ class Authentication
 		return null;
 	}
 
-	public function login($user, $password)
+	public function login(User $user)
 	{
-		$user = strtolower($user);
-		$user = new User($user, $password);
-
-		if ($user->exists()) {
-			$this->segment->user = $user->bean->getID();
+		if (!isset($this->segment->user) && $user->exists()) {
+			$this->segment->user = $user->id;
 			return true;
 		} else {
 			return false;

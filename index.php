@@ -7,13 +7,16 @@
 
 	<!-- Custom styles for this template -->
 	<link href="vendor/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
+
+	<link href="src/style/default.css" rel="stylesheet">
+
 	<title></title>
 </head>
 
 <body>
 	<header></header>
 	<nav></nav>
-	<article id="main"></article>
+	<article id="app-container"></article>
 	<aside id="left"></aside>
 	<aside id="right"></aside>
 	<footer></footer>
@@ -28,6 +31,10 @@
 <script src="vendor/class/Class.js"></script>
 
 <script src="src/client/Enpowi.js"></script>
-<script src="src/client/Utilities.js"></script>
+<script src="src/client/Enpowi/forms.js"></script>
+<script src="src/client/Enpowi/module.js"></script>
+<script src="src/client/Enpowi/translation.js"></script>
+<script src="src/client/Enpowi/utilities.js"></script>
 <script src="src/client/app.js"></script>
+<script src="modules/app/session.js.php"></script>
 </html>

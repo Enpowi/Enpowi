@@ -7,17 +7,22 @@ Class('Enpowi', {
 		this.router = crossroads;
 		this.hasher = hasher;
 
+		this.module = '';
+		this.component = '';
+
 		this.setupRoutes(callback);
-		this.setupTranslations();
+
+		Enpowi.module.setup();
+		Enpowi.translation.setup();
 	},
 
 	setupRoutes: function(callback) {
 		//setup router
 		var router = this.router = crossroads,
 			app = this,
-			landRoute = function(url) {
+			landRoute = function(url, module, component) {
 				$.post(url, function (data) {
-					callback(app.process(data));
+					callback(app.process(data, module, component));
 				});
 			};
 
@@ -31,19 +36,19 @@ Class('Enpowi', {
 		router.normalizeFn = router.NORM_AS_OBJECT;
 
 		router.addRoute('/', function(path) {
-			landRoute('modules/default');
+			landRoute('modules/default', 'default', '');
 		});
 		router.addRoute('/{module}', function(path) {
-			landRoute('modules/' + path.module);
+			landRoute('modules/' + path.module, path.module, '');
 		});
 		router.addRoute('/{module}/{component}', function(path) {
-			landRoute('modules/' + path.module + '/' + path.component + '.php');
+			landRoute('modules/' + path.module + '/' + path.component + '.php', path.module, path.component);
 		});
 		router.addRoute('/{module}/{component}/{id}', function(path) {
-			landRoute('modules/' + path.module + '/' + path.component + '.php?id' + path.id);
+			landRoute('modules/' + path.module + '/' + path.component + '.php?id' + path.id, path.module, path.component);
 		});
 		router.addRoute('/{module}/{component}{?query}', function(path) {
-			landRoute('modules/' + path.module + '/' + path.component + '.php' + '?' + path['?query_']);
+			landRoute('modules/' + path.module + '/' + path.component + '.php' + '?' + path['?query_'], path.module, path.component);
 		});
 
 
@@ -64,28 +69,17 @@ Class('Enpowi', {
 		return this;
 	},
 
-	setupTranslations: function() {
-		Vue.directive('placeholder', {
-			isLiteral: true,
-			bind: function () {
-				this.el.setAttribute('placeholder', Enpowi.utilities.translate(this.expression));
-			}
-		});
-
-		Vue.directive('t', {
-			isLiteral: true,
-			bind: function () {
-				this.el.innerHTML = Enpowi.utilities.translate(this.el.innerHTML);
-			}
-		});
-	},
-
-	process: function(data) {
+	process: function(data, module, component) {
 		var el = document.createElement('div');
 		el.innerHTML = data;
 
 		new Vue({
-			el: el
+			el: el,
+			data: {
+				user: app.user,
+				module: module,
+				component: component
+			}
 		});
 
 		return el.children;
