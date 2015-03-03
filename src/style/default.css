@@ -1,18 +1,33 @@
-#app-container {
-
-}
-
-#app-main {
-
-}
-
-#app-main > form {
+form {
 	width: 250px;
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
 }
 
-#app-main > form .captcha {
+form .captcha {
 	width: 100%;
+}
+
+aside.left {
+	float: left;
+	width: 10%;
+}
+aside.right {
+	float: right;
+	width: 10%;
+}
+
+article {
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+article > * {
+	margin-top: 48px;
+}
+
+footer {
+	text-align: center;
 }

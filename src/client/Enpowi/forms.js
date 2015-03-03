@@ -22,7 +22,7 @@ Enpowi.forms = {
 		});
 	},
 	socket: function(url, serialized, elements, serializedArray, form, vue) {
-		$.getJSON(Enpowi.module.url(vue.$options.module, url), serialized, function(json) {
+		$.getJSON(Enpowi.module.url(url), serialized, function(json) {
 			$.each(serializedArray, function() {
 				vue.$delete(this.name);
 			});
@@ -39,7 +39,7 @@ Enpowi.forms = {
 					})(i);
 				}
 			} else {
-				app.go(vue.$options.module, Enpowi.module.url(form.getAttribute('data-done')));
+				app.go(form.getAttribute('data-done'));
 			}
 		});
 	}

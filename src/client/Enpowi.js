@@ -7,22 +7,25 @@ Class('Enpowi', {
 		this.router = crossroads;
 		this.hasher = hasher;
 
-		this.module = '';
-		this.component = '';
+		this.session = {};
 
 		this.setupRoutes(callback);
 
-		Enpowi.module.setup();
-		Enpowi.translation.setup();
+		Enpowi.module.setup(this);
+		Enpowi.translation.setup(this);
 	},
 
 	setupRoutes: function(callback) {
 		//setup router
-		var router = this.router = crossroads,
+		var router = this.router,
 			app = this,
-			landRoute = function(url, module, component) {
+			landRoute = function(url) {
+				app.activeUrl = url;
+
 				$.post(url, function (data) {
-					callback(app.process(data, module, component));
+					$.getScript('modules/app/session.js.php', function() {
+						callback(app.process(data));
+					});
 				});
 			};
 
@@ -35,7 +38,7 @@ Class('Enpowi', {
 		//moduleName/component?querystring
 		router.normalizeFn = router.NORM_AS_OBJECT;
 
-		router.addRoute('/', function(path) {
+		router.addRoute('/', function() {
 			landRoute('modules/default', 'default', '');
 		});
 		router.addRoute('/{module}', function(path) {
@@ -69,16 +72,17 @@ Class('Enpowi', {
 		return this;
 	},
 
-	process: function(data, module, component) {
+	process: function(data, callback) {
 		var el = document.createElement('div');
+
 		el.innerHTML = data;
+
+		$(el.querySelector('script')).insertAfter('script:first');
 
 		new Vue({
 			el: el,
 			data: {
-				user: app.user,
-				module: module,
-				component: component
+				session: this.session
 			}
 		});
 
@@ -89,5 +93,17 @@ Class('Enpowi', {
 		this.hasher.setHash(route);
 
 		return this;
+	},
+
+	updateSession: function(type, sessionItems) {
+		var oldSessionItems = this.session[type] || (this.session[type] = {}),
+			key;
+
+		for(key in sessionItems) if (key && sessionItems.hasOwnProperty(key)) {
+			oldSessionItems[key] = sessionItems[key];
+		}
+
+		return this;
 	}
+
 });

@@ -14,12 +14,12 @@
 </head>
 
 <body>
-	<header></header>
-	<nav></nav>
-	<article id="app-container"></article>
-	<aside id="left"></aside>
-	<aside id="right"></aside>
-	<footer></footer>
+	<header v-header></header>
+	<nav v-navigation></nav>
+	<article v-article></article>
+	<aside class="left" v-side></aside>
+	<aside class="right" v-side></aside>
+	<footer v-footer></footer>
 </body>
 
 <script src="vendor/jquery/dist/jquery.js"></script>

@@ -9,8 +9,8 @@ if ($user !== null) {
 }
 $img = Enpowi\Forms\Utilities::captcha();
 
-?><form action="create" v-module data-done="user/view">
-	<h2>Register</h2>
+?><form action="user/newService" v-module data-done="user/view">
+	<h2 v-t>Register</h2>
 	<div class="form-group">
 		<input type="text" class="form-control" name="username" v-placeholder="Username">
 		<span v-text="username"></span>

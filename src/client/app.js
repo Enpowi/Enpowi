@@ -1,13 +1,10 @@
 var app = new Enpowi(function(html) {
-	var main = $('#app-main'),
-		container = $('#app-container');
+	var mod = Enpowi.module;
+	$(mod.defaultModuleElement).html(html);
+});
 
-
-	if (main.length > 0) {
-		main.html(html);
-	} else if (container.length > 0) {
-		container.html(html);
-	}
+new Vue({
+	el: $('body')[0]
 });
 
 app.logRoutes();

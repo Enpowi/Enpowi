@@ -34,7 +34,7 @@ class Authentication
 	public function login(User $user)
 	{
 		if (!isset($this->segment->user) && $user->exists()) {
-			$this->segment->user = $user->id;
+			$this->segment->user = $user->id();
 			return true;
 		} else {
 			return false;

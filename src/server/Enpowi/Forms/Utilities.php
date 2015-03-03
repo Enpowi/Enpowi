@@ -14,7 +14,6 @@ use Aura\Session;
 
 class Utilities
 {
-
 	public static function captcha()
 	{
 		$app = Enpowi\App::get();

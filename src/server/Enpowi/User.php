@@ -15,32 +15,47 @@ class User {
 
 	public $username;
 	public $email;
-	public $id;
 	public $lastLogin;
 	public $created;
 	public $locked;
+	public $groupList = [];
 
 	private $_emailPassword;
-	private $bean;
+	private $_bean;
 
-	public function __construct($username = null, $password = null) {
-		if ($username !== null) {
-			$username = strtolower($username);
-			$this->username = $username;
-			$bean = R::findOne('user', ' username = ? and locked = ? ', [$username, false]);
-			if ($bean !== null) {
-				if (password_verify($password, $bean->password)) {
-					$this->convertFromBean($bean);
-				}
-			}
+	public function __construct($username, $bean = null) {
+		$this->username = $username;
+
+		if ($bean === null) {
+			$this->_bean = R::findOne('user', ' username = ? ', [strtolower($this->username)]);
+		} else {
+			$this->_bean = $bean;
 		}
+
+		$this->convertFromBean();
+		$this->updateGroups();
 	}
 
-	private function convertFromBean($bean)
+	public static function getByUsernameAndPassword($username, $password)
 	{
-		$this->bean = $bean;
-		$this->id = $bean->getID();
-		$this->bean = $bean;
+		$user = new User($username);
+		$bean = $user->_bean;
+
+		if ($bean !== null) {
+			if (password_verify($password, $bean->password)) {
+				return $user;
+			}
+		}
+
+		return null;
+	}
+
+	private function convertFromBean()
+	{
+		$bean = $this->_bean;
+
+		if (!$this->exists()) return;
+
 		$this->username = $bean->username;
 		$this->email = $bean->email;
 		$this->_emailPassword = $bean->emailPassword;
@@ -50,11 +65,11 @@ class User {
 	}
 
 	public static function fromId($id) {
-		$user = new self();
 		$bean = R::findOne('user', ' id = ? ', [$id]);
-		if ($bean !== null) {
-			$user->convertFromBean($bean);
-		}
+
+		if ($bean === null) return null;
+
+		$user = new User($bean->username, $bean);
 
 		return $user;
 	}
@@ -81,13 +96,13 @@ class User {
 
 	public static function isUnique($username)
 	{
-		$result = R::count('user', ' username = ?', [$username]);
+		$result = R::count('user', ' username = ?', [strtolower($username)]);
 		return $result === 0;
 	}
 
 	public function exists()
 	{
-		if ($this->bean === null) {
+		if ($this->_bean === null) {
 			return false;
 		} else {
 			return true;
@@ -102,7 +117,7 @@ class User {
 		if ($numOfUsersWithThisName < 1) {
 			$bean = R::dispense('user');
 
-			$bean->username = $this->username;
+			$bean->username = strtolower($this->username);
 			$bean->password = $passwordHash;
 			$bean->email = $email;
 			$bean->emailPassword = '';
@@ -110,6 +125,7 @@ class User {
 			$bean->locked = false;
 			$bean->lastLogin = R::isoDateTime();
 			$bean->created = R::isoDateTime();
+			$bean->sharedGroupList;
 
 			$id = R::store($bean);
 			(new Authentication())->login($this);
@@ -133,5 +149,40 @@ class User {
 	public function emailPassword()
 	{
 		return $this->_emailPassword;
+	}
+
+	public function bean()
+	{
+		return $this->_bean;
+	}
+
+	public function id()
+	{
+		return $this->_bean->getID();
+	}
+
+	public function updateGroups()
+	{
+		$groupBeans = $this->_bean->ownGroupList;
+		$groups = [];
+
+		foreach($groupBeans as $groupBean) {
+			$group = new Group($groupBean->name, $groupBean);
+			$groups[] = $group;
+		}
+
+		return $this->groupList = $groups;
+	}
+
+	public static function users()
+	{
+		$beans = R::findAll('user', ' order by username ');
+		$users = [];
+
+		foreach($beans as $bean) {
+			$users[] = new User($bean->username, $bean);
+		}
+
+		return $users;
 	}
 }

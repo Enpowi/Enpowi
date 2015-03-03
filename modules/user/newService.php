@@ -51,7 +51,7 @@ if ($stop) {
 }
 
 
-$user = new User($username, $password);
+$user = new User($username);
 $id = $user->create($email, $password);
 
 echo json_encode(['id'=>$id]);

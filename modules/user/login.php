@@ -6,17 +6,14 @@ use Enpowi\User;
 
 $response = [];
 
-$user = new User(
-	App::param('username'),
-	App::param('password')
-);
-$login = $user->login();
+$user = User::getByUsernameAndPassword(App::param('username'), App::param('password'));
 
-if (!$login) {
+if ($user === null) {
 	$response['paramResponse'] = ['username'=>'Invalid username or password'];
 	$response['id'] = -1;
 } else {
-	$response['id'] = $user->id;
+	$login = $user->login();
+	$response['id'] = $user->id();
 }
 
 echo json_encode($response);
