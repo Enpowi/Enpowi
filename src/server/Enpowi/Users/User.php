@@ -208,6 +208,7 @@ class User {
 	public function hasPerm($module, $component)
 	{
 		foreach($this->groups as $group) {
+			$group->updatePerms();
 			foreach($group->perms as $perm) {
 				if ($perm->module === $module || $perm->module === '*') {
 					if ($perm->component === $component || $perm->component === '*') {
