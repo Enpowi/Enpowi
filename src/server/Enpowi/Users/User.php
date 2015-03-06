@@ -6,10 +6,11 @@
  * Time: 2:39 PM
  */
 
-namespace Enpowi;
+namespace Enpowi\Users;
 
 use R;
 use Respect\Validation\Validator as v;
+use Enpowi\Authentication;
 
 class User {
 
@@ -18,21 +19,24 @@ class User {
 	public $lastLogin;
 	public $created;
 	public $locked;
-	public $groupList = [];
+	public $groups = [];
 
 	private $_emailPassword;
 	private $_bean;
 
-	public function __construct($username, $bean = null) {
+	public function __construct($username = null, $bean = null) {
 		$this->username = $username;
 
 		if ($bean === null) {
-			$this->_bean = R::findOne('user', ' username = ? ', [strtolower($this->username)]);
+			$this->_bean = $bean = R::findOne('user', ' username = ? ', [strtolower($this->username)]);
 		} else {
 			$this->_bean = $bean;
 		}
 
-		$this->convertFromBean();
+		if ($bean !== null) {
+			$this->convertFromBean();
+		}
+
 		$this->updateGroups();
 	}
 
@@ -109,15 +113,15 @@ class User {
 		}
 	}
 
-	public function create($email, $password, $valid = false)
+	public static function create($username, $password, $email = '', $valid = false)
 	{
 		$passwordHash = password_hash($password, PASSWORD_DEFAULT);
-		$numOfUsersWithThisName = R::count('user', ' username = ? ', [$this->username]);
+		$numOfUsersWithThisName = R::count('user', ' username = ? ', [$username]);
 
 		if ($numOfUsersWithThisName < 1) {
 			$bean = R::dispense('user');
 
-			$bean->username = strtolower($this->username);
+			$bean->username = strtolower($username);
 			$bean->password = $passwordHash;
 			$bean->email = $email;
 			$bean->emailPassword = '';
@@ -128,12 +132,11 @@ class User {
 			$bean->sharedGroupList;
 
 			$id = R::store($bean);
-			(new Authentication())->login($this);
 
-			return $id;
+			return new User($username, $bean);
 		}
 
-		return -1;
+		return null;
 	}
 
 	public function login()
@@ -163,19 +166,35 @@ class User {
 
 	public function updateGroups()
 	{
-		$groupBeans = $this->_bean->ownGroupList;
 		$groups = [];
 
-		foreach($groupBeans as $groupBean) {
-			$group = new Group($groupBean->name, $groupBean);
-			$groups[] = $group;
+		//anonymous
+		if ($this->username === 'Anonymous') {
+			$groups[] = new Group( 'Anonymous' );
 		}
 
-		return $this->groupList = $groups;
+		//not anonymous
+		else {
+			$groupBeans = $this->_bean->sharedGroupList;
+
+			$groups[] = new Group( 'Registered' );
+
+			foreach($groupBeans as $groupBean) {
+				$group = new Group($groupBean->name, $groupBean);
+				$groups[] = $group;
+			}
+		}
+
+		//everyone
+		$groups[] = new Group( 'Everyone' );
+
+		return $this->groups = $groups;
 	}
 
 	public static function users()
 	{
+		//TODO: paging
+
 		$beans = R::findAll('user', ' order by username ');
 		$users = [];
 
@@ -184,5 +203,31 @@ class User {
 		}
 
 		return $users;
+	}
+
+	public function hasPerm($module, $component)
+	{
+		foreach($this->groups as $group) {
+			foreach($group->perms as $perm) {
+				if ($perm->module === $module || $perm->module === '*') {
+					if ($perm->component === $component || $perm->component === '*') {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public function isSuper()
+	{
+		foreach ($this->groups as $group) {
+			if (R::count('perm', ' group_name = ? AND module = "*" AND component = "*"', [$group->name])) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

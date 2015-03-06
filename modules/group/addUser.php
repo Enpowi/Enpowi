@@ -1,11 +1,11 @@
 <?php
-require_once '../module.php';
+if(!defined('Modular')) die('Direct access not permitted');
 
-use Enpowi\Group;
-use Enpowi\ModuleData;
+use Enpowi\Users\Group;
+use Enpowi\Modules\Data;
 
 $groups = Group::groups();
-$data = new ModuleData($groups);
+$data = new Data($groups);
 $id = $data->id;
 
 echo $data->toScript();

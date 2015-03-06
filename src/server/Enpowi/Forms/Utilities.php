@@ -14,13 +14,13 @@ use Aura\Session;
 
 class Utilities
 {
-	public static function captcha()
+	public static function captcha($isNew = false)
 	{
 		$app = Enpowi\App::get();
 
 		$segment = $app->session->newSegment(__CLASS__);
 
-		if (!isset($segment->phrase)) {
+		if (!isset($segment->phrase) || $isNew) {
 			$builder = new CaptchaBuilder();
 			$builder->build();
 

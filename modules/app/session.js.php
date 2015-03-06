@@ -1,11 +1,12 @@
 <?php
-require_once '../module.php';
+if(!defined('Modular')) die('Direct access not permitted');
 
 $replies = [];
 $authentication = new Enpowi\Authentication();
 
 //get user
-$replies['user'] = $authentication->getUser();
+$user = $authentication->getUser();
+$replies['user'] = $user;
 
 
 //iterate through all replies and reply them as json

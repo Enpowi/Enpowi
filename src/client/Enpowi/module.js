@@ -2,8 +2,10 @@ Enpowi.module = {
 	defaultModuleElement: null,
 	queue: [],
 	data: {},
+	app: null,
 	setup: function(app) {
 		var me = this;
+		me.app = app;
 
 		Vue.directive('module', {
 			bind: function() {
@@ -31,8 +33,8 @@ Enpowi.module = {
 			bind: function() {
 				var el = this.el;
 
-				$.post('modules/default/header.html', function(html) {
-					$(el).html(app.process(html));
+				app.loadModule('default/header', function(html) {
+					$(el).html(html);
 				});
 			}
 		});
@@ -41,8 +43,8 @@ Enpowi.module = {
 			bind: function() {
 				var el = this.el;
 
-				$.post('modules/default/navigation.html', function(html) {
-					$(el).html(app.process(html));
+				app.loadModule('default/navigation', function(html) {
+					$(el).html(html);
 				});
 			}
 		});
@@ -61,28 +63,21 @@ Enpowi.module = {
 			bind: function() {
 				var el = this.el;
 
-				$.post('modules/default/footer.html', function(html) {
-					$(el).html(app.process(html));
+				app.loadModule('default/footer', function(html) {
+					$(el).html(html);
 				});
 			}
 		});
 	},
 
-	url: function(url) {
-		var urlActual = 'modules/';
+	url: function(moduleAndComponent) {
+		var tempRouter = crossroads.create(),
+			url = '';
+		app.bindRouteUrls(tempRouter, function(_url) {
+			url = _url;
+		});
+		tempRouter.parse(moduleAndComponent);
 
-		switch (url.charAt(0)) {
-			case '/':
-				if (url.length > 1) {
-					urlActual += url;
-				} else {
-					urlActual = '';
-				}
-				break;
-			default:
-				urlActual += url + '.php';
-		}
-
-		return urlActual;
+		return url;
 	}
 };

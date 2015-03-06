@@ -1,8 +1,8 @@
 <?php
-require_once '../module.php';
+if(!defined('Modular')) die('Direct access not permitted');
 
 use Enpowi\App;
-use Enpowi\Group;
+use Enpowi\Users\Group;
 
 $groupName = App::param('groupName');
 $reply = [];

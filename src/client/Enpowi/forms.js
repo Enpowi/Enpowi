@@ -1,7 +1,14 @@
 Enpowi.forms = {
 	strategy: function(el, vue) {
 		var $el = $(el),
-			me = this;
+			me = this,
+			listener = el.hasAttribute('data-listener');
+
+		if (listener) {
+			$el.find(':input').change(function() {
+				$el.submit();
+			});
+		}
 
 		$el.on('submit', function(e) {
 			e.preventDefault();

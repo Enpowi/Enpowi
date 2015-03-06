@@ -5,15 +5,19 @@
 Class('Enpowi', {
 	construct: function(callback) {
 		this.router = crossroads;
+		this.routes = [];
 		this.hasher = hasher;
 
-		this.session = {};
+		this.session = {
+			user: {}
+		};
 
 		this.setupRoutes(callback);
 
 		Enpowi.module.setup(this);
 		Enpowi.translation.setup(this);
 	},
+
 
 	setupRoutes: function(callback) {
 		//setup router
@@ -22,8 +26,8 @@ Class('Enpowi', {
 			landRoute = function(url) {
 				app.activeUrl = url;
 
-				$.post(url, function (data) {
-					$.getScript('modules/app/session.js.php', function() {
+				$.get(url, function (data) {
+					$.getScript('modules?module=app&component=session.js', function() {
 						callback(app.process(data));
 					});
 				});
@@ -31,29 +35,7 @@ Class('Enpowi', {
 
 		this.hasher = hasher;
 
-		//none
-		//moduleName
-		//moduleName/component
-		//moduleName/component/id
-		//moduleName/component?querystring
-		router.normalizeFn = router.NORM_AS_OBJECT;
-
-		router.addRoute('/', function() {
-			landRoute('modules/default', 'default', '');
-		});
-		router.addRoute('/{module}', function(path) {
-			landRoute('modules/' + path.module, path.module, '');
-		});
-		router.addRoute('/{module}/{component}', function(path) {
-			landRoute('modules/' + path.module + '/' + path.component + '.php', path.module, path.component);
-		});
-		router.addRoute('/{module}/{component}/{id}', function(path) {
-			landRoute('modules/' + path.module + '/' + path.component + '.php?id' + path.id, path.module, path.component);
-		});
-		router.addRoute('/{module}/{component}{?query}', function(path) {
-			landRoute('modules/' + path.module + '/' + path.component + '.php' + '?' + path['?query_'], path.module, path.component);
-		});
-
+		this.bindRouteUrls(router, landRoute);
 
 		//setup hasher
 		function parseHash(newHash, oldHash){
@@ -66,6 +48,31 @@ Class('Enpowi', {
 
 	},
 
+	bindRouteUrls: function(router, callback) {
+		//none
+		//moduleName
+		//moduleName/component
+		//moduleName/component/id
+		//moduleName/component?querystring
+		router.normalizeFn = crossroads.NORM_AS_OBJECT;
+
+		router.addRoute('/', function() {
+			callback('modules?module=default&component=index');
+		});
+		router.addRoute('/{module}', function(path) {
+			callback('modules?module=' + path.module);
+		});
+		router.addRoute('/{module}/{component}', function(path) {
+			callback('modules?module=' + path.module + '&component=' + path.component);
+		});
+		router.addRoute('/{module}/{component}/{id}', function(path) {
+			callback('modules?module=' + path.module + '&component=' + path.component + '&id' + path.id);
+		});
+		router.addRoute('/{module}/{component}{?query}', function(path) {
+			callback('modules?module=' + path.module + '&component=' + path.component + '&'  + path['?query_']);
+		});
+	},
+
 	logRoutes: function() {
 		this.router.routed.add(console.log, console); //log all routes
 
@@ -73,7 +80,8 @@ Class('Enpowi', {
 	},
 
 	process: function(data, callback) {
-		var el = document.createElement('div');
+		var el = document.createElement('div'),
+			me = this;
 
 		el.innerHTML = data;
 
@@ -83,6 +91,25 @@ Class('Enpowi', {
 			el: el,
 			data: {
 				session: this.session
+			},
+			methods: {
+				go: function(sig) {
+					app.go(sig);
+				},
+				hasPerm: function(module, component) {
+					var hasPerm = false;
+					$.each(me.session.user.groups, function() {
+						$.each(this.perms, function() {
+							if (this.module === module || module ==='*') {
+								if (this.component === component || componenet ==='*') {
+									hasPerm = true;
+								}
+							}
+						});
+					});
+
+					return hasPerm;
+				}
 			}
 		});
 
@@ -93,6 +120,25 @@ Class('Enpowi', {
 		this.hasher.setHash(route);
 
 		return this;
+	},
+
+	loadModule: function(url, callback) {
+		var app = this;
+		$.ajax({
+			type: "POST",
+			url: Enpowi.module.url(url),
+			success: function (html) {
+				var result = app.process(html);
+				callback(result);
+			},
+			error: function (html) {
+				var result = app.process(html);
+				callback(null, result);
+			}
+		});
+	},
+	loadModuleScript: function(url, callback) {
+		$.getScript(Enpowi.module.url(url), callback);
 	},
 
 	updateSession: function(type, sessionItems) {

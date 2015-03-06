@@ -1,8 +1,8 @@
 <?php
-require_once '../module.php';
+if(!defined('Modular')) die('Direct access not permitted');
 
 use Enpowi\App;
-use Enpowi\User;
+use Enpowi\Users\User;
 use Enpowi\Forms\Utilities;
 
 $username = App::param('username');
@@ -40,9 +40,11 @@ else if (!User::isValidPassword($password)) {
 	$stop = true;
 }
 
-if (!Utilities::isCaptchaMatch($captcha)) {
-	$reply['captcha'] = 'Invalid captcha phrase';
-	$stop = true;
+if (!App::get()->user->isSuper()) {
+	if ( ! Utilities::isCaptchaMatch( $captcha ) ) {
+		$reply['captcha'] = 'Invalid captcha phrase';
+		$stop             = true;
+	}
 }
 
 if ($stop) {
@@ -51,7 +53,12 @@ if ($stop) {
 }
 
 
-$user = new User($username);
-$id = $user->create($email, $password);
+$user = User::create($username, $password, $email);
 
-echo json_encode(['id'=>$id]);
+
+if ($user !== null) {
+	$user->login();
+	echo json_encode( [ 'id' => $user->id() ] );
+} else {
+	echo json_encode( [ 'id' => $user->id() ] );
+}

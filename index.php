@@ -36,5 +36,5 @@
 <script src="src/client/Enpowi/translation.js"></script>
 <script src="src/client/Enpowi/utilities.js"></script>
 <script src="src/client/app.js"></script>
-<script src="modules/app/session.js.php"></script>
+<script src="modules?module=app&component=session.js"></script>
 </html>

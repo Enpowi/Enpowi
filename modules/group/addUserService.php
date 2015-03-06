@@ -1,9 +1,9 @@
 <?php
-require_once '../module.php';
+if(!defined('Modular')) die('Direct access not permitted');
 
 use Enpowi\App;
-use Enpowi\User;
-use Enpowi\Group;
+use Enpowi\Users\User;
+use Enpowi\Users\Group;
 
 $userID = App::param('userID');
 $groupName = App::param('groupName');

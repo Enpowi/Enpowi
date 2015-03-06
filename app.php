@@ -1,0 +1,1 @@
+<?php require_once 'modules/setup/run.php';

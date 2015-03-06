@@ -1,8 +1,8 @@
 <?php
-require_once '../module.php';
+if(!defined('Modular')) die('Direct access not permitted');
 
 use Enpowi\App;
-use Enpowi\User;
+use Enpowi\Users\User;
 
 $response = [];
 

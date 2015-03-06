@@ -9,6 +9,7 @@
 namespace Enpowi;
 
 use Slim;
+use Enpowi\Users\User;
 
 class Authentication
 {
@@ -25,10 +26,15 @@ class Authentication
 	public function getUser()
 	{
 		if (isset($this->segment->user)) {
-			return User::fromId($this->segment->user);
+			$user = User::fromId($this->segment->user);
+			if ($user === null) {
+				$this->logout();
+			} else {
+				return $user;
+			}
 		}
 
-		return null;
+		return new User('Anonymous');
 	}
 
 	public function login(User $user)

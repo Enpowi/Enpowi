@@ -6,10 +6,10 @@
  * Time: 4:57 PM
  */
 
-namespace Enpowi;
+namespace Enpowi\Modules;
 
 
-class ModuleData {
+class Data {
 
 	public $object;
 	public $json;
@@ -26,5 +26,10 @@ class ModuleData {
 		$id = $this->id;
 		$json = $this->json;
 		return "<script>Enpowi.module.data['$id'] =  $json;</script>";
+	}
+
+	public function bind()
+	{
+		echo $this->toScript();
 	}
 }

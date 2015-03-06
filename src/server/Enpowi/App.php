@@ -3,6 +3,8 @@
 namespace Enpowi;
 
 use Slim\Slim;
+use R;
+use Enpowi\Modules;
 
 class App
 {
@@ -36,5 +38,35 @@ class App
 		}
 
 		return self::$app;
+	}
+
+	public static function log($username, $moduleName, $componentName, $detail = '') {
+		$bean = R::dispense('log');
+
+		$bean->username = $username;
+		$bean->ip = $_SERVER['REMOTE_ADDR'];
+		$bean->time = R::isoDateTime();
+		$bean->moduleName = $moduleName;
+		$bean->componentName = $componentName;
+		$bean->detail = $detail;
+
+		R::store($bean);
+	}
+
+	public static function loadComponent($folder, $moduleName, $componentName)
+	{
+		$app = self::get();
+		$user = $app->user;
+
+		App::log($user->username, $moduleName, $componentName);
+
+		if ($user->hasPerm($moduleName, $componentName)) {
+			$module    = new Modules\Module( $folder, $moduleName );
+			$component = new Modules\Component( $module, $componentName );
+
+			return $component;
+		}
+
+		return null;
 	}
 }

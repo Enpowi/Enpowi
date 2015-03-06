@@ -1,13 +1,7 @@
 <?php
-require_once '../module.php';
+if(!defined('Modular')) die('Direct access not permitted');
 
-$authentication = new Enpowi\Authentication();
-$user = $authentication->getUser();
-if ($user !== null) {
-	echo json_encode(['module', 'user/view']);
-	die;
-}
-$img = Enpowi\Forms\Utilities::captcha();
+$img = Enpowi\Forms\Utilities::captcha(true);
 
 ?><form action="user/newService" v-module data-done="user/view">
 	<h2 v-t>Register</h2>

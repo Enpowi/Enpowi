@@ -1,5 +1,5 @@
 <?php
-require_once '../module.php';
+if(!defined('Modular')) die('Direct access not permitted');
 ?><br><form v-module>
 	<h2 v-t>View User</h2>
 	<table>
@@ -14,6 +14,12 @@ require_once '../module.php';
 			<tr>
 				<th v-t>Created: </th>
 				<td>{{ session.user.created }}</td>
+			</tr>
+			<tr>
+				<th v-t>Groups: </th>
+				<td>
+					<span v-repeat="group : session.user.groupList">{{group.name}}</span>
+				</td>
 			</tr>
 	</table>
 </form>
