@@ -2,16 +2,16 @@
 
 $dir = dirname(__FILE__);
 
-//if (file_exists($dir . '/config.lock')) {
-//	unlink( $dir . '/config.lock' );
-//}
+if (file_exists($dir . '/config.lock')) {
+	unlink( $dir . '/config.lock' );
+}
 
 if (file_exists($dir . '/config.lock')) {
 	throw new Exception('locked');
 }
 
 if (!is_writable($dir)) {
-	throw new Exception('modules/setup folder needs write permission');
+	//throw new Exception('modules/setup folder needs write permission');
 }
 
 if (!file_exists($dir . '/config.php')) {

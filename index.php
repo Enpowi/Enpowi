@@ -32,6 +32,7 @@
 
 <script src="src/client/Enpowi.js"></script>
 <script src="src/client/Enpowi/forms.js"></script>
+<script src="src/client/Enpowi/directives.js"></script>
 <script src="src/client/Enpowi/module.js"></script>
 <script src="src/client/Enpowi/translation.js"></script>
 <script src="src/client/Enpowi/utilities.js"></script>

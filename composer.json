@@ -27,7 +27,8 @@
         "aura/session": "dev-master",
         "wikilingo/wikilingo": "0.12.*",
         "respect/validation": "0.8.*",
-        "gabordemooij/redbean": "dev-master"
+        "gabordemooij/redbean": "dev-master",
+        "mindplay/jsonfreeze": "~1.2"
     },
     "autoload": {
         "psr-0": {

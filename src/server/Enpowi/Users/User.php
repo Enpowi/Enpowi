@@ -19,6 +19,10 @@ class User {
 	public $lastLogin;
 	public $created;
 	public $locked;
+
+	/**
+	 * @var Group[]
+	 */
 	public $groups = [];
 
 	private $_emailPassword;
@@ -159,6 +163,15 @@ class User {
 		return $this->_bean;
 	}
 
+	public function ensureExists()
+	{
+		if ($this->_bean === null) {
+			$this->_bean = R::findOne('user', ' username = ? ', [$this->username]);
+		}
+
+		return $this;
+	}
+
 	public function id()
 	{
 		return $this->_bean->getID();
@@ -167,26 +180,30 @@ class User {
 	public function updateGroups()
 	{
 		$groups = [];
+		$group = null;
 
 		//anonymous
 		if ($this->username === 'Anonymous') {
-			$groups[] = new Group( 'Anonymous' );
+			$group = new Group( 'Anonymous' );
+			$groups[$group->id()] = $group;
 		}
 
 		//not anonymous
 		else {
 			$groupBeans = $this->_bean->sharedGroupList;
 
-			$groups[] = new Group( 'Registered' );
+			$group = new Group( 'Registered' );
+			$groups[$group->id()] = $group;
 
 			foreach($groupBeans as $groupBean) {
 				$group = new Group($groupBean->name, $groupBean);
-				$groups[] = $group;
+				$groups[$group->id()] = $group;
 			}
 		}
 
 		//everyone
-		$groups[] = new Group( 'Everyone' );
+		$group = new Group( 'Everyone' );
+		$groups[$group->id()] = $group;
 
 		return $this->groups = $groups;
 	}
@@ -230,5 +247,14 @@ class User {
 		}
 
 		return false;
+	}
+
+
+	public function removeAllGroups() {
+		$this->updateGroups();
+		foreach($this->groups as $group) {
+			$group->removeUser($this);
+		}
+		return $this;
 	}
 }

@@ -1,6 +1,5 @@
 var app = new Enpowi(function(html) {
-	var mod = Enpowi.module;
-	$(mod.defaultModuleElement).html(html);
+	$(Enpowi.directives.defaultModuleElement).html(html);
 });
 
 new Vue({

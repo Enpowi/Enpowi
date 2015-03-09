@@ -1,14 +1,7 @@
 Enpowi.forms = {
-	strategy: function(el, vue) {
+	strategy: function(el, vue, directive) {
 		var $el = $(el),
-			me = this,
-			listener = el.hasAttribute('data-listener');
-
-		if (listener) {
-			$el.find(':input').change(function() {
-				$el.submit();
-			});
-		}
+			me = this;
 
 		$el.on('submit', function(e) {
 			e.preventDefault();
@@ -25,13 +18,13 @@ Enpowi.forms = {
 				elements[item.name] = el.querySelector('[name="' + item.name + '"]');
 			}
 
-			me.socket(el.getAttribute('action'), $el.serialize(), elements, items, el, vue);
+			me.socket(Enpowi.module.url(el.getAttribute('action')), $el.serialize(), elements, items, el, vue);
 		});
 	},
 	socket: function(url, serialized, elements, serializedArray, form, vue) {
-		$.getJSON(Enpowi.module.url(url), serialized, function(json) {
+		$.getJSON(url, serialized, function(json) {
 			$.each(serializedArray, function() {
-				vue.$delete(this.name);
+				//vue.$delete(this.name);
 			});
 
 			if (json.paramResponse) {
@@ -45,7 +38,9 @@ Enpowi.forms = {
 						});
 					})(i);
 				}
-			} else {
+			} else if(form.hasAttribute('listen')) {
+				return;
+			} else if (form.getAttribute('data-done')) {
 				app.go(form.getAttribute('data-done'));
 			}
 		});

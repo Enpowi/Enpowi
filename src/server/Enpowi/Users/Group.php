@@ -76,34 +76,42 @@ class Group {
 	public function addUser(User $user)
 	{
 		$userBean = $user->bean();
-		$groupBean = R::findOne( 'group', ' name = ? ', [ $this->name ] );
+		$groupBean = $this->_bean;
 
-		if ($groupBean !== null && $user !== null) {
-			$groupBean->sharedUserList[] = $userBean;
+		if ($groupBean !== null) {
 			$userBean->sharedGroupList[] = $groupBean;
 
-			R::store($groupBean);
 			R::store($userBean);
 
 			$user->updateGroups();
 
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	public function removeUser(User $user)
 	{
 		$userBean = $user->bean();
-		$groupBean = R::findOne( 'group', ' name = ? ', [ $this->name ] );
+		$groupBean = $this->_bean;
 
 		if ($groupBean !== null && $user !== null) {
-			unset($userBean->ownGroupList[$groupBean->getID()]);
-			R::storeAll([$groupBean, $userBean]);
-			return true;
-		}
 
-		return false;
+			if (
+				!$groupBean->isDefaultRegistered
+				&& !$groupBean->isDefaultAnonymous
+				&& !$groupBean->isEveryone
+			) {
+				unset($userBean->sharedGroupList[$groupBean->getID()]);
+
+				R::store($userBean);
+
+				$user->updateGroups();
+			}
+
+			return false;
+		}
+		return true;
 	}
 
 	public function countUsers()
@@ -113,9 +121,9 @@ class Group {
 
 	public function users()
 	{
-		$groupBean = R::findOne( 'group', ' name = ? ', [ $this->name ] );
+		$groupBean = $this->_bean;
 		$users = [];
-		foreach($groupBean->ownUserList as $userBean) {
+		foreach($groupBean->sharedUserList as $userBean) {
 			$users[] = new User($userBean->username, $userBean);
 		}
 		return $users;
@@ -132,15 +140,12 @@ class Group {
 		return $groups;
 	}
 
-	public static function editableGroupsRaw()
+	public static function editableGroups()
 	{
 		$groups = [];
 
 		foreach(R::find('group', ' is_default_anonymous = 0 and is_default_registered = 0 and is_everyone = 0 ') as $groupBean) {
-			$groups[] = [
-				'id' => $groupBean->id,
-				'name' => $groupBean->name
-			];
+			$groups[$groupBean->id] = new Group( $groupBean->name, $groupBean );
 		}
 
 		return $groups;
@@ -157,6 +162,15 @@ class Group {
 	public function bean()
 	{
 		return $this->_bean;
+	}
+
+	public function ensureExists()
+	{
+		if ($this->_bean === null) {
+			$this->_bean = R::findOne('group', ' name = ? ', [$this->name]);
+		}
+
+		return $this;
 	}
 
 	public function updatePerms()

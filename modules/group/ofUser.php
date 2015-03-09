@@ -4,34 +4,38 @@ if(!defined('Modular')) die('Direct access not permitted');
 use Enpowi\App;
 use Enpowi\Users\Group;
 use Enpowi\Users\User;
-use Enpowi\Modules\Data;
+use Enpowi\Modules\DataOut;
 
-$moduleData = [];
-$moduleData['user'] = $user = new User(App::param('username'));
-$moduleData['groups'] = Group::editableGroupsRaw();
-
-$groupsKeyed = [];
-foreach($user->groups as $group) {
-	$groupsKeyed[$group->id()] = $group->name;
-}
-$moduleData['user']->groupsKeyed = $groupsKeyed;
-
-$data = new Data($moduleData);
-
-$data->bind();
+$id = (new DataOut())
+	->add('user', $user = new User(App::param('username')))
+	->add('groups', Group::editableGroups())
+	->bind();
 
 ?><form
+	listen
 	v-module
-	data="<?php echo $data->id ?>"
-	action="group/ofUserService"
-	listener>
-	<h2><span v-t>Groups for: </span>{{data.user.username}}</h2>
-	<div v-repeat="group : data.groups">
+	data="<?php echo $id ?>"
+	action="group/ofUserService">
+
+	<h2>
+		<span v-t>Groups for: </span>
+		{{ user.username }}
+	</h2>
+
+	<input
+		name="user"
+		type="hidden"
+		value="{{ stringify( user ) }}">
+
+	<div v-repeat=" group : groups ">
+
 		<input
+			v-module-item
 			name="groups[]"
 			type="checkbox"
-			value="{{ group.name }}"
-			checked="{{ data.user.groupsKeyed[group.id] ? true : false }}">
+			value="{{ stringify( group ) }}"
+		    v-model=" user.groups[ $key ] ">
+
 		<label>{{ group.name }}</label>
 	</div>
 </form>

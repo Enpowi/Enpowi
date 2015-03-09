@@ -12,10 +12,11 @@ Class('Enpowi', {
 			user: {}
 		};
 
-		this.setupRoutes(callback);
-
+		Enpowi.directives.setup(this);
 		Enpowi.module.setup(this);
 		Enpowi.translation.setup(this);
+
+		this.setupRoutes(callback);
 	},
 
 
@@ -28,7 +29,8 @@ Class('Enpowi', {
 
 				$.get(url, function (data) {
 					$.getScript('modules?module=app&component=session.js', function() {
-						callback(app.process(data));
+						var result = app.process(data);
+						callback(result);
 					});
 				});
 			};
@@ -79,41 +81,70 @@ Class('Enpowi', {
 		return this;
 	},
 
-	process: function(data, callback) {
+	process: function(html) {
 		var el = document.createElement('div'),
-			me = this;
+			me = this,
+			children,
+			child,
+			i = 0;
 
-		el.innerHTML = data;
+		el.innerHTML = html;
 
 		$(el.querySelector('script')).insertAfter('script:first');
 
-		new Vue({
-			el: el,
-			data: {
-				session: this.session
-			},
-			methods: {
-				go: function(sig) {
-					app.go(sig);
-				},
-				hasPerm: function(module, component) {
-					var hasPerm = false;
-					$.each(me.session.user.groups, function() {
-						$.each(this.perms, function() {
-							if (this.module === module || module ==='*') {
-								if (this.component === component || componenet ==='*') {
-									hasPerm = true;
+		for(children = el.children;i < children.length; i++) {
+			child = children[i];
+
+			new Vue({
+				el: child,
+				data: (function() {
+					var data = {
+							session: me.session
+						},
+						hasData = child.hasAttribute('data'),
+						key = child.getAttribute('data'),
+						moduleData,
+						i;
+
+					if (hasData) {
+						moduleData = Enpowi.module.data[key];
+						for(i in moduleData) if (moduleData.hasOwnProperty(i)) {
+							data[i] = moduleData[i];
+						}
+					}
+
+					return data;
+				})(),
+				methods: {
+					go: function(sig) {
+						app.go(sig);
+					},
+					stringify: function(json) {
+						return JSON.stringify(json);
+					},
+					hasPerm: function(module, component) {
+						var hasPerm = false;
+						$.each(me.session.user.groups, function() {
+							$.each(this.perms, function() {
+								if (this.module === module || module ==='*') {
+									if (this.component === component || component ==='*') {
+										hasPerm = true;
+									}
 								}
-							}
+							});
 						});
-					});
 
-					return hasPerm;
+						return hasPerm;
+					},
+					hasKey: function(key, array) {
+						return array[key] !== undefined;
+					}
 				}
-			}
-		});
+			});
+		}
 
-		return el.children;
+
+		return children;
 	},
 
 	go: function(route) {

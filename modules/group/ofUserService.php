@@ -1,10 +1,20 @@
 <?php
 if(!defined('Modular')) die('Direct access not permitted');
 
-use Enpowi\App;
-use Enpowi\Users\Group;
-use Enpowi\Users\User;
-use Enpowi\Modules\Data;
+use Enpowi\Modules\DataIn;
+use Enpowi\Types;
 
-App::param('username');
-app::param('groups');
+$dataIn = new DataIn();
+$user = Types::Users_User($dataIn->in('user'));
+$groups = $dataIn->in('groups');
+$user
+	->ensureExists()
+	->removeAllGroups();
+
+foreach($groups as $group) {
+	Types::Users_Group($group)
+		->ensureExists()
+		->addUser($user);
+}
+
+echo 1;
