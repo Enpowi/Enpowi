@@ -3,18 +3,14 @@ if(!defined('Modular')) die('Direct access not permitted');
 
 use Enpowi\Users\User;
 use Enpowi\Users\Group;
-use Enpowi\Modules\Data;
+use Enpowi\Modules\DataOut;
 
-$data = new Data([
-	'users' => User::users(),
-	'availableGroups' => Group::groups()
-]);
-
-$data->bind();
-
-?>
-<h3 v-t>Users</h3>
-<table v-module data="<?php echo $data->id ?>">
+$id = (new DataOut())
+	->add('users', User::users())
+	->add('availableGroups', Group::groups())
+	->bind();
+?><h3 v-t>Users</h3>
+<table v-module data="<?php echo $id ?>">
 	<tbody>
 		<tr>
 			<th v-t>Username</th>
@@ -22,7 +18,7 @@ $data->bind();
 			<th v-t>Created</th>
 			<th v-t>Groups</th>
 		</tr>
-		<tr v-repeat="user : data.users">
+		<tr v-repeat="user : users">
 			<td>{{ user.username }}</td>
 			<td>{{ user.email }}</td>
 			<td>{{ user.created }}</td>
