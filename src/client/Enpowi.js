@@ -3,14 +3,36 @@
  * @name Enpowi
  */
 Class('Enpowi', {
+
+	Static: {
+		session: {
+			user: {},
+			theme: null
+		},
+		updateSession: function(type, sessionItems) {
+			var oldSessionItems = Enpowi.session[type],
+				key;
+
+			if (sessionItems instanceof Array) {
+				for (key = 0; key < sessionItems.length; key++) {
+					oldSessionItems[key] = sessionItems[key];
+				}
+			} else if (typeof sessionItems === 'object') {
+				for (key in sessionItems) if (key && sessionItems.hasOwnProperty(key)) {
+					oldSessionItems[key] = sessionItems[key];
+				}
+			} else {
+				Enpowi.session[type] = sessionItems;
+			}
+
+			return Enpowi;
+		}
+	},
+
 	construct: function(callback) {
 		this.router = crossroads;
 		this.routes = [];
 		this.hasher = hasher;
-
-		this.session = {
-			user: {}
-		};
 
 		Enpowi.directives.setup(this);
 		Enpowi.module.setup(this);
@@ -18,7 +40,6 @@ Class('Enpowi', {
 
 		this.setupRoutes(callback);
 	},
-
 
 	setupRoutes: function(callback) {
 		//setup router
@@ -59,7 +80,7 @@ Class('Enpowi', {
 		router.normalizeFn = crossroads.NORM_AS_OBJECT;
 
 		router.addRoute('/', function() {
-			callback('modules?module=default&component=index');
+			callback('modules?module=' + Enpowi.session.theme + '&component=index');
 		});
 		router.addRoute('/{module}', function(path) {
 			callback('modules?module=' + path.module);
@@ -99,7 +120,7 @@ Class('Enpowi', {
 				el: child,
 				data: (function() {
 					var data = {
-							session: me.session
+							session: Enpowi.session
 						},
 						hasData = child.hasAttribute('data'),
 						key = child.getAttribute('data'),
@@ -124,7 +145,7 @@ Class('Enpowi', {
 					},
 					hasPerm: function(module, component) {
 						var hasPerm = false;
-						$.each(me.session.user.groups, function() {
+						$.each(Enpowi.session.user.groups, function() {
 							$.each(this.perms, function() {
 								if (this.module === module || module ==='*') {
 									if (this.component === component || component ==='*') {
@@ -170,17 +191,6 @@ Class('Enpowi', {
 	},
 	loadModuleScript: function(url, callback) {
 		$.getScript(Enpowi.module.url(url), callback);
-	},
-
-	updateSession: function(type, sessionItems) {
-		var oldSessionItems = this.session[type] || (this.session[type] = {}),
-			key;
-
-		for(key in sessionItems) if (key && sessionItems.hasOwnProperty(key)) {
-			oldSessionItems[key] = sessionItems[key];
-		}
-
-		return this;
 	}
 
 });

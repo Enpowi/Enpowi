@@ -12,12 +12,29 @@ use R;
 
 class Config
 {
+	public $moduleDirectory;
+
+	public $themeModule = 'default';
+
 	public $db = [
 		'host' => '',
 		'name' => '',
 		'user' => '',
 		'password' => ''
 	];
+
+	public function __construct($moduleDirectory = null)
+	{
+		if ($moduleDirectory === null) {
+			$moduleDirectory = dirname(__FILE__) . '/../../../modules/';
+		}
+
+		if (file_exists($moduleDirectory)) {
+			$this->moduleDirectory = $moduleDirectory;
+		} else {
+			throw new \Exception("Modules directory, $moduleDirectory, does not exist");
+		}
+	}
 
 	public function setupMySql($host, $name, $user, $password)
 	{
@@ -29,8 +46,14 @@ class Config
 		R::setup('mysql:host=' . $host . ';dbname=' . $name, $user, $password);
 	}
 
-	public function setupDB()
+	public function setupThemeModule($moduleName)
 	{
+		$moduleDir = $this->moduleDirectory . $moduleName;
 
+		if (file_exists($moduleDir)) {
+			$this->themeModule = $moduleName;
+		} else {
+			throw new \Exception("Module directory, $moduleDir, does not exist");
+		}
 	}
 }

@@ -17,8 +17,8 @@
 	<header v-header></header>
 	<nav v-navigation></nav>
 	<article v-article></article>
-	<aside class="left" v-side></aside>
-	<aside class="right" v-side></aside>
+	<aside v-side="left"></aside>
+	<aside v-side="right"></aside>
 	<footer v-footer></footer>
 </body>
 
@@ -36,6 +36,6 @@
 <script src="src/client/Enpowi/module.js"></script>
 <script src="src/client/Enpowi/translation.js"></script>
 <script src="src/client/Enpowi/utilities.js"></script>
-<script src="src/client/app.js"></script>
 <script src="modules?module=app&component=session.js"></script>
+<script src="src/client/app.js"></script>
 </html>

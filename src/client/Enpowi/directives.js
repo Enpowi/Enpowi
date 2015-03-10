@@ -33,7 +33,7 @@ Enpowi.directives = {
 			bind: function() {
 				var el = this.el;
 
-				app.loadModule('default/header', function(html) {
+				app.loadModule(Enpowi.session.theme + '/header', function(html) {
 					$(el).html(html);
 				});
 			}
@@ -43,7 +43,7 @@ Enpowi.directives = {
 			bind: function() {
 				var el = this.el;
 
-				app.loadModule('default/navigation', function(html) {
+				app.loadModule(Enpowi.session.theme + '/navigation', function(html) {
 					$(el).html(html);
 				});
 			}
@@ -63,7 +63,7 @@ Enpowi.directives = {
 			bind: function() {
 				var el = this.el;
 
-				app.loadModule('default/footer', function(html) {
+				app.loadModule(Enpowi.session.theme + '/footer', function(html) {
 					$(el).html(html);
 				});
 			}
