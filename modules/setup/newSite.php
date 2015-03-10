@@ -33,7 +33,7 @@ Enpowi\App::log(null, 'setup', 'newSite');
 $everyoneGroup = Group::create('Everyone', false, false, true);
 $anonymousGroup = Group::create('Anonymous', false, true);
 $registeredGroup = Group::create('Registered', true);
-$administratorGroup = Group::create('Administrator');
+$administratorGroup = Group::create('Administrator', false, false, false, true);
 
 //create first user & put him in admin group
 $administratorUser = User::create('admin', 'admin', '', true);

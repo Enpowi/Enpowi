@@ -14,9 +14,7 @@ class Perm {
 	private $_bean;
 	private $_group;
 
-	public function __construct($module, $component, Group $group, $bean = null) {
-		$this->_group = $group;
-		$this->groupName = $group->name;
+	public function __construct($module, $component, Group $group = null, $bean = null) {
 		$this->module = $module;
 		$this->component = $component;
 
@@ -24,6 +22,11 @@ class Perm {
 			$this->_bean = R::findOne('perm', ' groupName = ? AND module = ? AND component = ?', [$this->groupName, $module, $component]);
 		} else {
 			$this->_bean = $bean;
+		}
+
+		if ($group !== null) {
+			$this->_group = $group;
+			$this->groupName = $group->name;
 		}
 	}
 
@@ -80,5 +83,16 @@ class Perm {
 	public function id()
 	{
 		return $this->_bean->getID();
+	}
+
+	public static function parse($string)
+	{
+		preg_match('/(?P<group>[a-zA-Z][a-zA-Z0-9-_]+)[@](?P<module>[a-zA-Z][a-zA-Z0-9-_]+)[\/]?(?P<component>[a-zA-Z][a-zA-Z0-9-_]+)?/', $string, $matches);
+
+		return [
+			'group' => $matches['group'],
+			'module' => $matches['module'],
+			'component' => $matches['component'],
+		];
 	}
 }

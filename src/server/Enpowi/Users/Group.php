@@ -36,7 +36,7 @@ class Group {
 		return $group;
 	}
 
-	public static function create($groupName, $isDefaultRegistered = false, $isDefaultAnonymous = false, $isEveryone = false)
+	public static function create($groupName, $isDefaultRegistered = false, $isDefaultAnonymous = false, $isEveryone = false, $isSuper = false)
 	{
 		$count = R::count( 'group', ' name = ? ', [ $groupName ] );
 
@@ -46,6 +46,7 @@ class Group {
 			$bean->isDefaultRegistered = $isDefaultRegistered;
 			$bean->isDefaultAnonymous = $isDefaultAnonymous;
 			$bean->isEveryone = $isEveryone;
+			$bean->isSuper = $isSuper;
 			$bean->ownUserList;
 			$bean->sharedPermList;
 
@@ -140,12 +141,24 @@ class Group {
 		return $groups;
 	}
 
-	public static function editableGroups()
+	public static function editableGroups($updatePerms = false, $excludeSuper = false)
 	{
 		$groups = [];
 
-		foreach(R::find('group', ' is_default_anonymous = 0 and is_default_registered = 0 and is_everyone = 0 ') as $groupBean) {
-			$groups[$groupBean->id] = new Group( $groupBean->name, $groupBean );
+		if ($excludeSuper) {
+			$sqlLookup = ' is_default_anonymous = 0 and is_default_registered = 0 and is_everyone = 0 and is_super = 0 ';
+		} else {
+			$sqlLookup = ' is_default_anonymous = 0 and is_default_registered = 0 and is_everyone = 0 ';
+		}
+
+		foreach(R::find('group', $sqlLookup) as $groupBean) {
+			$group = new Group( $groupBean->name, $groupBean );
+
+			$groups[$groupBean->id] = $group;
+
+			if ($updatePerms) {
+				$group->updatePerms();
+			}
 		}
 
 		return $groups;
@@ -179,9 +192,22 @@ class Group {
 		$permBeans = R::findAll('perm', ' group_name = ? ', [$this->name]);
 
 		foreach($permBeans as $permBean) {
-			$perms[] = new Perm($permBean->module, $permBean->component, $this);
+			$perms[$permBean->module . '/' . $permBean->component] = new Perm($permBean->module, $permBean->component, $this);
 		}
 
-		return $this->perms = $perms;
+		$this->perms = $perms;
+
+		return $this;
+	}
+
+	public function removePerms()
+	{
+		if ($this->name !== 'Administrator') {
+			$beans = R::findAll('perm', ' group_name = ? ', [$this->name]);
+
+			R::trashAll($beans);
+		}
+
+		return $this;
 	}
 }

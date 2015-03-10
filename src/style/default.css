@@ -24,7 +24,7 @@ article {
 	margin-right: auto;
 }
 
-article > * {
+article > *:first-child {
 	margin-top: 48px;
 }
 
