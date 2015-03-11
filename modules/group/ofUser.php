@@ -15,12 +15,13 @@ $id = (new DataOut())
 	listen
 	v-module
 	data="<?php echo $id ?>"
-	action="group/ofUserService">
+	action="group/ofUserService"
+	class="container">
 
-	<h2>
+	<h3>
 		<span v-t>Groups for: </span>
 		{{ user.username }}
-	</h2>
+	</h3>
 
 	<input
 		name="user"

@@ -16,8 +16,9 @@ class Component {
 	public $file;
 
 	private $extensions = [
-		'php',
-		'html'
+		'.php',
+		'.html',
+		''
 	];
 
 	public function __construct(Module $module, $componentName)
@@ -26,9 +27,10 @@ class Component {
 		$this->name = $componentName;
 
 		foreach ($this->extensions as $extension) {
-			$file = $module->folder . '/' . $componentName . '.' . $extension;
+			$file = $module->folder . '/' . $componentName . $extension;
 			if (file_exists($file)) {
 				$this->file = $file;
+				break;
 			}
 		}
 	}

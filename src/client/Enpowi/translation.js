@@ -19,9 +19,21 @@ Enpowi.translation = {
 				});
 			}
 		});
+
+		Vue.directive('title', {
+			isLiteral: true,
+			bind: function () {
+				var el = this.el;
+				Enpowi.translation.translate(this.expression, function(v) {
+					el.setAttribute('title', v);
+				});
+			}
+		});
 	},
 	translate: function(string, callback) {
-		console.log(string);
+		if (string.match(/[<>]/)) {
+			throw new Error('Translate does not support html');
+		}
 		callback(string);
 	}
 };

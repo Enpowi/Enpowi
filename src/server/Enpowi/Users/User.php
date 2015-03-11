@@ -227,7 +227,11 @@ class User {
 		foreach($this->groups as $group) {
 			$group->updatePerms();
 			foreach($group->perms as $perm) {
-				if ($perm->module === $module || $perm->module === '*') {
+				if (
+					$perm->module === $module
+					|| ($perm->module . 'Service') === $module
+					|| $perm->module === '*'
+				) {
 					if ($perm->component === $component || $perm->component === '*') {
 						return true;
 					}
@@ -256,5 +260,24 @@ class User {
 			$group->removeUser($this);
 		}
 		return $this;
+	}
+
+	public function updatePerms() {
+		$this->updateGroups();
+		foreach($this->groups as $group) {
+			$group->updatePerms();
+		}
+		return $this;
+	}
+
+	public function remove()
+	{
+		$bean = R::findOne( 'user', ' username = ? ', [ $this->username ] );
+
+		if ($bean !== null) {
+			R::trash($bean);
+			return true;
+		}
+		return false;
 	}
 }

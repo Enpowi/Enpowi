@@ -41,8 +41,7 @@ $administratorGroup->addUser($administratorUser);
 
 //give Anonymous abilities
 Perm::create('user', 'login', $anonymousGroup);
-Perm::create('user', 'new', $anonymousGroup);
-Perm::create('user', 'newService', $anonymousGroup);
+Perm::create('user', 'register', $anonymousGroup);
 
 //give registered abilities
 Perm::create('user', 'view', $registeredGroup);
@@ -52,7 +51,7 @@ Perm::create('user', 'logout', $registeredGroup);
 Perm::create('*', '*', $administratorGroup);
 
 //give everyone the ability to see modules with no security
-Perm::create('app', 'session.js', $everyoneGroup);
+Perm::create('app', '*', $everyoneGroup);
 Perm::create('default', '*', $everyoneGroup);
 Perm::create('setup', '*', $everyoneGroup);
 

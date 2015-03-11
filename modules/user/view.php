@@ -1,8 +1,10 @@
 <?php
 if(!defined('Modular')) die('Direct access not permitted');
-?><br><form v-module>
+?><form
+	class="container"
+	v-module>
 	<h2 v-t>View User</h2>
-	<table>
+	<table class="table">
 			<tr>
 				<th v-t>Username: </th>
 				<td>{{ session.user.username }}</td>

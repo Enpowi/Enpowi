@@ -2,6 +2,6 @@
  * @name utilities
  * @memberOf Enpowi
  */
-Enpowi.utilities = {
-
-};
+Enpowi.Class('utilities', {
+	Static: {}
+});

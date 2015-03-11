@@ -2,39 +2,43 @@
 if(!defined('Modular')) die('Direct access not permitted');
 
 use Enpowi\Users\Group;
-use Enpowi\Modules\Data;
+use Enpowi\Modules\DataOut;
 
-$groups = Group::groups();
-$data = new Data($groups);
-$id = $data->id;
+$id = (new DataOut())
+	->add('groups', Group::groups())
+	->bind();
 
-echo $data->toScript();
-
-?>
-<h3 v-t>User Groups</h3>
-<table v-module data="<?php echo $id?>">
-	<thead>
+?><form
+	v-module
+	action="group/listService"
+	data-done="group/list"
+	data="<?php echo $id?>"
+	class="container">
+	<h3><span v-t>Groups</span> <a v-title="New Group" href="#group/new"><span class="glyphicon glyphicon-plus-sign"></span></a></h3>
+	<table class="table">
 		<tr>
-			<th></th>
 			<th v-t>Group Name</th>
 		</tr>
-	</thead>
-	<tbody>
-		<tr v-repeat="group : data">
-			<td><input type="checkbox" name="group[]" value="{{group.name}}"></td>
-			<td>{{group.name}}</td>
+		<tr v-repeat="group : groups">
+			<td class="checkbox" colspan="2">
+				<label>
+					<input
+						type="checkbox"
+						name="groupNames[]"
+						value="{{ group.name }}"
+						disabled="{{ group.isSystem }}">
+					{{group.name}}
+				</label>
+			</td>
 		</tr>
-	</tbody>
-	<tfoot>
 		<tr>
-			<td colspan="2">
-				<select>
+			<td>
+				<select name="action" class="form-control inline">
 					<option value="" t-v>Action</option>
 					<option value="delete" t-v>Delete</option>
 				</select>
-				<button v-t>Submit</button>
-				<button v-t onclick="app.go('group/new');">New</button>
+				<button v-t class="btn btn-success">Submit</button>
 			</td>
 		</tr>
-	</tfoot>
-</table>
+	</table>
+</form>

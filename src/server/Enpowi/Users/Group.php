@@ -15,6 +15,7 @@ class Group {
 
 	public $name;
 	public $perms;
+	public $isSystem = false;
 
 	private $_bean;
 
@@ -23,9 +24,21 @@ class Group {
 		$this->name = $name;
 
 		if ($bean === null) {
-			$this->_bean = R::findOne( 'group', ' name = ? ', [ $name ] );
+			$this->_bean = $bean = R::findOne( 'group', ' name = ? ', [ $name ] );
 		} else {
 			$this->_bean = $bean;
+		}
+
+		if (
+			$bean !== null
+			&& (
+				$bean->isDefaultRegistered
+				|| $bean->isDefaultAnonymous
+				|| $bean->isEveryone
+				|| $bean->isSuper
+			)
+		) {
+			$this->isSystem = true;
 		}
 	}
 

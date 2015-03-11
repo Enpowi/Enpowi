@@ -7,7 +7,7 @@ $replies = [];
 $authentication = new Enpowi\Authentication();
 
 //get user
-$user = $authentication->getUser();
+$user = $authentication->getUser()->updatePerms();
 $replies['user'] = $user;
 $replies['theme'] = $config->themeModule;
 

@@ -3,7 +3,11 @@ if(!defined('Modular')) die('Direct access not permitted');
 
 $img = Enpowi\Forms\Utilities::captcha(true);
 
-?><form action="user/newService" v-module data-done="user/view">
+?><form
+	action="user/registerService"
+	v-module
+	data-done="user/view"
+	class="container">
 	<h2 v-t>Register</h2>
 	<div class="form-group">
 		<input type="text" class="form-control" name="username" v-placeholder="Username">

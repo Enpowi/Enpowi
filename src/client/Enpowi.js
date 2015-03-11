@@ -46,8 +46,6 @@ Class('Enpowi', {
 		var router = this.router,
 			app = this,
 			landRoute = function(url) {
-				app.activeUrl = url;
-
 				$.get(url, function (data) {
 					$.getScript('modules?module=app&component=session.js', function() {
 						var result = app.process(data);
@@ -147,8 +145,8 @@ Class('Enpowi', {
 						var hasPerm = false;
 						$.each(Enpowi.session.user.groups, function() {
 							$.each(this.perms, function() {
-								if (this.module === module || module ==='*') {
-									if (this.component === component || component ==='*') {
+								if (this.module === module || this.module ==='*') {
+									if (this.component === component || this.component ==='*') {
 										hasPerm = true;
 									}
 								}
@@ -169,7 +167,11 @@ Class('Enpowi', {
 	},
 
 	go: function(route) {
-		this.hasher.setHash(route);
+		if ('#/' + route === window.location.hash.toString()) {
+			this.hasher.setHash(route + '/');
+		} else {
+			this.hasher.setHash(route);
+		}
 
 		return this;
 	},

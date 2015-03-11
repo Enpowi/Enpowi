@@ -1,15 +1,38 @@
-<nav class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container">
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 				<span class="sr-only">Toggle navigation</span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#">Project name</a>
+			<a class="navbar-brand" href="#"><img src="src/img/logo.svg" width="15px" v-title="Enpowi"></a>
 		</div>
-		<div id="navbar" class="navbar-collapse collapse">
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+				<li><a href="#">Link</a></li>
+				<li class="dropdown" v-show=" hasPerm('*', '*') ">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span v-t>Administer</span> <span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="#/users/list" v-t>Users</a></li>
+						<li><a href="#/group/list" v-t>Groups</a></li>
+						<li><a href="#/perms/list" v-t>Permissions</a></li>
+						<!--li class="divider"></li>
+						<li><a href="#">Separated link</a></li-->
+					</ul>
+				</li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+				</div>
+				<button type="submit" class="btn btn-default">Submit</button>
+			</form>
 			<form class="navbar-form navbar-right" action="user/login" v-module data-done="user/view" v-show="session.user.username === 'Anonymous'">
 				<div class="form-group">
 					<input type="text" v-placeholder="Username" name="username" class="form-control">
@@ -19,12 +42,12 @@
 					<input type="password" v-placeholder="Password" name="password" class="form-control">
 				</div>
 				<button type="submit" class="btn btn-success" v-t>Sign in</button>
-				<a class="btn btn-success" v-t v-on="click: go('user/new')">Register</a>
+				<a class="btn btn-success" v-t v-on="click: go('user/register')">Register</a>
 			</form>
-			<form class="navbar-form navbar-right" action="user/logout" v-module data-done="/" v-show="session.user.username !== 'Anonymous'">
+			<form class="navbar-form navbar-right" action="user/logout" v-module data-done="#//" v-show="session.user.username !== 'Anonymous'">
 				<a class="btn btn-success" v-on="click: go('user/view')">{{session.user.username}}</a>
 				<button type="submit" class="btn btn-success" v-t>Sign out</button>
 			</form>
-		</div><!--/.navbar-collapse -->
-	</div>
+		</div><!-- /.navbar-collapse -->
+	</div><!-- /.container-fluid -->
 </nav>

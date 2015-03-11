@@ -40,12 +40,11 @@ else if (!User::isValidPassword($password)) {
 	$stop = true;
 }
 
-if (!App::get()->user->isSuper()) {
-	if ( ! Utilities::isCaptchaMatch( $captcha ) ) {
-		$reply['captcha'] = 'Invalid captcha phrase';
-		$stop             = true;
-	}
+if ( ! Utilities::isCaptchaMatch( $captcha ) ) {
+	$reply['captcha'] = 'Invalid captcha phrase';
+	$stop             = true;
 }
+
 
 if ($stop) {
 	echo(json_encode(['paramResponse' => $reply, 'id'=>-1]));
@@ -62,3 +61,5 @@ if ($user !== null) {
 } else {
 	echo json_encode( [ 'id' => $user->id() ] );
 }
+
+echo 1;
