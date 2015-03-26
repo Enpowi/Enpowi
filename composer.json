@@ -15,7 +15,8 @@
         "wikilingo/wikilingo": "0.12.*",
         "respect/validation": "0.8.*",
         "gabordemooij/redbean": "dev-master",
-        "mindplay/jsonfreeze": "~1.2"
+        "mindplay/jsonfreeze": "~1.2",
+        "skema/skema": "dev-master"
     },
     "autoload": {
         "psr-0": {
