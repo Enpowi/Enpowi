@@ -8,19 +8,6 @@
             "email": "robertleeplummerjr@gmail.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "gabordemooij/redbean",
-                "version": "dev-master",
-                "dist": {
-                    "url": "http://www.redbeanphp.com/downloadredbean.php",
-                    "type": "tar"
-                }
-            }
-        }
-    ],
     "require": {
         "slim/slim": "~2.5",
         "gregwar/captcha": "~1.0",
@@ -33,9 +20,6 @@
     "autoload": {
         "psr-0": {
             "Enpowi\\": "./src/server/"
-        },
-        "files": [
-            "vendor/gabordemooij/redbean/rb.php"
-        ]
+        }
     }
 }

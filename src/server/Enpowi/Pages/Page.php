@@ -8,7 +8,7 @@
 
 namespace Enpowi\Pages;
 
-use R;
+use RedBeanPHP\R;
 
 class Page
 {

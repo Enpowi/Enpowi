@@ -21,6 +21,7 @@ if (!file_exists($dir . '/config.php')) {
 require_once $dir . '/../../vendor/autoload.php';
 require_once $dir . '/../setup/config.php';
 
+use RedBeanPHP\R;
 use Enpowi\Users\Group;
 use Enpowi\Users\User;
 use Enpowi\Users\Perm;

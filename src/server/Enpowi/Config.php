@@ -8,7 +8,7 @@
 
 namespace Enpowi;
 
-use R;
+use RedBeanPHP\R;
 
 class Config
 {
