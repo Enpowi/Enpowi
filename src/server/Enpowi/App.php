@@ -57,12 +57,12 @@ class App
 		R::store($bean);
 	}
 
-	public static function loadComponent($folder, $moduleName, $componentName)
+	public static function loadComponent($folder, $moduleName, $componentName = 'index')
 	{
 		$app = self::get();
 		$user = $app->user;
 
-		App::log($user->username, $moduleName, $componentName);
+		App::log($user->username, $moduleName, empty($componentName) ? 'index' : $componentName);
 
 		if ($user->hasPerm($moduleName, $componentName)) {
 			$module    = new Modules\Module( $folder, $moduleName );

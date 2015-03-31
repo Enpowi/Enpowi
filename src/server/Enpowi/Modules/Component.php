@@ -21,7 +21,7 @@ class Component {
 		''
 	];
 
-	public function __construct(Module $module, $componentName)
+	public function __construct(Module $module, $componentName = 'index')
 	{
 		$this->module = $module;
 		$this->name = $componentName;
