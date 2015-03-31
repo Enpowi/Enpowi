@@ -80,6 +80,11 @@ class App
 
 	public static function url()
 	{
+		return ( ! empty( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . '/';
+	}
+
+	public static function uri()
+	{
 		return self::$api->request()->getRootUri();
 	}
 }
