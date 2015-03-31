@@ -3,10 +3,6 @@
 $dir = dirname(__FILE__);
 
 if (file_exists($dir . '/config.lock')) {
-	unlink( $dir . '/config.lock' );
-}
-
-if (file_exists($dir . '/config.lock')) {
 	throw new Exception('locked');
 }
 
