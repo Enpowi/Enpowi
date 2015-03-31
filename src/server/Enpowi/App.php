@@ -12,6 +12,10 @@ class App
 	public $authentication;
 	public $session;
 	public $user;
+
+	/**
+	 * @var Slim null
+	 */
 	public static $api = null;
 	public static $app = null;
 
@@ -68,5 +72,10 @@ class App
 		}
 
 		return null;
+	}
+
+	public static function url()
+	{
+		return self::$api->request()->getRootUri();
 	}
 }
