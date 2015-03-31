@@ -1,24 +1,11 @@
 {
-    "name": "inpowi/inpowi",
-    "description": "web platform, INgineered with POwer and WIsdom",
+    "name": "enpowi/enpowi",
+    "description": "web platform, ENgineered with POwer and WIsdom",
     "license": "MIT",
     "authors": [
         {
             "name": "Robert Lee Plummer Jr",
             "email": "robertleeplummerjr@gmail.com"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "gabordemooij/redbean",
-                "version": "dev-master",
-                "dist": {
-                    "url": "http://www.redbeanphp.com/downloadredbean.php",
-                    "type": "tar"
-                }
-            }
         }
     ],
     "require": {
@@ -28,14 +15,12 @@
         "wikilingo/wikilingo": "0.12.*",
         "respect/validation": "0.8.*",
         "gabordemooij/redbean": "dev-master",
-        "mindplay/jsonfreeze": "~1.2"
+        "mindplay/jsonfreeze": "~1.2",
+        "skema/skema": "dev-master"
     },
     "autoload": {
         "psr-0": {
             "Enpowi\\": "./src/server/"
-        },
-        "files": [
-            "vendor/gabordemooij/redbean/rb.php"
-        ]
+        }
     }
 }

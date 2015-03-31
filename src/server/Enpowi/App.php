@@ -3,7 +3,7 @@
 namespace Enpowi;
 
 use Slim\Slim;
-use R;
+use RedBeanPHP\R;
 use Enpowi\Modules;
 
 class App

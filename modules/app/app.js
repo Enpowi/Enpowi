@@ -6,4 +6,4 @@ new Vue({
 	el: $('body')[0]
 });
 
-app.logRoutes();
+//app.logRoutes();
