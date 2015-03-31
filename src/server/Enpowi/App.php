@@ -62,7 +62,11 @@ class App
 		$app = self::get();
 		$user = $app->user;
 
-		App::log($user->username, $moduleName, empty($componentName) ? 'index' : $componentName);
+		if (empty($componentName)) {
+			$componentName = 'index';
+		}
+
+		App::log($user->username, $moduleName, $componentName);
 
 		if ($user->hasPerm($moduleName, $componentName)) {
 			$module    = new Modules\Module( $folder, $moduleName );
