@@ -22,7 +22,7 @@ class App
 	function __construct()
 	{
 		$this->clientScripts = new ClientScripts();
-		$this->session = include dirname(__FILE__) . '/../../../vendor/aura/session/scripts/instance.php';
+		$this->session = include (dirname(dirname(dirname(dirname(__FILE__)))) . '/vendor/aura/session/scripts/instance.php');
 		$authentication = $this->authentication = new Authentication($this);
 		$this->user = $authentication->getUser();
 	}
