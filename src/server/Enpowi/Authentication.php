@@ -20,13 +20,13 @@ class Authentication
 			$app = App::get();
 		}
 
-		$this->segment = $app->session->newSegment(__CLASS__);
+		$this->segment = $app->session->getSegment(__CLASS__);
 	}
 
 	public function getUser()
 	{
-		if (isset($this->segment->user)) {
-			$user = User::fromId($this->segment->user);
+		if (($_user = $this->segment->get('user')) !== null) {
+			$user = User::fromId($_user);
 			if ($user === null) {
 				$this->logout();
 			} else {
@@ -39,8 +39,8 @@ class Authentication
 
 	public function login(User $user)
 	{
-		if (!isset($this->segment->user) && $user->exists()) {
-			$this->segment->user = $user->id();
+		if ($user->exists()) {
+			$this->segment->set('user', $user->id());
 			return true;
 		} else {
 			return false;
@@ -55,6 +55,6 @@ class Authentication
 
 	public function isAuthenticated()
 	{
-		return isset($this->segment->user);
+		return $this->segment->get('user') !== null;
 	}
 }

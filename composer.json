@@ -11,7 +11,7 @@
     "require": {
         "slim/slim": "~2.5",
         "gregwar/captcha": "~1.0",
-        "aura/session": "dev-master",
+        "aura/session": "2.*@dev",
         "wikilingo/wikilingo": "0.12.*",
         "respect/validation": "0.8.*",
         "gabordemooij/redbean": "dev-master",

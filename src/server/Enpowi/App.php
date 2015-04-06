@@ -5,6 +5,7 @@ namespace Enpowi;
 use Slim\Slim;
 use RedBeanPHP\R;
 use Enpowi\Modules;
+use Aura\Session;
 
 class App
 {
@@ -22,7 +23,7 @@ class App
 	function __construct()
 	{
 		$this->clientScripts = new ClientScripts();
-		$this->session = include (dirname(dirname(dirname(dirname(__FILE__)))) . '/vendor/aura/session/scripts/instance.php');
+		$this->session = (new Session\SessionFactory)->newInstance($_COOKIE);
 		$authentication = $this->authentication = new Authentication($this);
 		$this->user = $authentication->getUser();
 	}
