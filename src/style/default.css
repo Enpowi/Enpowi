@@ -25,8 +25,8 @@ footer {
 	display: inline;
 }
 
-/* FORM */
 
+/* FORM */
 form {
 	table-layout: fixed;
 	margin-left: auto;
@@ -44,4 +44,10 @@ form > table.table {
 
 form select {
 	max-width: 300px;
+}
+
+
+/* Assist */
+.click {
+	cursor: pointer;
 }
