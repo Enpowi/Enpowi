@@ -51,3 +51,7 @@ form select {
 .click {
 	cursor: pointer;
 }
+
+.wide {
+	width: inherit;
+}
