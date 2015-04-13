@@ -33,6 +33,7 @@ Class('Enpowi', {
 		this.router = crossroads;
 		this.routes = [];
 		this.hasher = hasher;
+		this.loadingElement = null;
 
 		Enpowi.directives.setup(this);
 		Enpowi.module.setup(this);
@@ -46,8 +47,17 @@ Class('Enpowi', {
 		var router = this.router,
 			app = this,
 			landRoute = function(url) {
+				var loading = setTimeout(function() {
+						loading = null;
+					app.setLoading(true);
+				}, 500);
+
 				$.get(url, function (data) {
 					$.getScript('modules?module=app&component=session.js', function() {
+						if (loading !== null) {
+							clearTimeout(loading);
+						}
+						app.setLoading(false);
 						var result = app.process(data);
 						callback(result);
 					});
@@ -193,6 +203,28 @@ Class('Enpowi', {
 	},
 	loadModuleScript: function(url, callback) {
 		$.getScript(Enpowi.module.url(url), callback);
-	}
+	},
 
+	isLoading: false,
+	/**
+	 *
+	 * @param {Boolean} isLoading
+	 * @returns {Enpowi}
+	 */
+	setLoading: function(isLoading) {
+		var el;
+		if ((el = this.loadingElement) === null) return this;
+
+		if (this.isLoading === false && isLoading) {
+			this.isLoading = isLoading;
+			el.modal();
+		}
+
+		else if (this.isLoading && isLoading === false) {
+			this.isLoading = isLoading;
+			el.modal('hide');
+		}
+
+		return this;
+	}
 });
