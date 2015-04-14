@@ -43,6 +43,7 @@ Perm::create('user', 'register', $anonymousGroup);
 //give registered abilities
 Perm::create('user', 'view', $registeredGroup);
 Perm::create('user', 'logout', $registeredGroup);
+Perm::create('page', 'edit', $registeredGroup);
 
 //give Administrator group access to everything
 Perm::create('*', '*', $administratorGroup);
@@ -51,6 +52,7 @@ Perm::create('*', '*', $administratorGroup);
 Perm::create('app', '*', $everyoneGroup);
 Perm::create('default', '*', $everyoneGroup);
 Perm::create('setup', '*', $everyoneGroup);
+Perm::create('page', 'index', $everyoneGroup);
 
 file_put_contents($dir . '/config.lock', '');
 

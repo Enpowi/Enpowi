@@ -9,6 +9,7 @@
 namespace Enpowi;
 
 
+use Enpowi\Pages\Page;
 use Enpowi\Users\Group;
 use Enpowi\Users\Perm;
 use Enpowi\Users\User;
@@ -20,5 +21,5 @@ class Types {
 	public static function Users_Group(Group $group) { return $group; }
 	public static function Users_Perm(Perm $perm) { return $perm; }
 
-
+	public static function Pages_Page(Page $page) { return $page; }
 }

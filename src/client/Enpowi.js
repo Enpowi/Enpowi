@@ -93,6 +93,9 @@ Class('Enpowi', {
 		router.addRoute('/{module}', function(path) {
 			callback('modules?module=' + path.module);
 		});
+		router.addRoute('/{module}{?query}', function(path) {
+			callback('modules?module=' + path.module + '&'  + path['?query_']);
+		});
 		router.addRoute('/{module}/{component}', function(path) {
 			callback('modules?module=' + path.module + '&component=' + path.component);
 		});

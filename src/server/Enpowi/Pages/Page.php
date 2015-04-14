@@ -9,6 +9,8 @@
 namespace Enpowi\Pages;
 
 use RedBeanPHP\R;
+use Enpowi;
+use WikiLingo\Parser;
 
 class Page
 {
@@ -23,12 +25,16 @@ class Page
 	public function __construct($name, $bean = null)
 	{
 		if ($bean === null) {
-			$this->_bean = $bean = R::findOne('page', ' name = ? ', [$name]);
+			$bean = $this->_bean = $bean = R::findOne('page', ' name = ? and is_revision = 0 ', [$name]);
 		} else {
 			$this->_bean = $bean;
 		}
 
-		$this->convertFromBean();
+		if ($bean === null) {
+			$this->name = $name;
+		} else {
+			$this->convertFromBean();
+		}
 	}
 
 	private function convertFromBean()
@@ -53,8 +59,54 @@ class Page
 		}
 	}
 
-	public function create($name, $content)
+	public function replace($content = '')
 	{
+		$username = Enpowi\App::get()->user->username;
 
+		R::exec( 'UPDATE page SET is_revision = 1 WHERE name = ?', [$this->name] );
+
+		//TODO: ensure createdBy is set once and contributors is an incremental list
+		$bean = R::dispense('page');
+		$bean->name = $this->name;
+		$bean->content = $content;
+		$bean->created = R::isoDateTime();
+		$bean->createdBy = $username;
+		$this->contributors = [$username];
+		$bean->isRevision = false;
+
+		R::store($bean);
+	}
+
+	public function render()
+	{
+		return (new Parser)->parse($this->content);
+	}
+
+	public static function pages()
+	{
+		//TODO: paging
+
+		$beans = R::findAll('page', ' is_revision = 0 order by name ');
+		$pages = [];
+
+		foreach($beans as $bean) {
+			$pages[] = new Page($bean->name, $bean);
+		}
+
+		return $pages;
+	}
+
+	public function history()
+	{
+		//TODO: paging
+
+		$beans = R::findAll('page', ' order by created ');
+		$pages = [];
+
+		foreach($beans as $bean) {
+			$pages[] = new Page($bean->name, $bean);
+		}
+
+		return $pages;
 	}
 }

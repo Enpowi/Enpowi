@@ -1,30 +1,38 @@
 <?php
 if(!defined('Modular')) die('Direct access not permitted');
 
-use Enpowi\Pages\Page;
 use Enpowi\Modules\DataOut;
+use Enpowi\App;
+use Enpowi\Pages\Page;
+
+$name = App::param('name');
 
 $id = (new DataOut())
-	->add('pages', Page::pages())
+	->add('name', $name)
+	->add('history', (new Page($name))->history())
 	->bind();
-
 ?><div
 	v-module
-	data="<?php echo $id?>"
+	data="<?php echo $id ?>"
 	class="container">
+
+	<h3><span v-t>History of </span>{{ name }}</h3>
+
 	<table class="table table-hover click">
 		<thead>
 		<tr>
-			<th v-t>Page Name</th>
 			<th v-t>Last Edited</th>
 			<th v-t>Created By</th>
+			<th></th>
+			<th></th>
 		</tr>
 		</thead>
 		<tbody>
-		<tr v-repeat="page : pages" v-on="click : go('page?name=' + page.name)">
-			<td>{{ page.name }}</td>
+		<tr v-repeat="page : history">
 			<td>{{ page.created }}</td>
 			<td>{{ page.createdBy }}</td>
+			<td><input type="radio" name="left-compare[]"</td>
+			<td><input type="radio" name="right-compare[]"</td>
 		</tr>
 		</tbody>
 	</table>
