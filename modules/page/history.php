@@ -31,9 +31,15 @@ $id = (new DataOut())
 		<tr v-repeat="page : history">
 			<td>{{ page.created }}</td>
 			<td>{{ page.createdBy }}</td>
-			<td><input type="radio" name="left-compare[]"</td>
-			<td><input type="radio" name="right-compare[]"</td>
+			<td class="center"><input type="radio" name="left-compare[]"</td>
+			<td class="center"><input type="radio" name="right-compare[]"</td>
 		</tr>
 		</tbody>
+		<tfoot>
+		<tr>
+			<td colspan="2"></td>
+			<td colspan="2" class="center"><button v-t class="btn btn-success">Compare</button></td>
+		</tr>
+		</tfoot>
 	</table>
 </div>

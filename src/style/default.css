@@ -55,3 +55,7 @@ form select {
 .wide {
 	width: 100%;
 }
+
+.center {
+	text-align: center;
+}
