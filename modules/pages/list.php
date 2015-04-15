@@ -12,6 +12,10 @@ $id = (new DataOut())
 	v-module
 	data="<?php echo $id?>"
 	class="container">
+	<!--TODO page name-->
+	<h3><span v-t>Pages</span>
+		<a v-title="New Page" href="#/page/edit"><span class="glyphicon glyphicon-plus-sign"></span></a></h3>
+
 	<table class="table table-hover click">
 		<thead>
 		<tr>

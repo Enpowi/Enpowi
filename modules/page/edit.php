@@ -15,7 +15,7 @@ $id = (new DataOut())
 	data="<?php echo $id?>"
 	action="page/editService">
 
-	<h3><span v-t>Editing </span>{{ page.name }}</h3>
+	<h3><span v-t>Editing Page: </span>{{ page.name }}</h3>
 
 	<input type="hidden" name="page" value="{{ stringify(page) }}">
 
