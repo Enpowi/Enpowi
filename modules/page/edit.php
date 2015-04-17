@@ -5,17 +5,25 @@ use Enpowi\Modules\DataOut;
 use Enpowi\App;
 use Enpowi\Pages\Page;
 
+$name = App::param('name');
+
 $id = (new DataOut())
-	->add('page', new Page(App::param('name')))
+    ->add('name', $name)
+	->add('page', new Page($name))
 	->bind();
 ?>
 <form
 	class="container"
 	v-module
 	data="<?php echo $id?>"
-	action="page/editService">
+	action="page/editService"
+    data-done="page?name={{ name }}">
 
-	<h3><span v-t>Editing Page: </span>{{ page.name }}</h3>
+	<h3>
+        <span v-t>Editing Page: </span>
+        {{ page.name }}
+        <input type="{{ page.name === null ? 'text' : 'hidden' }}" v-hide=" page.name === null " name="name" value="{{ name }}" v-model="name" />
+    </h3>
 
 	<input type="hidden" name="page" value="{{ stringify(page) }}">
 
