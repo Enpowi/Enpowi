@@ -8,7 +8,7 @@ use Enpowi\Pages\Page;
 $name = App::param('name');
 
 $id = (new DataOut())
-    ->add('name', $name)
+    ->add('editing', empty($name))
 	->add('page', new Page($name))
 	->bind();
 ?>
@@ -17,18 +17,25 @@ $id = (new DataOut())
 	v-module
 	data="<?php echo $id?>"
 	action="page/editService"
-    data-done="page?name={{ name }}">
+    data-done="page?name={{ page.name }}">
 
 	<h3>
-        <span v-t>Editing Page: </span>
-        {{ page.name }}
-        <input type="{{ page.name === null ? 'text' : 'hidden' }}" v-hide=" page.name === null " name="name" value="{{ name }}" v-model="name" />
+        <span v-t>Editing:</span>
+        <span v-show=" !editing ">{{ page.name }}</span><br>
     </h3>
+
+    <span v-show=" editing " class="wide fixed">
+        <input class="form-control" type="text" name="name" v-model="page.name" v-placeholder="Page Name" />
+    </span>
 
 	<input type="hidden" name="page" value="{{ stringify(page) }}">
 
-	<textarea name="content" class="wide">{{ page.content }}</textarea>
+    <div class="form-control height-auto">
+	    <textarea
+            v-source-edit="wikilingo"
+            name="content"
+            class="wide">{{ page.content }}</textarea>
+    </div>
 
 	<button type="submit" class="btn btn-success" v-t>Submit</button>
 </form>
-<script src="modules/page/edit.js"></script>

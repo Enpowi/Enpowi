@@ -32,10 +32,11 @@
 <script src="vendor/vue/dist/vue.js"></script>
 <script src="vendor/class/Class.js"></script>
 
-<script src="src/client/Enpowi.js"></script>
+<script src="src/client/Enpowi/App.js"></script>
 <script src="src/client/Enpowi/forms.js"></script>
 <script src="src/client/Enpowi/directives.js"></script>
 <script src="src/client/Enpowi/module.js"></script>
+<script src="src/client/Enpowi/session.js"></script>
 <script src="src/client/Enpowi/translation.js"></script>
 <script src="src/client/Enpowi/utilities.js"></script>
 <script src="modules?module=app&component=session.js"></script>

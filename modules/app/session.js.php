@@ -16,11 +16,11 @@ $replies['theme'] = $config->themeModule;
 foreach($replies as $key => $reply) {
 	$className = null;
 	if ($reply !== null) {
-		echo "Enpowi.updateSession('$key', " . json_encode($reply) . ");\n";
+		echo "Enpowi.session.update('$key', " . json_encode($reply) . ");\n";
 	} else {
 		$className = 'Enpowi\\' . ucfirst($key);
 		if (class_exists($className)) {
-			echo "Enpowi.updateSession('$key', " . json_encode(get_class_vars($className)) . ");\n";
+			echo "Enpowi.session.update('$key', " . json_encode(get_class_vars($className)) . ");\n";
 		} else {
 			throw new \Exception('Unhandled type: ' . $key);
 		}

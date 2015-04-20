@@ -5,14 +5,8 @@ use Enpowi\App;
 use Enpowi\Modules\DataIn;
 use Enpowi\Types;
 
-$page = Types::Pages_Page((new DataIn())->in('page'));
-
-$page->name = App::param('name');
-
-if (empty($page->name)) {
-    echo 0;
-    die;
-}
+$page = Types::Pages_Page((new DataIn())
+    ->in('page'));
 
 $page->replace(App::param('content'));
 

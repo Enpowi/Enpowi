@@ -59,3 +59,7 @@ form select {
 .center {
 	text-align: center;
 }
+
+.height-auto {
+    height: auto ! important;
+}

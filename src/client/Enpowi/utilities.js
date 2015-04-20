@@ -2,6 +2,7 @@
  * @name utilities
  * @memberOf Enpowi
  */
-Enpowi.Class('utilities', {
-	Static: {}
-});
+Namespace('Enpowi').
+    Class('utilities', {
+        Static: {}
+    });
