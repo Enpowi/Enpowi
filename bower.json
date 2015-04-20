@@ -21,8 +21,7 @@
     "hasher": "~1.2.0",
     "vue": "~0.11.5",
     "class": "~1.0.3",
-    "codemirror.wikilingo": "https://github.com/wikiLingo/CodeMirror.git",
-    "requirejs": "~2.1.17"
+    "codemirror.wikilingo": "https://github.com/wikiLingo/CodeMirror.git"
   },
   "resolutions": {
     "vue": "~0.11.5"
