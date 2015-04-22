@@ -29,18 +29,8 @@ class DataOut {
 		return $this;
 	}
 
-	public function toScript()
+	public function out()
 	{
-		$json = $this->serializer->serialize($this->objects);
-		$this->id = md5($json);
-		$id = $this->id;
-		return "<script>Enpowi.module.data['$id'] =  $json;</script>";
-	}
-
-	public function bind()
-	{
-		echo $this->toScript();
-
-		return $this->id;
+		return rawurlencode($this->serializer->serialize($this->objects));
 	}
 }

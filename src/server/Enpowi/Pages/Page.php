@@ -15,6 +15,7 @@ use WikiLingo\Parser;
 
 class Page
 {
+    public $id;
 	public $name;
 	public $content;
 	public $created;
@@ -38,12 +39,23 @@ class Page
 		}
 	}
 
+    public static function byId($id)
+    {
+        $bean = R::findOne('page', ' id = ? ', [$id]);
+        if ($bean !== null) {
+            return new Page($bean->name, $bean);
+        }
+
+        return null;
+    }
+
 	private function convertFromBean()
 	{
 		$bean = $this->_bean;
 
 		if (!$this->exists()) return;
 
+        $this->id = $bean->getID();
 		$this->name = $bean->name;
 		$this->content = $bean->content;
 		$this->created = $bean->created;

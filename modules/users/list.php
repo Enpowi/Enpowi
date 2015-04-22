@@ -5,15 +5,15 @@ use Enpowi\Users\User;
 use Enpowi\Users\Group;
 use Enpowi\Modules\DataOut;
 
-$id = (new DataOut())
+$data = (new DataOut())
 	->add('users', User::users())
 	->add('availableGroups', Group::groups())
-	->bind();
+	->out();
 
 ?><form
 	v-module
+    data="<?php echo $data?>"
 	action="users/listService"
-	data="<?php echo $id ?>"
 	data-done="users/list"
 	class="container">
 	<h3><span v-t>Users</span>

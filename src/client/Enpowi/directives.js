@@ -92,8 +92,6 @@ Namespace('Enpowi').
 
                         }
 
-                        scriptUrls.push("modules/page/edit.js");
-
                         el.parentNode.appendChild(app.loadStyles(styleUrls));
                         app.loadScripts(scriptUrls, function() {
                             var cm = CodeMirror.fromTextArea(el, {
@@ -101,6 +99,10 @@ Namespace('Enpowi').
                             });
 
                             cm.on('change', function() {
+                                el.value = cm.getValue();
+                            });
+
+                            form.addEventListener('submit', function() {
                                 el.value = cm.getValue();
                             });
                         });

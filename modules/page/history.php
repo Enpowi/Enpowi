@@ -7,14 +7,20 @@ use Enpowi\Pages\Page;
 
 $name = App::param('name');
 
-$id = (new DataOut())
+$out = (new DataOut())
 	->add('name', $name)
+    ->add('left', 0)
+    ->add('right', 0)
 	->add('history', (new Page($name))->history())
-	->bind();
-?><div
+	->out();
+
+?><form
 	v-module
-	data="<?php echo $id ?>"
-	class="container">
+    data="<?php echo $out?>"
+	class="container"
+    action="page/compare?name={{ name }}&left={{ left }}&right={{ right }}">
+
+    <input type="hidden" value="{{ name }}" name="name">
 
 	<h3><span v-t>History of </span>{{ name }}</h3>
 
@@ -31,15 +37,15 @@ $id = (new DataOut())
 		<tr v-repeat="page : history">
 			<td>{{ page.created }}</td>
 			<td>{{ page.createdBy }}</td>
-			<td class="center"><input type="radio" name="left-compare[]"</td>
-			<td class="center"><input type="radio" name="right-compare[]"</td>
+			<td class="center"><input type="radio" name="left" value="{{ page.id }}" v-model="left"></td>
+			<td class="center"><input type="radio" name="right" value="{{ page.id }}" v-model="right"></td>
 		</tr>
 		</tbody>
 		<tfoot>
 		<tr>
 			<td colspan="2"></td>
-			<td colspan="2" class="center"><button v-t class="btn btn-success">Compare</button></td>
+			<td colspan="2" class="center"><button v-t type="submit" class="btn btn-success">Compare</button></td>
 		</tr>
 		</tfoot>
 	</table>
-</div>
+</form>

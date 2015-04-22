@@ -3,7 +3,6 @@ Namespace('Enpowi').
         Static: {
             setup: function (app) {
                 this.app = app;
-                this.data = {};
             },
             url: function (moduleAndComponent) {
                 var tempRouter = crossroads.create(),

@@ -185,7 +185,7 @@ class User {
 		//anonymous
 		if ($this->username === 'Anonymous') {
 			$group = new Group( 'Anonymous' );
-			$groups[$group->id()] = $group;
+			$groups[] = $group;
 		}
 
 		//not anonymous
@@ -193,17 +193,17 @@ class User {
 			$groupBeans = $this->_bean->sharedGroupList;
 
 			$group = new Group( 'Registered' );
-			$groups[$group->id()] = $group;
+			$groups[] = $group;
 
 			foreach($groupBeans as $groupBean) {
 				$group = new Group($groupBean->name, $groupBean);
-				$groups[$group->id()] = $group;
+				$groups[] = $group;
 			}
 		}
 
 		//everyone
 		$group = new Group( 'Everyone' );
-		$groups[$group->id()] = $group;
+		$groups[] = $group;
 
 		return $this->groups = $groups;
 	}

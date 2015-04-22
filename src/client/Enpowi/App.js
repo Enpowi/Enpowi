@@ -11,15 +11,16 @@ Namespace('Enpowi').
             this.routes = [];
             this.hasher = hasher;
             this.loadingElement = null;
+            this.routeCallback = callback;
 
             Enpowi.directives.setup(this);
             Enpowi.module.setup(this);
             Enpowi.translation.setup(this);
 
-            this.setupRoutes(callback);
+            this.setupRoutes();
         },
 
-        setupRoutes: function(callback) {
+        setupRoutes: function() {
             //setup router
             var router = this.router,
                 app = this,
@@ -36,7 +37,7 @@ Namespace('Enpowi').
                             }
                             app.setLoading(false);
                             var result = app.process(data);
-                            callback(result);
+                            app.routeCallback(result);
                         });
                     });
                 };
@@ -90,10 +91,6 @@ Namespace('Enpowi').
             return this;
         },
 
-        qMod: function(query) {
-            return Enpowi.directives.defaultModuleElement.querySelector(query);
-        },
-
         loadScripts: function(urls, callback) {
             this.loadAll(urls, function(results) {
                 var i = 0,
@@ -121,56 +118,36 @@ Namespace('Enpowi').
 
             return styles;
         },
-        /**
-         * @type {HTMLElement}
-         */
-        processScript: function(script, scriptFrag) {
-            var replacementScript;
-
-            if (script.innerHTML.length > 0) {
-                (new Function(script.innerHTML))();
-            } else {
-                replacementScript = document.createElement('script');
-                replacementScript.setAttribute('src', script.getAttribute('src'));
-                scriptFrag.appendChild(replacementScript);
-            }
-
-            return this;
-        },
         process: function(html) {
             var el = document.createElement('div'),
-                children,
                 frag = document.createDocumentFragment(),
-                scriptFrag = document.createDocumentFragment(),
-                scriptAnchor = document.querySelector('script'),
                 child;
 
             el.innerHTML = html;
-            children = el.children;
 
-            while(children.length > 0) {
+            while (el.children.length > 0) {
                 child = el.firstChild;
-                console.log(child);
                 el.removeChild(child);
+                frag.appendChild(child);
 
-                if (child.nodeName === 'SCRIPT') {
-                    this.processScript(child, scriptFrag);
-                } else if (child.nodeType === 1) {
-                    frag.appendChild(child);
+                if (child.nodeType === 1) {
                     new Vue({
                         el: child,
                         data: (function () {
                             var data = {
                                     session: Enpowi.session
                                 },
-                                hasData = child.hasAttribute('data'),
-                                key = child.getAttribute('data'),
+                                jsonEncoded = child.getAttribute('data'),
+                                jsonDecoded,
                                 moduleData,
                                 i;
 
-                            if (hasData) {
-                                moduleData = Enpowi.module.data[key];
-                                for (i in moduleData) if (moduleData.hasOwnProperty(i)) {
+                            if (jsonEncoded) {
+                                child.removeAttribute('data');
+                                jsonDecoded = decodeURIComponent(jsonEncoded);
+                                moduleData = JSON.parse(jsonDecoded);
+                                console.log(moduleData);
+                                for (i in moduleData) if (i && moduleData.hasOwnProperty(i)) {
                                     data[i] = moduleData[i];
                                 }
                             }
@@ -183,6 +160,16 @@ Namespace('Enpowi').
                             },
                             stringify: function (json) {
                                 return JSON.stringify(json);
+                            },
+                            arrayLookup: function(array, key, value) {
+                                var i = 0,
+                                    max = array.length;
+
+                                for(;i < max; i++) {
+                                    if (array[i][key] === value) return array[i];
+                                }
+
+                                return null;
                             },
                             hasPerm: function (module, component) {
                                 var hasPerm = false;
@@ -203,12 +190,8 @@ Namespace('Enpowi').
                             }
                         }
                     });
-                } else {
-                    frag.appendChild(child);
                 }
             }
-
-            scriptAnchor.parentNode.insertBefore(scriptFrag, scriptAnchor);
 
             return frag;
         },

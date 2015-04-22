@@ -4,15 +4,15 @@ if(!defined('Modular')) die('Direct access not permitted');
 use Enpowi\Users\Group;
 use Enpowi\Modules\DataOut;
 
-$id = (new DataOut())
+$data = (new DataOut())
 	->add('groups', Group::groups())
-	->bind();
+	->out();
 
 ?><form
 	v-module
+    data="<?php echo $data; ?>"
 	action="group/listService"
 	data-done="group/list"
-	data="<?php echo $id?>"
 	class="container">
 	<h3><span v-t>Groups</span> <a v-title="New Group" href="#group/new"><span class="glyphicon glyphicon-plus-sign"></span></a></h3>
 	<table class="table">

@@ -6,15 +6,15 @@ use Enpowi\Users\Group;
 use Enpowi\Users\User;
 use Enpowi\Modules\DataOut;
 
-$id = (new DataOut())
+$data = (new DataOut())
 	->add('user', $user = new User(App::param('username')))
 	->add('groups', Group::editableGroups())
-	->bind();
+	->out();
 
 ?><form
 	listen
 	v-module
-	data="<?php echo $id ?>"
+    data="<?php echo $data?>"
 	action="group/ofUserService"
 	class="container">
 
@@ -35,7 +35,7 @@ $id = (new DataOut())
 			name="groups[]"
 			type="checkbox"
 			value="{{ stringify( group ) }}"
-		    v-model=" user.groups[ $key ] ">
+		    v-model=" arrayLookup(user.groups, 'id', group.id) !== null ">
 
 		<label>{{ group.name }}</label>
 	</div>

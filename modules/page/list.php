@@ -4,13 +4,13 @@ if(!defined('Modular')) die('Direct access not permitted');
 use Enpowi\Pages\Page;
 use Enpowi\Modules\DataOut;
 
-$id = (new DataOut())
+$data = (new DataOut())
 	->add('pages', Page::pages())
-	->bind();
+	->out();
 
 ?><div
 	v-module
-	data="<?php echo $id?>"
+    data="<?php echo $data?>"
 	class="container">
 	<!--TODO page name-->
 	<h3><span v-t>Pages</span>

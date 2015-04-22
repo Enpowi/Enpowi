@@ -13,6 +13,7 @@ use Respect\Validation\Validator as v;
 
 class Group {
 
+    public $id;
 	public $name;
 	public $perms;
 	public $isSystem = false;
@@ -39,6 +40,7 @@ class Group {
 			)
 		) {
 			$this->isSystem = true;
+            $this->id = $bean->getID();
 		}
 	}
 
@@ -69,11 +71,6 @@ class Group {
 		}
 
 		return null;
-	}
-
-	public function id()
-	{
-		return $this->_bean->getID();
 	}
 
 	public function remove()
@@ -167,7 +164,7 @@ class Group {
 		foreach(R::find('group', $sqlLookup) as $groupBean) {
 			$group = new Group( $groupBean->name, $groupBean );
 
-			$groups[$groupBean->id] = $group;
+			$groups[] = $group;
 
 			if ($updatePerms) {
 				$group->updatePerms();
