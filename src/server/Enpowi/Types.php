@@ -9,6 +9,7 @@
 namespace Enpowi;
 
 
+use Enpowi\Blog\Post;
 use Enpowi\Pages\Page;
 use Enpowi\Users\Group;
 use Enpowi\Users\Perm;
@@ -22,4 +23,6 @@ class Types {
 	public static function Users_Perm(Perm $perm) { return $perm; }
 
 	public static function Pages_Page(Page $page) { return $page; }
+
+    public static function Blog_Post(Post $post) { return $post; }
 }

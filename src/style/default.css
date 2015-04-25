@@ -13,10 +13,6 @@ article {
 	margin-right: auto;
 }
 
-article > *:first-child {
-	margin-top: 48px;
-}
-
 footer {
 	text-align: center;
 }
