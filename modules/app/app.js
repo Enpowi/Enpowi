@@ -1,3 +1,15 @@
+$.holdReady(true);
+Enpowi.App
+	.sub('directive.ready', function() {
+		$.holdReady(false);
+	})
+	.sub('app.delay', function() {
+		$('body').modal();
+	})
+	.sub('app.continue', function() {
+		$('body').modal(false);
+	});
+
 var app = new Enpowi.App(function(html) {
     var el = Enpowi.directives.defaultModuleElement;
     while (el.firstChild !== null) {
@@ -7,9 +19,9 @@ var app = new Enpowi.App(function(html) {
 });
 
 app.load('modules/default/loading.html', function(html){
-	app.loadingElement = $(html);
+	app.loadingElement = html;
 });
 
 new Vue({
-	el: $('body')[0]
+	el: document.body
 });

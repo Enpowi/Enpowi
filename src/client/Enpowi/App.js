@@ -6,6 +6,32 @@
 Namespace('Enpowi').
 
     Class('App', {
+		Static: {
+			pubs: {},
+			sub: function(eventName, callback) {
+				var pubs;
+				if ((pubs = this.pubs[eventName]) === undefined) pubs = this.pubs[eventName] = [];
+				pubs.push(callback);
+
+				return this;
+			},
+			pub: function(eventName, data) {
+				var pubs,
+					max,
+					i;
+
+				if ((pubs = this.pubs[eventName]) === undefined) return this;
+
+				i = 0;
+				max = pubs.length;
+
+				for (;i <max;i++) {
+					pubs[i](this, data);
+				}
+
+				return this;
+			}
+		},
         construct: function(callback) {
             this.router = crossroads;
             this.routes = [];
@@ -277,12 +303,12 @@ Namespace('Enpowi').
 
             if (this.isLoading === false && isLoading) {
                 this.isLoading = isLoading;
-                el.modal();
+	            Enpowi.App.pub('app.delay');
             }
 
             else if (this.isLoading && isLoading === false) {
                 this.isLoading = isLoading;
-                el.modal('hide');
+	            Enpowi.App.pub('app.continue');
             }
 
             return this;

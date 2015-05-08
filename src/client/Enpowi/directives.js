@@ -6,17 +6,30 @@ Namespace('Enpowi').
             queue: [],
             data: {},
             app: null,
+	        bindingDirectives: [],
+	        setBinding: function(directive) {
+		        this.bindingDirectives.push(directive);
+	        },
+	        doneBinding: function(directive) {
+		        this.bindingDirectives.splice(this.bindingDirectives.indexOf(directive), 1);
+
+		        if (this.bindingDirectives.length < 1) {
+			        Enpowi.App.pub('directive.ready');
+		        }
+	        },
             setup: function (app) {
                 var me = this;
                 me.app = app;
 
                 Vue.directive('module', {
                     bind: function () {
-                        var el = this.el;
-
+                        var el = this.el,
+	                        directive = this;
+	                    me.setBinding(directive);
                         switch (el.nodeName) {
                             case 'FORM':
                                 Enpowi.forms.strategy(el, this.vm, this);
+	                            me.doneBinding(directive);
                         }
                     }
                 });
@@ -25,62 +38,77 @@ Namespace('Enpowi').
                     deep: true,
                     bind: function () {
                         var me = this;
-
-                        $(this.el).change(function () {
-                            $(me.vm.$parent.$el).submit();
-                        });
+                        this.el.onchange = function () {
+                            me.vm.$parent.$el.submit();
+                        };
                     }
                 });
 
                 Vue.directive('header', {
                     bind: function () {
-                        var el = this.el;
+                        var el = this.el,
+	                        directive = this;
+
+	                    me.setBinding(directive);
 
                         app.loadModule(Enpowi.session.theme + '/header', function (html) {
-                            $(el).html(html);
+                            el.appendChild(html);
+	                        me.doneBinding(directive);
                         });
                     }
                 });
 
                 Vue.directive('navigation', {
                     bind: function () {
-                        var el = this.el;
+                        var el = this.el,
+	                        directive = this;
+
+	                    me.setBinding(directive);
 
                         app.loadModule(Enpowi.session.theme + '/navigation', function (html) {
-                            $(el).html(html);
+                            el.appendChild(html);
+	                        me.doneBinding(directive);
                         });
                     }
                 });
 
                 Vue.directive('article', {
                     bind: function () {
-                        me.defaultModuleElement = this.el;
+	                    var el = this.el;
+                        me.defaultModuleElement = el;
                     }
                 });
 
                 Vue.directive('side', {
                     bind: function () {
-                        this.el.className += ' ' + this.expression;
+	                    var el = this.el;
+                        el.className += ' ' + this.expression;
                     }
                 });
 
                 Vue.directive('footer', {
                     bind: function () {
+	                    var directive = this;
+	                    me.setBinding(directive);
                         var el = this.el;
 
                         app.loadModule(Enpowi.session.theme + '/footer', function (html) {
-                            $(el).html(html);
+                            el.appendChild(html);
+	                        me.doneBinding(directive);
                         });
                     }
                 });
 
                 Vue.directive('source-edit', {
                     bind: function() {
-                        var el = this.el,
+                        var directive = this,
+	                        el = this.el,
                             form = el.form,
                             styleUrls = ["vendor/codemirror/lib/codemirror.css"],
                             scriptUrls = ["vendor/codemirror/lib/codemirror.js"],
                             mode = '';
+
+	                    me.setBinding(directive);
 
                         switch (this.expression.toLowerCase()) {
                             case "wikilingo":
@@ -91,6 +119,8 @@ Namespace('Enpowi').
                             default:
 
                         }
+
+                        scriptUrls.push("modules/page/edit.js");
 
                         el.parentNode.appendChild(app.loadStyles(styleUrls));
                         app.loadScripts(scriptUrls, function() {
@@ -105,6 +135,8 @@ Namespace('Enpowi').
                             form.addEventListener('submit', function() {
                                 el.value = cm.getValue();
                             });
+
+	                        me.doneBinding(directive);
                         });
                     }
                 });
