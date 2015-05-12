@@ -25,7 +25,7 @@ $config->setupMySql('localhost', 'datbasename', 'user', 'password');
 ```
 
 Step 5:
-```
+```php
 //visit http://yoursite.com/setup.php
 ```
 
