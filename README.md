@@ -1,6 +1,12 @@
 # Enpowi
 web platform, Engineered with power & wisdom
 
+Enpowi is:
+* a single page content management system
+* very fast
+* cutting edge
+* very small
+
 Setup in 5 steps:
 
 Step 1:
@@ -25,8 +31,8 @@ $config->setupMySql('localhost', 'datbasename', 'user', 'password');
 ```
 
 Step 5:
-```php
-//visit http://yoursite.com/setup.php
+```
+visit http://yoursite.com/setup.php
 ```
 
 Enjoy Enpowi
