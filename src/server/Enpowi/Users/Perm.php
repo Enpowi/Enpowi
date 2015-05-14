@@ -2,6 +2,7 @@
 
 namespace Enpowi\Users;
 
+use Aura\Session\Exception;
 use RedBeanPHP\R;
 use Respect\Validation\Validator as v;
 
@@ -87,7 +88,12 @@ class Perm {
 
 	public static function parse($string)
 	{
-		preg_match('/(?P<group>[a-zA-Z][a-zA-Z0-9-_]+)[@](?P<module>[a-zA-Z][a-zA-Z0-9-_]+)[\/]?(?P<component>[a-zA-Z][a-zA-Z0-9-_]+)?/', $string, $matches);
+		//module/component
+		//module/*
+		//*/component
+		//*/*
+
+		preg_match('/(?P<group>[a-zA-Z][a-zA-Z0-9-_]+)[@](?P<module>([a-zA-Z][a-zA-Z0-9-_]+|[*]))[\/]?(?P<component>([a-zA-Z][a-zA-Z0-9-_]+|[*]))?/', $string, $matches);
 
 		return [
 			'group' => $matches['group'],

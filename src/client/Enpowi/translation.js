@@ -1,11 +1,13 @@
 Namespace('Enpowi').
     Class('translation', {
         setup: function() {
+	        var self = Enpowi.translation;
+
             Vue.directive('placeholder', {
                 isLiteral: true,
                 bind: function () {
                     var el = this.el;
-                    Enpowi.translation.translate(this.expression, function(v) {
+                    self.translate(this.expression, function(v) {
                         el.setAttribute('placeholder', v);
                     });
                 }
@@ -15,7 +17,7 @@ Namespace('Enpowi').
                 isLiteral: true,
                 bind: function () {
                     var el = this.el;
-                    Enpowi.translation.translate(el.innerHTML, function(v) {
+	                self.translate(el.innerHTML, function(v) {
                         el.innerHTML = v;
                     });
                 }
@@ -25,7 +27,7 @@ Namespace('Enpowi').
                 isLiteral: true,
                 bind: function () {
                     var el = this.el;
-                    Enpowi.translation.translate(this.expression, function(v) {
+	                self.translate(this.expression, function(v) {
                         el.setAttribute('title', v);
                     });
                 }

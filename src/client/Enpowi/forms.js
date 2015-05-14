@@ -6,7 +6,7 @@ Class('forms', {
 			var $el = $(el),
 				me = this;
 
-			$el.on('submit', function(e) {
+			el.addEventListener('submit', function(e) {
                 e.preventDefault();
 
                 if (!el.hasAttribute('data-done') && !el.hasAttribute('listen')) {
@@ -27,6 +27,8 @@ Class('forms', {
 				}
 
 				me.socket(Enpowi.module.url(el.getAttribute('action')), $el.serialize(), elements, items, el, vue);
+
+				return false;
 			});
 		},
 		socket: function(url, serialized, elements, serializedArray, form, vue) {

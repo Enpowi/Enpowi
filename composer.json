@@ -101,7 +101,7 @@
         "aura/session": "2.*@dev",
         "wikilingo/wikilingo": "~1.0.1",
         "respect/validation": "0.8.*",
-        "gabordemooij/redbean": "dev-master",
+        "gabordemooij/redbean": "~4.2.0",
         "mindplay/jsonfreeze": "~1.2",
         "skema/skema": "dev-master",
         "mediumjs/mediumjs": "dev-master",

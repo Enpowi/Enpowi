@@ -37,9 +37,25 @@ Namespace('Enpowi').
                 Vue.directive('module-item', {
                     deep: true,
                     bind: function () {
-                        var me = this;
-                        this.el.onchange = function () {
-                            me.vm.$parent.$el.submit();
+                        var me = this,
+	                        el = this.el;
+
+	                    el.onchange = function () {
+		                    var form,
+			                    parent;
+
+		                    parent = el.parentNode;
+
+		                    while (parent !== null && parent.nodeName !== 'FORM') {
+			                    parent = parent.parentNode;
+
+		                    }
+
+		                    if (parent === null) return;
+
+		                    form = parent;
+
+	                        Enpowi.utilities.trigger(form, 'submit');
                         };
                     }
                 });
@@ -119,8 +135,6 @@ Namespace('Enpowi').
                             default:
 
                         }
-
-                        scriptUrls.push("modules/page/edit.js");
 
                         el.parentNode.appendChild(app.loadStyles(styleUrls));
                         app.loadScripts(scriptUrls, function() {
