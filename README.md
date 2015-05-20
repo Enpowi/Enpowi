@@ -36,3 +36,8 @@ visit http://yoursite.com/setup.php
 ```
 
 Enjoy Enpowi
+
+default login is:
+```
+admin / admin
+```
