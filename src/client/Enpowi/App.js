@@ -260,10 +260,10 @@ Namespace('Enpowi').
 
             return this;
         },
-        load: function(url, callback) {
+        load: function(url, callback, usePost) {
             var request = new XMLHttpRequest();
 
-            request.open('POST', url, true);
+            request.open((usePost ? 'POST' : 'GET'), url, true);
 
             request.onload = function() {
                 if (request.status >= 200 && request.status < 400) {
