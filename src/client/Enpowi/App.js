@@ -229,6 +229,8 @@ Namespace('Enpowi').
                 this.hasher.setHash(route);
             }
 
+	        Enpowi.App.pub('app.go', route);
+
             return this;
         },
 
