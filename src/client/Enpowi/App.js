@@ -26,7 +26,7 @@ Namespace('Enpowi').
 				max = pubs.length;
 
 				for (;i <max;i++) {
-					pubs[i](this, data);
+					pubs[i].apply(this, data);
 				}
 
 				return this;
@@ -111,7 +111,7 @@ Namespace('Enpowi').
             });
 
 	        router.routed.add(function(route) {
-		        Enpowi.App.pub('app.go', route);
+		        Enpowi.App.pub('app.go', [route]);
 	        });
         },
 
