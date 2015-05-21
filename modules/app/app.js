@@ -1,13 +1,14 @@
 $.holdReady(true);
+
 Enpowi.App
 	.sub('directive.ready', function() {
 		$.holdReady(false);
 	})
 	.sub('app.delay', function() {
-		$('body').modal();
+		app.modal = $('<div>').modal('show');
 	})
 	.sub('app.continue', function() {
-		$('body').modal(false);
+		if (app.modal) app.modal.modal('hide');
 	});
 
 var app = new Enpowi.App(function(html) {
