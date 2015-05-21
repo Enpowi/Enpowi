@@ -172,7 +172,7 @@ Namespace('Enpowi').
                                 child.removeAttribute('data');
                                 jsonDecoded = decodeURIComponent(jsonEncoded);
                                 moduleData = JSON.parse(jsonDecoded);
-                                console.log(moduleData);
+
                                 for (i in moduleData) if (i && moduleData.hasOwnProperty(i)) {
                                     data[i] = moduleData[i];
                                 }
