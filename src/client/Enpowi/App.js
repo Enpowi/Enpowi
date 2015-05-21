@@ -109,6 +109,10 @@ Namespace('Enpowi').
             router.addRoute('/{module}/{component}{?query}', function(path) {
                 callback('modules?module=' + path.module + '&component=' + path.component + '&'  + path['?query_']);
             });
+
+	        router.routed.add(function(route) {
+		        Enpowi.App.pub('app.go', route);
+	        });
         },
 
         logRoutes: function() {
@@ -228,8 +232,6 @@ Namespace('Enpowi').
             } else {
                 this.hasher.setHash(route);
             }
-
-	        Enpowi.App.pub('app.go', route);
 
             return this;
         },
