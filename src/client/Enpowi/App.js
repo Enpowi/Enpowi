@@ -50,7 +50,7 @@ Namespace('Enpowi').
             //setup router
             var router = this.router,
                 app = this,
-                landRoute = function(url) {
+                landRoute = function(url, route) {
                     var loading = setTimeout(function() {
                         loading = null;
                         app.setLoading(true);
@@ -64,6 +64,7 @@ Namespace('Enpowi').
                             app.setLoading(false);
                             var result = app.process(data);
                             app.routeCallback(result);
+                            Enpowi.App.pub('app.land', [route]);
                         });
                     });
                 };
