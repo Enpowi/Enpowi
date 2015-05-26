@@ -16,15 +16,18 @@ class Config
 
 	public $themeModule = 'default';
 
-	public $db = [
-		'host' => '',
-		'name' => '',
-		'user' => '',
-		'password' => ''
-	];
+	public $siteName;
+	public $siteUrl;
+
+	public $dbHost;
+	public $dbName;
+	public $dbUser;
+	public $dbPassword;
 
 	public function __construct($moduleDirectory = null)
 	{
+		App::$config = $this;
+
 		if ($moduleDirectory === null) {
 			$moduleDirectory = dirname(__FILE__) . '/../../../modules/';
 		}
@@ -36,14 +39,23 @@ class Config
 		}
 	}
 
+	public function setupSite($name, $url) {
+		$this->siteName = $name;
+		$this->siteUrl = $url;
+
+		return $this;
+	}
+
 	public function setupMySql($host, $name, $user, $password)
 	{
-		$this->db['host'] = $host;
-		$this->db['name'] = $name;
-		$this->db['user'] = $user;
-		$this->db['password'] = $password;
+		$this->dbHost = $host;
+		$this->dbName = $name;
+		$this->dbUser = $user;
+		$this->dbPassword = $password;
 
 		R::setup('mysql:host=' . $host . ';dbname=' . $name, $user, $password);
+
+		return $this;
 	}
 
 	public function setupThemeModule($moduleName)
@@ -55,5 +67,11 @@ class Config
 		} else {
 			throw new \Exception("Module directory, $moduleDir, does not exist");
 		}
+	}
+
+	public function setupMail($from, $fromName, $host, $username, $password, $smtpAuth = true, $smtpSecure = 'tls', $port = 587) {
+		Mail::setup($from, $fromName, $host, $username, $password, $smtpAuth, $smtpSecure, $port);
+
+		return $this;
 	}
 }

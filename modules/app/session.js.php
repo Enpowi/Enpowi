@@ -1,7 +1,7 @@
 <?php
 if(!defined('Modular')) die('Direct access not permitted');
 
-global $config;
+use Enpowi\App;
 
 $replies = [];
 $authentication = new Enpowi\Authentication();
@@ -9,7 +9,7 @@ $authentication = new Enpowi\Authentication();
 //get user
 $user = $authentication->getUser()->updatePerms();
 $replies['user'] = $user;
-$replies['theme'] = $config->themeModule;
+$replies['theme'] = App::$config->themeModule;
 
 
 //iterate through all replies and reply them as json

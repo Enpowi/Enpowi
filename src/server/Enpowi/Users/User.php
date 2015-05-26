@@ -8,6 +8,7 @@
 
 namespace Enpowi\Users;
 
+use ENpowi\App;
 use RedBeanPHP\R;
 use Respect\Validation\Validator as v;
 use Enpowi\Authentication;
@@ -19,6 +20,7 @@ class User {
 	public $lastLogin;
 	public $created;
 	public $locked;
+	public $valid;
 
 	/**
 	 * @var Group[]
@@ -70,6 +72,7 @@ class User {
 		$this->lastLogin = $bean->lastLogin;
 		$this->created = $bean->created;
 		$this->locked = $bean->locked;
+		$this->valid = $bean->valid;
 	}
 
 	public static function fromId($id) {
@@ -134,6 +137,8 @@ class User {
 			$bean->lastLogin = R::isoDateTime();
 			$bean->created = R::isoDateTime();
 			$bean->sharedGroupList;
+			$bean->lockedKey = App::guid();
+			$bean->validationKey = App::guid();
 
 			$id = R::store($bean);
 
@@ -175,6 +180,32 @@ class User {
 	public function id()
 	{
 		return $this->_bean->getID();
+	}
+
+	public function lockedKey() {
+		return $this->_bean->lockedKey;
+	}
+
+	public function isLocked() {
+		return $this->_bean->locked ? true : false;
+	}
+
+	public function validationKey() {
+		return $this->_bean->validationKey;
+	}
+
+	public function isValid() {
+		return $this->_bean->valid ? true : false;
+	}
+
+	public function setValid($valid) {
+		$bean = $this->_bean;
+
+		$bean->valid = $valid;
+
+		R::store($bean);
+
+		return $this;
 	}
 
 	public function updateGroups()
@@ -229,10 +260,13 @@ class User {
 			foreach($group->perms as $perm) {
 				if (
 					$perm->module === $module
-					|| ($perm->module . 'Service') === $module
 					|| $perm->module === '*'
 				) {
-					if ($perm->component === $component || $perm->component === '*') {
+					if (
+						$perm->component === $component
+						|| ($perm->component . 'Service') === $component
+					    || $perm->component === '*'
+					) {
 						return true;
 					}
 				}

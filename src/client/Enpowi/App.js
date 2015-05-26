@@ -56,7 +56,7 @@ Namespace('Enpowi').
                         app.setLoading(true);
                     }, 500);
 
-                    app.load(url, function(data) {
+                    app.load(url, function(data, route) {
                         app.loadScript('modules?module=app&component=session.js', function() {
                             if (loading !== null) {
                                 clearTimeout(loading);
@@ -64,6 +64,7 @@ Namespace('Enpowi').
                             app.setLoading(false);
                             var result = app.process(data);
                             app.routeCallback(result);
+	                        Enpowi.App.pub('app.go', [route]);
                         });
                     });
                 };
@@ -92,27 +93,23 @@ Namespace('Enpowi').
             router.normalizeFn = crossroads.NORM_AS_OBJECT;
 
             router.addRoute('/', function() {
-                callback('modules?module=' + Enpowi.session.theme + '&component=index');
+                callback('modules?module=' + Enpowi.session.theme + '&component=index', '');
             });
             router.addRoute('/{module}', function(path) {
-                callback('modules?module=' + path.module);
+                callback('modules?module=' + path.module, path._request);
             });
             router.addRoute('/{module}{?query}', function(path) {
-                callback('modules?module=' + path.module + '&'  + path['?query_']);
+                callback('modules?module=' + path.module + '&'  + path['?query_'], path._request);
             });
             router.addRoute('/{module}/{component}', function(path) {
-                callback('modules?module=' + path.module + '&component=' + path.component);
+                callback('modules?module=' + path.module + '&component=' + path.component, path._request);
             });
             router.addRoute('/{module}/{component}/{id}', function(path) {
-                callback('modules?module=' + path.module + '&component=' + path.component + '&id' + path.id);
+                callback('modules?module=' + path.module + '&component=' + path.component + '&id' + path.id, path._request);
             });
             router.addRoute('/{module}/{component}{?query}', function(path) {
-                callback('modules?module=' + path.module + '&component=' + path.component + '&'  + path['?query_']);
+                callback('modules?module=' + path.module + '&component=' + path.component + '&'  + path['?query_'], path._request);
             });
-
-	        router.routed.add(function(route) {
-		        Enpowi.App.pub('app.go', [route]);
-	        });
         },
 
         logRoutes: function() {

@@ -7,9 +7,13 @@ ini_set("display_errors", 1);
 
 define('Modular', TRUE);
 
-$component = App::loadComponent(dirname(__FILE__), App::param('module'), App::param('component'));
-if ($component !== null && !empty($component->file)) {
-	require_once $component->file;
+$module = App::param('module');
+$component = App::param('component');
+$path = dirname(__FILE__);
+$me = App::loadComponent($path, $module, $component);
+
+if ($me !== null && !empty($me->file)) {
+	require_once $me->file;
 } else {
 	echo -1;
 }

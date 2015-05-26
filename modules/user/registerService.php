@@ -42,7 +42,7 @@ else if (!User::isValidPassword($password)) {
 
 if ( ! Utilities::isCaptchaMatch( $captcha ) ) {
 	$reply['captcha'] = 'Invalid captcha phrase';
-	$stop             = true;
+	$stop = true;
 }
 
 
@@ -51,15 +51,13 @@ if ($stop) {
 	die;
 }
 
-
 $user = User::create($username, $password, $email);
-
 
 if ($user !== null) {
 	$user->login();
 	echo json_encode( [ 'id' => $user->id() ] );
+	die;
 } else {
 	echo json_encode( [ 'id' => $user->id() ] );
+	die;
 }
-
-echo 1;

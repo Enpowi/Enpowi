@@ -1,5 +1,6 @@
 <?php
-global $config;
 
-$config = new \Enpowi\Config();
-$config->setupMySql('localhost', 'Enpowi', 'Enpowi', 'Enpowi');
+(new \Enpowi\Config())
+	->setupSite('Enpowi', 'http://www.enpowi.com')
+	->setupMySql('localhost', 'Enpowi', 'Enpowi', 'Enpowi')
+	->setupMail('admin@localhost', 'Admin', 'localhost', 'admin', 'secret');

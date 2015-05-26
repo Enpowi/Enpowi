@@ -105,7 +105,8 @@
         "mindplay/jsonfreeze": "~1.2",
         "skema/skema": "dev-master",
         "mediumjs/mediumjs": "dev-master",
-        "wikilingo/codemirror": "dev-master"
+        "wikilingo/codemirror": "dev-master",
+        "phpmailer/phpmailer": "~5.2"
     },
     "autoload": {
         "psr-0": {

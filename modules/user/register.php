@@ -23,9 +23,15 @@ $img = Enpowi\Forms\Utilities::captcha(true);
 		<span v-text="password"></span>
 	</div>
 	<div class="form-group">
-		<img class="captcha" src="<?php echo $img?>"/>
-		<input type="text" class="form-control" name="captcha" v-placeholder="Captcha">
-		<span v-text="captcha"></span>
+		<table>
+			<tr>
+				<td><img class="captcha" src="<?php echo $img?>"/></td>
+				<td>
+					<input type="text" class="form-control" name="captcha" v-placeholder="Captcha">
+					<span v-text="captcha"></span>
+				</td>
+			</tr>
+		</table>
 	</div>
 	<button type="submit" class="btn btn-success" v-t>Submit</button>
 </form>

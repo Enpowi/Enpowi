@@ -18,26 +18,26 @@ class Utilities
 	{
 		$app = Enpowi\App::get();
 
-		$segment = $app->session->newSegment(__CLASS__);
+		$segment = $app->session->getSegment(__CLASS__);
 
 		if (!isset($segment->phrase) || $isNew) {
 			$builder = new CaptchaBuilder();
 			$builder->build();
 
-			$segment->phrase = $builder->getPhrase();
-			$segment->image = $builder->inline();
+			$segment->set('phrase', $builder->getPhrase());
+			$segment->set('image', $builder->inline());
 		}
 
-		return $segment->image;
+		return $segment->get('image');
 	}
 
-	public static function isCaptchaMatch($phrase)
+	public static function isCaptchaMatch($phraseAttempt)
 	{
 		$app = Enpowi\App::get();
-		$segment = $app->session->newSegment(__CLASS__);
-
-		if (isset($segment->phrase)) {
-			return $segment->phrase === $phrase;
+		$segment = $app->session->getSegment(__CLASS__);
+		$phrase = $segment->get('phrase');
+		if (isset($phrase)) {
+			return $phrase === $phraseAttempt;
 		}
 		return false;
 	}

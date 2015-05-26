@@ -25,4 +25,6 @@ class Types {
 	public static function Pages_Page(Page $page) { return $page; }
 
     public static function Blog_Post(Post $post) { return $post; }
+
+	public static function Modules_Component(Modules\Component $component) { return $component; }
 }

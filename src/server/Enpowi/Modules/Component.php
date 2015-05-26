@@ -34,4 +34,20 @@ class Component {
 			}
 		}
 	}
+
+	public function template()
+	{
+		$module = $this->module;
+		$name = $this->name;
+
+		foreach ($this->extensions as $extension) {
+			$file = $module->folder . '/' . $name . '.template' . $extension;
+			if (file_exists($file)) {
+				return file_get_contents($file);
+				break;
+			}
+		}
+
+		return '';
+	}
 }

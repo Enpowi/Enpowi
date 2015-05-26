@@ -43,6 +43,7 @@ Perm::create('user', 'register', $anonymousGroup);
 //give registered abilities
 Perm::create('user', 'view', $registeredGroup);
 Perm::create('user', 'logout', $registeredGroup);
+Perm::create('user', 'confirm', $registeredGroup);
 Perm::create('page', 'edit', $registeredGroup);
 
 //give Administrator group access to everything

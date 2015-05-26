@@ -158,7 +158,7 @@ Namespace('Enpowi').
 	            Vue.directive('frame', {
 		            bind: function() {
 			            var el = this.el;
-			            app.load(this.expression, function(html) {
+			            app.load(Enpowi.module.url(this.expression), function(html) {
 				            $(el).append(html);
 			            });
 		            }
