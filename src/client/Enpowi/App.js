@@ -50,13 +50,13 @@ Namespace('Enpowi').
             //setup router
             var router = this.router,
                 app = this,
-                landRoute = function(url) {
+                landRoute = function(url, route) {
                     var loading = setTimeout(function() {
                         loading = null;
                         app.setLoading(true);
                     }, 500);
 
-                    app.load(url, function(data, route) {
+                    app.load(url, function(data) {
                         app.loadScript('modules?module=app&component=session.js', function() {
                             if (loading !== null) {
                                 clearTimeout(loading);
@@ -64,7 +64,7 @@ Namespace('Enpowi').
                             app.setLoading(false);
                             var result = app.process(data);
                             app.routeCallback(result);
-	                        Enpowi.App.pub('app.go', [route]);
+                            Enpowi.App.pub('app.land', [route]);
                         });
                     });
                 };
@@ -110,6 +110,10 @@ Namespace('Enpowi').
             router.addRoute('/{module}/{component}{?query}', function(path) {
                 callback('modules?module=' + path.module + '&component=' + path.component + '&'  + path['?query_'], path._request);
             });
+
+	        router.routed.add(function(route) {
+		        Enpowi.App.pub('app.go', [route]);
+	        });
         },
 
         logRoutes: function() {
