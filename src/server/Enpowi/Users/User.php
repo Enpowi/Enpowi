@@ -12,6 +12,7 @@ use ENpowi\App;
 use RedBeanPHP\R;
 use Respect\Validation\Validator as v;
 use Enpowi\Authentication;
+use Enpowi\Event;
 
 class User {
 
@@ -142,7 +143,11 @@ class User {
 
 			$id = R::store($bean);
 
-			return new User($username, $bean);
+			$user = new User($username, $bean);
+
+			Event\UserCreate::pub($user);
+
+			return $user;
 		}
 
 		return null;
@@ -150,12 +155,20 @@ class User {
 
 	public function login()
 	{
-		return (new Authentication())->login($this);
+		$login = (new Authentication())->login($this);
+
+		Event\UserLogin::pub($login, $this);
+
+		return $login;
 	}
 
 	public function logout()
 	{
+		Event\UserLogout::pub($this);
+
 		(new Authentication())->logout();
+
+		return $this;
 	}
 
 	public function emailPassword()
@@ -204,6 +217,8 @@ class User {
 		$bean->valid = $valid;
 
 		R::store($bean);
+
+		Event\UserValid::pub($valid, $this);
 
 		return $this;
 	}
