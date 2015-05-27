@@ -97,8 +97,14 @@ Namespace('Enpowi').
 
                 Vue.directive('side', {
                     bind: function () {
+	                    var directive = this;
+	                    me.setBinding(directive);
 	                    var el = this.el;
-                        el.className += ' ' + this.expression;
+
+	                    app.loadModule(Enpowi.session.theme + '/' + this.expression, function (html) {
+		                    el.appendChild(html);
+		                    me.doneBinding(directive);
+	                    });
                     }
                 });
 
