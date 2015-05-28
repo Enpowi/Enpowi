@@ -41,6 +41,9 @@ class App
 
 	function __construct()
 	{
+		if (self::$api === null) {
+			self::$api = new Slim();
+		}
 		$this->clientScripts = new ClientScripts();
 		$this->session = (new Session\SessionFactory)->newInstance($_COOKIE);
 		$authentication = $this->authentication = new Authentication($this);
@@ -49,10 +52,7 @@ class App
 
 	public static function param($param)
 	{
-		if (self::$api === null) {
-			self::$api = new Slim();
-		}
-		return self::$api->request->params($param);
+		return self::getApi()->request->params($param);
 	}
 
 	public static function get()
@@ -64,14 +64,34 @@ class App
 		return self::$app;
 	}
 
-	public static function log($username, $moduleName, $componentName, $detail = '') {
+	public static function getApi()
+	{
+		if (self::$api === null) {
+			self::$api = new Slim();
+		}
+
+		return self::$api;
+	}
+
+	public static function log($moduleName, $componentName, $detail = '') {
 		$bean = R::dispense('log');
 
-		$bean->username = $username;
-		$bean->ip = $_SERVER['REMOTE_ADDR'];
+		$bean->username = self::get()->user->username;
+		$bean->ip = self::getApi()->request->getIp();
 		$bean->time = R::isoDateTime();
 		$bean->moduleName = $moduleName;
 		$bean->componentName = $componentName;
+		$bean->detail = $detail;
+
+		R::store($bean);
+	}
+
+	public static function logError($detail = '') {
+		$bean = R::dispense('error');
+
+		$bean->username = self::get()->user->username;
+		$bean->ip = self::getApi()->request->getIp();
+		$bean->time = R::isoDateTime();
 		$bean->detail = $detail;
 
 		R::store($bean);
@@ -86,7 +106,7 @@ class App
 			$componentName = 'index';
 		}
 
-		App::log($user->username, $moduleName, $componentName);
+		App::log($moduleName, $componentName);
 
 		if ($user->hasPerm($moduleName, $componentName)) {
 			$module    = new Modules\Module( $folder, $moduleName );

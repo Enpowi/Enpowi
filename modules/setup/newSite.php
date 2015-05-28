@@ -24,7 +24,7 @@ use Enpowi\Users\Perm;
 
 R::nuke();
 
-Enpowi\App::log(null, 'setup', 'newSite');
+Enpowi\App::log('setup', 'newSite');
 
 //create groups
 $everyoneGroup = Group::create('Everyone', false, false, true);
