@@ -164,6 +164,7 @@ Namespace('Enpowi').
 	            i = 0,
 	            max,
 	            scriptBody,
+	            scriptXSS = [],
 	            scriptsRemote = [],
 	            scriptsLocal = document.createDocumentFragment();
 
@@ -177,7 +178,11 @@ Namespace('Enpowi').
 	        for(;i<max;i++) {
 		        script = scripts[i];
 		        if (script.hasAttribute('src')) {
-			        scriptsRemote.push(script.getAttribute('src'));
+			        if (script.hasAttribute('xss')) {
+				        scriptXSS.push(script);
+			        } else {
+				        scriptsRemote.push(script.getAttribute('src'));
+			        }
 		        } else {
 			        scriptBody = script.innerHTML;
 			        script = document.createElement('script');
@@ -265,6 +270,10 @@ Namespace('Enpowi').
 		        });
 	        } else if (scriptsLocal.children.length > 0) {
 		        document.querySelector('script').parentElement.appendChild(scriptsLocal);
+	        }
+
+	        if (scriptXSS.length > 0) {
+		        $('body').append(scriptXSS);
 	        }
 
             return frag;
