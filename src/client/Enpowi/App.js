@@ -176,7 +176,6 @@ Namespace('Enpowi').
 
 	        for(;i<max;i++) {
 		        script = scripts[i];
-		        el.removeChild(script);
 		        if (script.hasAttribute('src')) {
 			        scriptsRemote.push(script.getAttribute('src'));
 		        } else {
