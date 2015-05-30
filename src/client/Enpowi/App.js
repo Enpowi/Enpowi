@@ -158,10 +158,37 @@ Namespace('Enpowi').
         process: function(html) {
             var el = document.createElement('div'),
                 frag = document.createDocumentFragment(),
-                child;
+                child,
+	            scripts,
+	            script,
+	            i = 0,
+	            max,
+	            scriptBody,
+	            scriptsRemote = [],
+	            scriptsLocal = document.createDocumentFragment();
 
             el.innerHTML = html;
 
+	        //obtain scripts
+	        scripts = el.querySelectorAll('script');
+
+	        max = scripts.length;
+
+	        for(;i<max;i++) {
+		        script = scripts[i];
+		        el.removeChild(script);
+		        if (script.hasAttribute('src')) {
+			        scriptsRemote.push(script.getAttribute('src'));
+		        } else {
+			        scriptBody = script.innerHTML;
+			        script = document.createElement('script');
+			        script.innerHTML = scriptBody;
+			        scriptsLocal.appendChild(script);
+		        }
+	        }
+
+
+	        //process html
             while (el.children.length > 0) {
                 child = el.firstChild;
                 el.removeChild(child);
@@ -230,6 +257,17 @@ Namespace('Enpowi').
                 }
             }
 
+	        //process scripts
+	        if (scriptsRemote.length > 0) {
+		        this.loadScripts(scriptsRemote, function() {
+			        if (scriptsLocal.children.length > 0) {
+				        document.querySelector('script').parentElement.appendChild(scriptsLocal);
+			        }
+		        });
+	        } else if (scriptsLocal.children.length > 0) {
+		        document.querySelector('script').parentElement.appendChild(scriptsLocal);
+	        }
+
             return frag;
         },
 
@@ -246,7 +284,7 @@ Namespace('Enpowi').
         loadScript: function(url, callback) {
             this.load(url, function(scriptHTML) {
                 (new Function(scriptHTML))();
-                callback();
+                if (callback !== undefined) callback();
             });
         },
 
