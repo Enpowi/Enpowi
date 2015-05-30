@@ -51,17 +51,23 @@ Namespace('Enpowi').
             var router = this.router,
                 app = this,
                 landRoute = function(url, route) {
-                    var loading = setTimeout(function() {
-                        loading = null;
-                        app.setLoading(true);
-                    }, 500);
+	                var init = false,
+		                completed = false,
+		                timer = setInterval(function() {
+			                if (!init) {
+				                init = true;
+				                app.setLoading(true);
+			                }
+
+			                if (completed) {
+				                clearInterval(timer);
+				                app.setLoading(false);
+			                }
+		                }, 500);
 
                     app.load(url, function(data) {
                         app.loadScript('modules?module=app&component=session.js', function() {
-                            if (loading !== null) {
-                                clearTimeout(loading);
-                            }
-                            app.setLoading(false);
+	                        completed = true;
                             var result = app.process(data);
                             app.routeCallback(result);
                             Enpowi.App.pub('app.land', [route]);
