@@ -102,19 +102,19 @@ Namespace('Enpowi').
                 callback('modules?module=' + Enpowi.session.theme + '&component=index', '');
             });
             router.addRoute('/{module}', function(path) {
-                callback('modules?module=' + path.module, path._request);
+                callback('modules?module=' + path.module, path.request_);
             });
             router.addRoute('/{module}{?query}', function(path) {
-                callback('modules?module=' + path.module + '&'  + path['?query_'], path._request);
+                callback('modules?module=' + path.module + '&'  + path['?query_'], path.request_);
             });
             router.addRoute('/{module}/{component}', function(path) {
-                callback('modules?module=' + path.module + '&component=' + path.component, path._request);
+                callback('modules?module=' + path.module + '&component=' + path.component, path.request_);
             });
             router.addRoute('/{module}/{component}/{id}', function(path) {
-                callback('modules?module=' + path.module + '&component=' + path.component + '&id' + path.id, path._request);
+                callback('modules?module=' + path.module + '&component=' + path.component + '&id' + path.id, path.request_);
             });
             router.addRoute('/{module}/{component}{?query}', function(path) {
-                callback('modules?module=' + path.module + '&component=' + path.component + '&'  + path['?query_'], path._request);
+                callback('modules?module=' + path.module + '&component=' + path.component + '&'  + path['?query_'], path.request_);
             });
 
 	        router.routed.add(function(route) {
