@@ -94,7 +94,7 @@ class App
 	public static function logError($detail = '') {
 		$bean = R::dispense('error');
 
-		$bean->username = self::get()->user->username;
+		$bean->username = self::user()->username;
 		$bean->ip = self::getApi()->request->getIp();
 		$bean->time = R::isoDateTime();
 		$bean->detail = $detail;
