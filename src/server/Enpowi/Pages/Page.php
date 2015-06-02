@@ -76,7 +76,7 @@ class Page
 	{
         if (empty($this->name)) throw new Exception('Page needs name before it can be saved');
 
-		$username = Enpowi\App::get()->user->username;
+		$username = Enpowi\App::user()->username;
 
 		R::exec( 'UPDATE page SET is_revision = 1 WHERE name = ?', [$this->name] );
 

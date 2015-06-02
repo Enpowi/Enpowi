@@ -41,13 +41,18 @@ class App
 
 	function __construct()
 	{
+		self::$app = $this;
 		if (self::$api === null) {
 			self::$api = new Slim();
 		}
+
 		$this->clientScripts = new ClientScripts();
 		$this->session = (new Session\SessionFactory)->newInstance($_COOKIE);
-		$authentication = $this->authentication = new Authentication($this);
-		$this->user = $authentication->getUser();
+		$this->authentication = new Authentication($this);
+	}
+
+	public static function user() {
+		return self::get()->authentication->getUser();
 	}
 
 	public static function param($param)
@@ -58,7 +63,7 @@ class App
 	public static function get()
 	{
 		if (self::$app === null) {
-			self::$app = new self();
+			new self();
 		}
 
 		return self::$app;
@@ -76,7 +81,7 @@ class App
 	public static function log($moduleName, $componentName, $detail = '') {
 		$bean = R::dispense('log');
 
-		$bean->username = self::get()->user->username;
+		$bean->username = self::user()->username;
 		$bean->ip = self::getApi()->request->getIp();
 		$bean->time = R::isoDateTime();
 		$bean->moduleName = $moduleName;
@@ -99,8 +104,7 @@ class App
 
 	public static function loadComponent($folder, $moduleName, $componentName = 'index')
 	{
-		$app = self::get();
-		$user = $app->user;
+		$user = App::user();
 
 		if (empty($componentName)) {
 			$componentName = 'index';

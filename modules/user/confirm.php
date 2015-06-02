@@ -5,7 +5,7 @@ use Enpowi\App;
 use Enpowi\Mail;
 use Enpowi\Modules\DataOut;
 
-$user = App::$app->user;
+$user = App::$app->user();
 $key = App::param('key');
 $mailed = false;
 

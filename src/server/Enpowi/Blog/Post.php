@@ -73,7 +73,7 @@ class Post {
     {
         if (empty($this->name)) throw new Exception('Blog post needs name before it can be saved');
 
-        $username = App::get()->user->username;
+        $username = App::user()->username;
 
         //TODO: ensure createdBy is set once and contributors is an incremental list
         $bean = R::dispense('blog');

@@ -14,13 +14,9 @@ use Enpowi\Users\User;
 class Authentication
 {
 	public $segment;
-	public function __construct($app = null)
+	public function __construct()
 	{
-		if ($app === null) {
-			$app = App::get();
-		}
-
-		$this->segment = $app->session->getSegment(__CLASS__);
+		$this->segment = App::get()->session->getSegment(__CLASS__);
 	}
 
 	public function getUser()
