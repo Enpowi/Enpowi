@@ -36,7 +36,7 @@ class Authentication
 	public function login(User $user)
 	{
 		if ($user->exists()) {
-			Event\UserLogin::pub(true, $user);
+			Event\UserBeforeLogin::pub(true, $user);
 			$this->segment->set('user', $user->id());
 			return true;
 		} else {
