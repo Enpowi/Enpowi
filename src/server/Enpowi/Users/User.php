@@ -141,6 +141,8 @@ class User {
 			$bean->lockedKey = App::guid();
 			$bean->validationKey = App::guid();
 
+			Event\UserBeforeStore::pub($bean);
+
 			$id = R::store($bean);
 
 			$user = new User($username, $bean);
