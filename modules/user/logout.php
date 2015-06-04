@@ -1,7 +1,8 @@
 <?php
-if(!defined('Modular')) die('Direct access not permitted');
-
 use Enpowi\App;
+use Enpowi\Modules\Module;
+
+Module::is();
 
 App::user()->logout();
 

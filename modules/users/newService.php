@@ -1,8 +1,9 @@
 <?php
-if(!defined('Modular')) die('Direct access not permitted');
-
 use Enpowi\App;
 use Enpowi\Users\User;
+use Enpowi\Modules\Module;
+
+Module::is();
 
 $username = App::param('username');
 $email = App::param('email');

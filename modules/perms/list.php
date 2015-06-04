@@ -1,9 +1,9 @@
 <?php
-if(!defined('Modular')) die('Direct access not permitted');
-
 use Enpowi\Modules\DataOut;
 use Enpowi\Users\Group;
 use Enpowi\Modules\Module;
+
+Module::is();
 
 $data = (new DataOut())
 	->add('moduleMap', Module::map())

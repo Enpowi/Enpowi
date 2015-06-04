@@ -1,10 +1,11 @@
 <?php
-if(!defined('Modular')) die('Direct access not permitted');
-
 use Enpowi\App;
 use Enpowi\Users\Group;
 use Enpowi\Users\User;
 use Enpowi\Modules\DataOut;
+use Enpowi\Modules\Module;
+
+Module::is();
 
 $data = (new DataOut())
 	->add('user', $user = new User(App::param('username')))

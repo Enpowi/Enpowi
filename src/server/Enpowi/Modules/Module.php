@@ -21,6 +21,14 @@ class Module {
 
 	}
 
+	public static function is() {
+		if(!defined('Enpowi_Modular')) die('Direct access not permitted');
+	}
+
+	public static function run() {
+		define('Enpowi_Modular', TRUE);
+	}
+
 	public static function map()
 	{
 		$parentDir = dirname(__FILE__) . '/../../../../modules/';

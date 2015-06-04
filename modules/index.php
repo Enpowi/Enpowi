@@ -2,10 +2,12 @@
 require_once 'setup/run.php';
 
 use Enpowi\App;
+use Enpowi\Modules\Module;
+
+Module::run();
+
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
-
-define('Modular', TRUE);
 
 $module = App::param('module');
 $component = App::param('component');

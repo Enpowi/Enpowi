@@ -1,8 +1,9 @@
 <?php
-if(!defined('Modular')) die('Direct access not permitted');
-
 use Enpowi\Modules\DataIn;
 use Enpowi\Types;
+use Enpowi\Modules\Module;
+
+Module::is();
 
 $dataIn = new DataIn();
 $user = Types::Users_User($dataIn->in('user'));

@@ -1,9 +1,10 @@
 <?php
-if(!defined('Modular')) die('Direct access not permitted');
-
 use Enpowi\Modules\DataOut;
 use Enpowi\App;
 use Enpowi\Pages\Page;
+use Enpowi\Modules\Module;
+
+Module::is();
 
 $name = App::param('name');
 

@@ -1,9 +1,10 @@
 <?php
-if(!defined('Modular')) die('Direct access not permitted');
-
 use Enpowi\App;
 use Enpowi\Mail;
 use Enpowi\Modules\DataOut;
+use Enpowi\Modules\Module;
+
+Module::is();
 
 $user = App::$app->user();
 $key = App::param('key');

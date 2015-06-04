@@ -170,6 +170,8 @@ Namespace('Enpowi').
 
             el.innerHTML = html;
 
+	        Enpowi.App.pub('pre-process', [el]);
+
 	        //obtain scripts
 	        scripts = el.querySelectorAll('script');
 

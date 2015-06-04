@@ -1,9 +1,10 @@
 <?php
-if(!defined('Modular')) die('Direct access not permitted');
-
 use Enpowi\App;
 use Enpowi\Modules\DataIn;
 use Enpowi\Types;
+use Enpowi\Modules\Module;
+
+Module::is();
 
 $page = Types::Pages_Page((new DataIn())
     ->in('page'));

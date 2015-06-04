@@ -1,8 +1,9 @@
 <?php
-if(!defined('Modular')) die('Direct access not permitted');
-
 use Enpowi\Users\Group;
 use Enpowi\Modules\DataOut;
+use Enpowi\Modules\Module;
+
+Module::is();
 
 $data = (new DataOut())
 	->add('groups', Group::groups())

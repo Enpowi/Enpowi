@@ -1,8 +1,9 @@
 <?php
-if(!defined('Modular')) die('Direct access not permitted');
-
 use Enpowi\Blog\Post;
 use Enpowi\Modules\DataOut;
+use Enpowi\Modules\Module;
+
+Module::is();
 
 $data = (new DataOut())
 	->add('posts', Post::posts())

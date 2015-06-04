@@ -1,5 +1,7 @@
 <?php
-if(!defined('Modular')) die('Direct access not permitted');
+use Enpowi\Modules\Module;
+
+Module::is();
 
 $img = Enpowi\Forms\Utilities::captcha(true);
 

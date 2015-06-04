@@ -1,5 +1,7 @@
 <?php
-if(!defined('Modular')) die('Direct access not permitted');
+use Enpowi\Modules\Module;
+
+Module::is();
 
 $perms = [];
 $groupNames = Enpowi\App::param('groupNames');
