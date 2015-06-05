@@ -155,8 +155,12 @@ Namespace('Enpowi').
 
             return styles;
         },
+		/**
+		 * @type {HTMLElement}
+		 */
+		processContainer: null,
         process: function(html) {
-            var el = document.createElement('div'),
+            var el = this.processContainer = document.createElement('div'),
                 frag = document.createDocumentFragment(),
                 child,
 	            scripts,
@@ -341,6 +345,15 @@ Namespace('Enpowi').
 
             return this;
         },
+		getElementById: function(id) {
+			var el = document.getElementById(id);
+
+			if (el !== null) return el;
+
+			if (this.processContainer !== null) {
+				return this.processContainer.querySelector('#' + id);
+			}
+		},
         loadModule: function(url, callback) {
             var app = this;
 
