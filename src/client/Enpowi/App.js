@@ -4,10 +4,20 @@
  * @constructor
  */
 Namespace('Enpowi').
-
     Class('App', {
 		Static: {
 			pubs: {},
+			one: function(eventName, callback) {
+				var parentCallback = function() {
+					callback.apply(this, arguments);
+
+					var array = this.pubs[eventName];
+
+					array.splice(array.indexOf(parentCallback), 1);
+				};
+
+				return this.sub(eventName, parentCallback);
+			},
 			sub: function(eventName, callback) {
 				var pubs;
 				if ((pubs = this.pubs[eventName]) === undefined) pubs = this.pubs[eventName] = [];
