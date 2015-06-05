@@ -156,12 +156,12 @@ Namespace('Enpowi').
             return styles;
         },
 		/**
-		 * @type {HTMLElement}
+		 * @type {DocumentFragment}
 		 */
 		processContainer: null,
         process: function(html) {
-            var el = this.processContainer = document.createElement('div'),
-                frag = document.createDocumentFragment(),
+            var el = document.createElement('div'),
+                frag = this.processContainer = document.createDocumentFragment(),
                 child,
 	            scripts,
 	            script,
