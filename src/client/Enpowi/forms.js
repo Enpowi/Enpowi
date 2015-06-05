@@ -56,7 +56,9 @@ Class('forms', {
 							response: json
 						};
 
-					span.innerHTML = form.getAttribute('data-done');
+					span.innerHTML = form.getAttribute('data-done')
+						.replace('(%', '{{')
+						.replace('%)', '}}');
 
 					new Vue({
 						data: data,
