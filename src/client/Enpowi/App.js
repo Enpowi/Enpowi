@@ -185,7 +185,7 @@ Namespace('Enpowi').
 
             el.innerHTML = html;
 
-	        Enpowi.App.pub('pre-process', [el]);
+	        Enpowi.App.pub('process', [el]);
 
 	        //obtain scripts
 	        scripts = el.querySelectorAll('script');
@@ -293,7 +293,7 @@ Namespace('Enpowi').
 		        $('body').append(scriptXSS);
 	        }
 
-	        Enpowi.App.pub('post-process', [vues]);
+	        Enpowi.App.pub('processed', [vues]);
 
             return frag;
         },
@@ -388,12 +388,12 @@ Namespace('Enpowi').
 
             if (this.isLoading === false && isLoading) {
                 this.isLoading = isLoading;
-	            Enpowi.App.pub('app.delay');
+	            Enpowi.App.pub('delay');
             }
 
             else if (this.isLoading && isLoading === false) {
                 this.isLoading = isLoading;
-	            Enpowi.App.pub('app.continue');
+	            Enpowi.App.pub('continue');
             }
 
             return this;
