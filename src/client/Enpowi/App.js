@@ -170,7 +170,8 @@ Namespace('Enpowi').
 	            scriptBody,
 	            scriptXSS = [],
 	            scriptsRemote = [],
-	            scriptsLocal = document.createDocumentFragment();
+	            scriptsLocal = document.createDocumentFragment(),
+	            vues = [];
 
             el.innerHTML = html;
 
@@ -205,7 +206,7 @@ Namespace('Enpowi').
                 frag.appendChild(child);
 
                 if (child.nodeType === 1) {
-                    new Vue({
+                    vues.push(new Vue({
                         el: child,
                         data: (function () {
                             var data = {
@@ -263,7 +264,7 @@ Namespace('Enpowi').
                                 return array[key] !== undefined;
                             }
                         }
-                    });
+                    }));
                 }
             }
 
@@ -281,6 +282,8 @@ Namespace('Enpowi').
 	        if (scriptXSS.length > 0) {
 		        $('body').append(scriptXSS);
 	        }
+
+	        Enpowi.App.pub('post-process', [vues]);
 
             return frag;
         },
