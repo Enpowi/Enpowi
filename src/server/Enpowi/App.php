@@ -60,6 +60,66 @@ class App
 		return self::getApi()->request->params($param);
 	}
 
+	public static function paramInt($param)
+	{
+		return (int)self::param($param);
+	}
+
+	public static function paramBool($param)
+	{
+		return (bool)self::param($param);
+	}
+
+	public static function paramString($param)
+	{
+		return (string)self::param($param);
+	}
+
+	public static function paramFloat($param)
+	{
+		return (float)self::param($param);
+	}
+
+	public static function paramInts($param)
+	{
+		$result = [];
+		$values = self::param($param);
+		foreach ($values as $value) {
+			$result[] = (int)$value;
+		}
+		return $result;
+	}
+
+	public static function paramBools($param)
+	{
+		$result = [];
+		$values = self::param($param);
+		foreach ($values as $value) {
+			$result[] = (bool)$value;
+		}
+		return $result;
+	}
+
+	public static function paramStrings($param)
+	{
+		$result = [];
+		$values = self::param($param);
+		foreach ($values as $value) {
+			$result[] = (string)$value;
+		}
+		return $result;
+	}
+
+	public static function paramFloats($param)
+	{
+		$result = [];
+		$values = self::param($param);
+		foreach ($values as $value) {
+			$result[] = (float)$value;
+		}
+		return $result;
+	}
+
 	public static function get()
 	{
 		if (self::$app === null) {
