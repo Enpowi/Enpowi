@@ -50,8 +50,20 @@ Class('forms', {
 					}
 				} else if(form.hasAttribute('listen')) {
 					return;
-				} else if (form.getAttribute('data-done')) {
-					app.go(form.getAttribute('data-done'));
+				} else if (form.hasAttribute('data-done')) {
+					var span = document.createElement('span'),
+						data = json instanceof Object ? json : {
+							response: json
+						};
+
+					span.innerHTML = form.getAttribute('data-done');
+
+					new Vue({
+						data: data,
+						el: span
+					});
+
+					app.go(span.textContent);
 				}
 			});
 		}
