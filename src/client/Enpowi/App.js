@@ -76,7 +76,7 @@ Namespace('Enpowi').
 		                }, 500);
 
                     app.load(url, function(data) {
-                        app.loadScript('modules?module=app&component=session.js', function() {
+                        app.loadScript('modules/?module=app&component=session.js', function() {
 	                        completed = true;
                             var result = app.process(data);
                             app.routeCallback(result);
@@ -109,22 +109,22 @@ Namespace('Enpowi').
             router.normalizeFn = crossroads.NORM_AS_OBJECT;
 
             router.addRoute('/', function() {
-                callback('modules?module=' + Enpowi.session.theme + '&component=index', '');
+                callback('modules/?module=' + Enpowi.session.theme + '&component=index', '');
             });
             router.addRoute('/{module}', function(path) {
-                callback('modules?module=' + path.module, path.request_);
+                callback('modules/?module=' + path.module, path.request_);
             });
             router.addRoute('/{module}{?query}', function(path) {
-                callback('modules?module=' + path.module + '&'  + path['?query_'], path.request_);
+                callback('modules/?module=' + path.module + '&'  + path['?query_'], path.request_);
             });
             router.addRoute('/{module}/{component}', function(path) {
-                callback('modules?module=' + path.module + '&component=' + path.component, path.request_);
+                callback('modules/?module=' + path.module + '&component=' + path.component, path.request_);
             });
             router.addRoute('/{module}/{component}/{id}', function(path) {
-                callback('modules?module=' + path.module + '&component=' + path.component + '&id' + path.id, path.request_);
+                callback('modules/?module=' + path.module + '&component=' + path.component + '&id' + path.id, path.request_);
             });
             router.addRoute('/{module}/{component}{?query}', function(path) {
-                callback('modules?module=' + path.module + '&component=' + path.component + '&'  + path['?query_'], path.request_);
+                callback('modules/?module=' + path.module + '&component=' + path.component + '&'  + path['?query_'], path.request_);
             });
 
 	        router.routed.add(function(route) {
