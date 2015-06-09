@@ -1,14 +1,18 @@
 <?php
+use Enpowi\App;
 use Enpowi\Users\User;
 use Enpowi\Users\Group;
 use Enpowi\Modules\DataOut;
 use Enpowi\Modules\Module;
 
 Module::is();
-
+$app = App::get();
+$auth = $app->authentication;
 $data = (new DataOut())
 	->add('users', User::users())
 	->add('availableGroups', Group::groups())
+	->add('impersonateUser', $auth->isImpersonate() ? $auth->getUser() : null)
+	->add('action', '')
 	->out();
 
 ?><form
@@ -26,10 +30,17 @@ $data = (new DataOut())
 				<th v-t>Username</th>
 				<th v-t>Email</th>
 				<th v-t>Created</th>
-				<td></td>
+				<td>
+					<span v-show="impersonateUser !== null">
+						<span v-t>Impersonating: </span>{{ impersonateUser.username }}
+					</span>
+				</td>
 			</tr>
 			<tr v-repeat="user : users">
-				<td><input type="checkbox" name="usernames[]" value="{{ user.username }}"></td>
+				<td>
+					<input v-show="action !== 'impersonate'" type="checkbox" name="usernames[]" value="{{ user.username }}">
+					<input v-show="action === 'impersonate'" type="radio" name="impersonateUser" value="{{ user.username }}">
+				</td>
 				<td>{{ user.username }}</td>
 				<td>{{ user.email }}</td>
 				<td>{{ user.created }}</td>
@@ -39,9 +50,10 @@ $data = (new DataOut())
 			</tr>
 			<tr>
 				<td colspan="5">
-					<select name="action" class="form-control inline">
+					<select name="action" class="form-control inline" v-model="action">
 						<option value="" t-v>Action</option>
 						<option value="delete" t-v>Delete</option>
+						<option value="impersonate">Impersonate</option>
 					</select>
 					<button v-t class="btn btn-success">Submit</button>
 				</td>

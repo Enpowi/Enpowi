@@ -299,8 +299,15 @@ Namespace('Enpowi').
         },
 
         go: function(route) {
-            if ('#/' + route === window.location.hash.toString()) {
-                this.hasher.setHash(route + '/');
+	        var existingHash = window.location.hash.toString(),
+		        hasSlashes = existingHash.match(/\/$/);
+
+            if ('#/' + route === existingHash) {
+	            if (hasSlashes) {
+		            this.hasher.setHash(route.substring(0, route.length - 1));
+	            } else {
+		            this.hasher.setHash(route + '/');
+	            }
             } else {
                 this.hasher.setHash(route);
             }

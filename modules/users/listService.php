@@ -10,8 +10,14 @@ switch (App::param('action')) {
 		foreach(App::param('usernames') as $username) {
 			(new User($username))->remove();
 		}
-	break;
+		echo 1;
+		break;
+	case 'impersonate':
+		$user = new User(App::param('impersonateUser'));
+		echo App::get()
+			->authentication
+			->impersonate($user) ? 1 : -1;
+		break;
+	default:
+		echo 0;
 }
-
-
-echo 1;

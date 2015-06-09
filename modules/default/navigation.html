@@ -44,7 +44,7 @@
 				<button type="submit" class="btn btn-success" v-t>Sign in</button>
 				<a class="btn btn-success" v-t v-on="click: go('user/register')">Register</a>
 			</form>
-			<form class="navbar-form navbar-right" action="user/logout" v-module data-done="#//" v-show="session.user.username !== 'Anonymous'">
+			<form class="navbar-form navbar-right" action="user/logout" v-module data-done="default" v-show="session.user.username !== 'Anonymous'">
 				<a class="btn btn-success" v-on="click: go('user/view')">{{session.user.username}}</a>
 				<button type="submit" class="btn btn-success" v-t>Sign out</button>
 			</form>
