@@ -21,6 +21,22 @@ class Authentication
 			->getSegment(__CLASS__);
 	}
 
+	public function getRealUser()
+	{
+		$segment = $this->segment;
+
+		if (($_user = $segment->get('user')) !== null) {
+			$user = User::fromId( $_user );
+			if ($user === null) {
+				$this->logout();
+			} else {
+				return $user;
+			}
+		}
+
+		return new User('Anonymous');
+	}
+
 	public function getUser()
 	{
 		$segment = $this->segment;
