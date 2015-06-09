@@ -1,7 +1,7 @@
 Namespace('Enpowi').
     Class('session', {
         user: {},
-        theme: null,
+        theme: 'default',
         update: function(type, sessionItems) {
             var oldSessionItems = this[type],
                 key;

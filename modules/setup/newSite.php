@@ -2,6 +2,8 @@
 
 $dir = dirname(__FILE__);
 
+define('path', dirname(dirname($dir)));
+
 if (file_exists($dir . '/config.lock')) {
 	throw new Exception('locked');
 }
@@ -21,10 +23,13 @@ use RedBeanPHP\R;
 use Enpowi\Users\Group;
 use Enpowi\Users\User;
 use Enpowi\Users\Perm;
+use Enpowi\App;
+use Enpowi\Modules\Module;
 
+Module::run();
 R::nuke();
 
-Enpowi\App::log('setup', 'newSite');
+App::log('setup', 'newSite');
 
 //create groups
 $everyoneGroup = Group::create('Everyone', false, false, true);
@@ -55,6 +60,10 @@ Perm::create('default', '*', $everyoneGroup);
 Perm::create('setup', '*', $everyoneGroup);
 Perm::create('page', 'index', $everyoneGroup);
 
-file_put_contents($dir . '/config.lock', '');
+if (is_writable($dir)) {
+    echo 'cannot write lock file. ';
+} else {
+    file_put_contents($dir . '/config.lock', '');
+}
 
 echo 'setup complete';
