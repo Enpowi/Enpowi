@@ -6,8 +6,9 @@
  * Time: 7:18 AM
  */
 
-namespace Enpowi\Event;
+namespace Enpowi\Event\User;
 
+use Enpowi\Event;
 
-class UserCreate extends Base {
+class Logout extends Event\Base {
 }

@@ -6,9 +6,10 @@
  * Time: 2:42 PM
  */
 
-namespace Enpowi\Event;
+namespace Enpowi\Event\User;
 
+use Enpowi\Event;
 
-class UserBeforeLogin extends Base {
+class BeforeLogin extends Event\Base {
 
 }

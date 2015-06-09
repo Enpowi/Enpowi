@@ -141,13 +141,13 @@ class User {
 			$bean->lockedKey = App::guid();
 			$bean->validationKey = App::guid();
 
-			Event\UserBeforeStore::pub($bean);
+			Event\User\BeforeStore::pub($bean);
 
 			$id = R::store($bean);
 
 			$user = new User($username, $bean);
 
-			Event\UserCreate::pub($user);
+			Event\User\Create::pub($user);
 
 			return $user;
 		}
@@ -159,14 +159,14 @@ class User {
 	{
 		$login = (new Authentication())->login($this);
 
-		Event\UserLogin::pub($login, $this);
+		Event\User\Login::pub($login, $this);
 
 		return $login;
 	}
 
 	public function logout()
 	{
-		Event\UserLogout::pub($this);
+		Event\User\Logout::pub($this);
 
 		(new Authentication())->logout();
 
@@ -220,7 +220,7 @@ class User {
 
 		R::store($bean);
 
-		Event\UserValid::pub($valid, $this);
+		Event\User\Valid::pub($valid, $this);
 
 		return $this;
 	}
