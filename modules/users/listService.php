@@ -18,6 +18,12 @@ switch (App::param('action')) {
 			->authentication
 			->impersonate($user) ? 1 : -1;
 		break;
+	case 'impersonateAnonymous':
+		App::get()
+			->authentication
+			->impersonateAnonymous();
+		echo 1;
+		break;
 	default:
 		echo 0;
 }
