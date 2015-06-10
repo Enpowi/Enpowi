@@ -347,11 +347,11 @@ Namespace('Enpowi').
 	        //process scripts
 	        if (scriptsRemote.length > 0) {
 		        this.loadScripts(scriptsRemote, function() {
-			        if (scriptsLocal.children.length > 0) {
+			        if (scriptsLocal.childNodes.length > 0) {
 				        document.querySelector('script').parentElement.appendChild(scriptsLocal);
 			        }
 		        });
-	        } else if (scriptsLocal.children.length > 0) {
+	        } else if (scriptsLocal.childNodes.length > 0) {
 		        document.querySelector('script').parentElement.appendChild(scriptsLocal);
 	        }
 
