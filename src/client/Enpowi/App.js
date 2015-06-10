@@ -92,6 +92,7 @@ Namespace('Enpowi').
 
 
 			event: {
+				deny: 'deny',
 				go: 'go',
 				land: 'land',
 				process: 'process',
@@ -134,6 +135,12 @@ Namespace('Enpowi').
 		                }, 500);
 
                     app.load(url, function(data) {
+	                    if (data == -1) {
+		                    var result = app.pubTo().deny([url]);
+		                    if (result === false) {
+			                    return;
+		                    }
+	                    }
                         app.loadScript('modules/?module=app&component=session.js', function() {
 	                        completed = true;
                             var result = app.process(data);
