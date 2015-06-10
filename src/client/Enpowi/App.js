@@ -42,6 +42,54 @@ Namespace('Enpowi').
 				return this;
 			},
 
+			oneTo: function() {
+				var caller = {},
+					me = this,
+					n;
+
+				for (n in this.event) if (this.event.hasOwnProperty(n)) {
+					caller[n] = (function(eventName) {
+						return function(callback) {
+							return me.one(eventName, callback);
+						};
+					})(n);
+				}
+
+				return caller;
+			},
+
+			subTo: function() {
+				var caller = {},
+					me = this,
+					n;
+
+				for (n in this.event) if (this.event.hasOwnProperty(n)) {
+					caller[n] = (function (eventName) {
+						return function (callback) {
+							return me.sub(eventName, callback);
+						};
+					})(n);
+				}
+
+				return caller;
+			},
+
+			pubTo: function() {
+				var caller = {},
+					me = this,
+					n;
+
+				for (n in this.event) if (this.event.hasOwnProperty(n)) {
+					caller[n] = (function (eventName) {
+						return function () {
+							return me.pub(eventName);
+						};
+					})(n);
+				}
+
+				return caller;
+			},
+
 
 			event: {
 				go: 'go',
@@ -90,7 +138,7 @@ Namespace('Enpowi').
 	                        completed = true;
                             var result = app.process(data);
                             app.routeCallback(result);
-                            app.pub(app.events.land, [route]);
+                            app.pubTo().land([route]);
                         });
                     });
                 };
@@ -139,7 +187,7 @@ Namespace('Enpowi').
             });
 
 	        router.routed.add(function(route) {
-		        me.pub(me.event.go, [route]);
+		        me.pubTo().go([route]);
 	        });
         },
 
@@ -196,7 +244,7 @@ Namespace('Enpowi').
 
             el.innerHTML = html;
 
-	        this.pub(this.event.process, [el]);
+	        this.pubTo().process([el]);
 
 	        //obtain scripts
 	        scripts = el.querySelectorAll('script');
@@ -304,7 +352,7 @@ Namespace('Enpowi').
 		        $('body').append(scriptXSS);
 	        }
 
-	        this.pub(this.event.processed, [vues]);
+	        this.pubTo().processed([vues]);
 
             return frag;
         },
@@ -405,12 +453,12 @@ Namespace('Enpowi').
 
             if (this.isLoading === false && isLoading) {
                 this.isLoading = isLoading;
-	            this.pub(this.event.delay);
+	            this.pubTo().delay();
             }
 
             else if (this.isLoading && isLoading === false) {
                 this.isLoading = isLoading;
-	            this.pub(this.event._continue);
+	            this.pubTo()._continue();
             }
 
             return this;
