@@ -81,8 +81,8 @@ Namespace('Enpowi').
 
 				for (n in this.event) if (this.event.hasOwnProperty(n)) {
 					caller[n] = (function (eventName) {
-						return function () {
-							return me.pub(eventName);
+						return function (args) {
+							return me.pub(eventName, args);
 						};
 					})(n);
 				}
