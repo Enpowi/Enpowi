@@ -40,6 +40,16 @@ Namespace('Enpowi').
 				}
 
 				return this;
+			},
+
+
+			event: {
+				go: 'go',
+				land: 'land',
+				process: 'process',
+				processed: 'processed',
+				delay: 'delay',
+				_continue: 'continue'
 			}
 		},
         construct: function(callback) {
@@ -80,7 +90,7 @@ Namespace('Enpowi').
 	                        completed = true;
                             var result = app.process(data);
                             app.routeCallback(result);
-                            Enpowi.App.pub('app.land', [route]);
+                            app.pub(app.events.land, [route]);
                         });
                     });
                 };
@@ -101,6 +111,7 @@ Namespace('Enpowi').
         },
 
         bindRouteUrls: function(router, callback) {
+	        var me = this;
             //none
             //moduleName
             //moduleName/component
@@ -128,7 +139,7 @@ Namespace('Enpowi').
             });
 
 	        router.routed.add(function(route) {
-		        Enpowi.App.pub('app.go', [route]);
+		        me.pub(me.event.go, [route]);
 	        });
         },
 
@@ -185,7 +196,7 @@ Namespace('Enpowi').
 
             el.innerHTML = html;
 
-	        Enpowi.App.pub('process', [el]);
+	        this.pub(this.event.process, [el]);
 
 	        //obtain scripts
 	        scripts = el.querySelectorAll('script');
@@ -293,7 +304,7 @@ Namespace('Enpowi').
 		        $('body').append(scriptXSS);
 	        }
 
-	        Enpowi.App.pub('processed', [vues]);
+	        this.pub(this.event.processed, [vues]);
 
             return frag;
         },
@@ -390,17 +401,16 @@ Namespace('Enpowi').
          * @returns {Enpowi.App}
          */
         setLoading: function(isLoading) {
-            var el;
-            if ((el = this.loadingElement) === null) return this;
+            if (this.loadingElement === null) return this;
 
             if (this.isLoading === false && isLoading) {
                 this.isLoading = isLoading;
-	            Enpowi.App.pub('delay');
+	            this.pub(this.event.delay);
             }
 
             else if (this.isLoading && isLoading === false) {
                 this.isLoading = isLoading;
-	            Enpowi.App.pub('continue');
+	            this.pub(this.event._continue);
             }
 
             return this;
