@@ -7,6 +7,10 @@ Enpowi.App
 	})
 	.subTo().delay(function() {
 		app.modal = $('<div>').modal('show');
+	})
+	.subTo().deny(function() {
+		app.go('#/');
+		return false;
 	});
 
 var app = new Enpowi.App(function(html) {
