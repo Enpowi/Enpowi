@@ -165,17 +165,17 @@ Namespace('Enpowi').
 		            bind: function() {
 			            var el = this.el;
 
-			            app.load(Enpowi.module.url(this.expression), function(html) {
-				            $(el).append(html);
-			            });
-		            },
-		            update: function (url) {
-			            if (this.el.hasAttribute('data')) {
-				            var el = this.el;
-				            app.load(Enpowi.module.url(url), function (html) {
+			            if (!el.hasAttribute('data')) {
+				            app.load(Enpowi.module.url(this.expression), function (html) {
 					            $(el).append(html);
 				            });
 			            }
+		            },
+		            update: function (url) {
+			            var el = this.el;
+			            app.load(Enpowi.module.url(url), function (html) {
+				            $(el).append(html);
+			            });
 		            }
 	            });
             }
