@@ -34,4 +34,7 @@ Module::is();
 		</tr>
 	</table>
 </form>
-<div v-show='!session.user.valid' v-frame="user/confirm"></div>
+<div
+	static
+	v-show='!session.user.valid'
+	v-frame="user/confirm"></div>
