@@ -295,7 +295,7 @@ Namespace('Enpowi').
 
                             if (jsonEncoded) {
                                 child.removeAttribute('data');
-	                            
+
                                 jsonDecoded = decodeURIComponent(jsonEncoded);
                                 moduleData = JSON.parse(jsonDecoded);
 
