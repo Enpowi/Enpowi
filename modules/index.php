@@ -9,8 +9,8 @@ Module::run();
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-$module = App::param('module');
-$component = App::param('component');
+$module = App::param('module') ?: App::param('m');
+$component = App::param('component') ?: App::param('c');
 $path = dirname(__FILE__);
 $me = App::loadComponent($path, $module, $component);
 
