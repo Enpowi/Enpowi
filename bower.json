@@ -21,7 +21,9 @@
     "hasher": "~1.2.0",
     "vue": "~0.11.5",
     "class": "~1.0.3",
-    "codemirror.wikilingo": "https://github.com/wikiLingo/CodeMirror.git"
+    "codemirror.wikilingo": "https://github.com/wikiLingo/CodeMirror.git",
+    "bootstrap-fileinput": "~4.2.2",
+    "galereya": "https://github.com/VodkaBears/galereya.git#~0.9.94"
   },
   "resolutions": {
     "vue": "~0.11.5"

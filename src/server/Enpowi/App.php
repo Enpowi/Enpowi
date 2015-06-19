@@ -6,6 +6,7 @@ use Slim\Slim;
 use RedBeanPHP\R;
 use Enpowi\Modules;
 use Aura\Session;
+use Enpowi\Files\File;
 
 class App
 {
@@ -118,6 +119,54 @@ class App
 			$result[] = (float)$value;
 		}
 		return $result;
+	}
+
+	/**
+	 * @param {String} $param
+	 * @param {String} [$class]
+	 *
+	 * @return File|null
+	 */
+	public static function paramFile($param, $class = null)
+	{
+		if (isset($_FILES[$param])) {
+			$file = $_FILES[$param];
+			$type = ($class !== null ? new $class() : new File());
+
+			return $type
+				->setName($file['name'])
+				->setTempPath($file['tmp_name'])
+				->setType($file['type'])
+				->setSize($file['size']);
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param {String} $param
+	 * @param {String} [$class]
+	 *
+	 * @return Array(File)|null
+	 */
+	public static function paramFiles($param, $class = null)
+	{
+		if (isset($_FILES[$param])) {
+			$result = [];
+			$files = $_FILES[$param];
+			foreach($files['tmp_name'] as $i => $path) {
+				$file = ($class !== null ? new $class() : new File());
+				$file
+					->setName($files['name'][$i])
+					->setTempPath($path)
+					->setType($files['type'][$i])
+					->setSize($files['size'][$i]);
+
+				$result[] = $file;
+			}
+			return $result;
+		}
+		return null;
 	}
 
 	public static function get()
