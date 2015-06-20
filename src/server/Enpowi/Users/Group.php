@@ -10,6 +10,7 @@ namespace Enpowi\Users;
 
 use RedBeanPHP\R;
 use Respect\Validation\Validator as v;
+use Enpowi\App;
 
 class Group {
 
@@ -140,28 +141,50 @@ class Group {
 		return $users;
 	}
 
-	public static function groups()
+	public static function groups($pageNumber = 0)
 	{
+		$beans = R::find('group', ' order by username limit :offset, :count', [
+			'offset' => $pageNumber * App::$pagingSize,
+			'count' => App::$pagingSize
+		]);
 		$groups = [];
 
-		foreach(R::find('group') as $groupBean) {
+		foreach($beans as $groupBean) {
 			$groups[] = new Group($groupBean->name, $groupBean);
 		}
 
 		return $groups;
 	}
 
-	public static function editableGroups($updatePerms = false, $excludeSuper = false)
+	public static function editableGroups($updatePerms = false, $excludeSuper = false, $pageNumber = 0)
 	{
+		$beans = null;
 		$groups = [];
 
 		if ($excludeSuper) {
-			$sqlLookup = ' is_default_anonymous = 0 and is_default_registered = 0 and is_everyone = 0 and is_super = 0 ';
+			$beans = R::find('group', '
+				is_default_anonymous = 0
+				and is_default_registered = 0
+				and is_everyone = 0
+				and is_super = 0
+				order by name
+				limit :offset, :count', [
+				'offset' => $pageNumber * App::$pagingSize,
+				'count' => App::$pagingSize
+			]);
 		} else {
-			$sqlLookup = ' is_default_anonymous = 0 and is_default_registered = 0 and is_everyone = 0 ';
+			$beans = R::find('group', '
+				is_default_anonymous = 0
+				and is_default_registered = 0
+				and is_everyone = 0
+				order by name
+				limit :offset, :count', [
+				'offset' => $pageNumber * App::$pagingSize,
+				'count' => App::$pagingSize
+			]);
 		}
 
-		foreach(R::find('group', $sqlLookup) as $groupBean) {
+		foreach($beans as $groupBean) {
 			$group = new Group( $groupBean->name, $groupBean );
 
 			$groups[] = $group;

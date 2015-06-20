@@ -11,16 +11,21 @@ namespace Enpowi\Blog;
 use Aura\Session\Exception;
 use Enpowi\App;
 use RedBeanPHP\R;
+use RedBeanPHP\RedException;
 use WikiLingo\Parser;
+use Enpowi\Users\User;
 
 class Post {
     public $id;
     public $name;
     public $content;
     public $created;
-    public $createdBy;
+	public $edited;
+    public $user = null;
+	public $contributorIds = [];
+	public $publishedOn;
 
-    private $_bean;
+    private $_bean = null;
 
     public function __construct($name, $bean = null)
     {
@@ -56,8 +61,11 @@ class Post {
         $this->id = $bean->getID();
         $this->name = $bean->name;
         $this->content = $bean->content;
+	    $this->edited = $bean->edited;
         $this->created = $bean->created;
-        $this->createdBy = $bean->createdBy;
+	    $this->contributorIds = explode(',', $bean->contributorIds);
+        $this->user = new User(null, $bean->user);
+	    $this->publishedOn = $bean->publishedOn;
     }
 
     public function exists()
@@ -73,16 +81,25 @@ class Post {
     {
         if (empty($this->name)) throw new Exception('Blog post needs name before it can be saved');
 
-        $username = App::user()->username;
+	    $bean = $this->_bean;
 
-        //TODO: ensure createdBy is set once and contributors is an incremental list
-        $bean = R::dispense('blog');
+	    if ($bean === null) {
+		    $this->_bean = $bean = R::dispense('blog');
+	    }
+
         $bean->name = $this->name;
-        $bean->content = $content;
-        $bean->created = R::isoDateTime();
-        $bean->createdBy = $username;
+        $this->content = $bean->content = $content;
+	    $bean->edited = R::isoDateTime();
+        $bean->created = $this->created ?: R::isoDateTime();
 
-        R::store($bean);
+	    $otherUserBean = App::user()->bean();
+        $bean->user = $this->user !== null ? $this->user->bean() : $otherUserBean;
+	    $this->contributorIds[] = $otherUserBean->getID();
+	    $this->contributorIds = array_unique( $this->contributorIds );
+	    $bean->contributorIds = implode(',',$this->contributorIds);
+	    $bean->publishedOn = $this->publishedOn;
+
+	    R::store( $bean );
     }
 
     public function render()
@@ -90,11 +107,19 @@ class Post {
         return (new Parser)->parse($this->content);
     }
 
-    public static function posts()
+    public static function posts($pageNumber = 0, $showAll = false)
     {
-        //TODO: paging
+        $beans = R::findAll('blog', '
+            where
+                true = :show_all
+                or date(published_on) >= now()
+	        order by created
+	        limit :offset, :count',[
+		        'offset' => $pageNumber * App::$pagingSize,
+		        'count' => App::$pagingSize,
+	            'show_all' => $showAll
+        ]);
 
-        $beans = R::findAll('blog', ' order by created ');
         $posts = [];
 
         foreach($beans as $bean) {
@@ -103,4 +128,70 @@ class Post {
 
         return $posts;
     }
+
+	public static function pages($showAll = false)
+	{
+		$count = R::count('blog', '
+			where
+				true = :show_all
+				or date(published_on) >= now()
+			order by created', [
+				'show_all' => $showAll
+		]);
+
+		$result = [];
+		$max = $count / App::$pagingSize;
+		$i = 0;
+		for(;$i < $max; $i++) {
+			$result[] = $i;
+		}
+		return $result;
+	}
+
+	public static function mostRecentPost($showAll = false)
+	{
+		$bean = R::findOne('blog', '
+			where
+				true = :show_all
+				or date(published_on) >= now()
+			order by created limit 0, 1', [
+				'show_all' => $showAll
+		]);
+
+		if ($bean !== null) {
+			return new Post($bean->name, $bean);
+		}
+
+		return null;
+	}
+
+	public function userPosts($pageNumber = 0, $showAll = false)
+	{
+		$beans = R::findAll('blog', '
+			where
+				true = :show_all
+				or date(published_on) >= now()
+			order by created
+			limit :offset, :count', [
+				'offset' => $pageNumber * App::$pagingSize,
+				'count' => App::$pagingSize,
+				'show_all' => $showAll
+		]);
+
+		$posts = [];
+
+		foreach($beans as $bean) {
+			$posts[] = new Post($bean->name, $bean);
+		}
+
+		return $posts;
+	}
+
+	public function bean()
+	{
+		if ($this->_bean === null) {
+			$this->_bean = R::findOne( 'blog', ' name = ? ', [ $this->name ] );
+		}
+		return $this->_bean;
+	}
 }

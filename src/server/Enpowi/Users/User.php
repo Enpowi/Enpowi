@@ -180,6 +180,10 @@ class User {
 
 	public function bean()
 	{
+		if ($this->_bean === null) {
+			$this->_bean = R::findOne('user', ' username = ? ', [strtolower($this->username)]);
+		}
+
 		return $this->_bean;
 	}
 
@@ -256,11 +260,13 @@ class User {
 		return $this->groups = $groups;
 	}
 
-	public static function users()
+	public static function users($pageNumber = 0)
 	{
-		//TODO: paging
+		$beans = R::findAll('user', ' order by username limit :offset, :count', [
+			'offset' => $pageNumber * App::$pagingSize,
+			'count' => App::$pagingSize
+		]);
 
-		$beans = R::findAll('user', ' order by username ');
 		$users = [];
 
 		foreach($beans as $bean) {

@@ -40,6 +40,8 @@ class App
 	 */
 	public static $module;
 
+	public static $pagingSize = 25;
+
 	function __construct()
 	{
 		self::$app = $this;
