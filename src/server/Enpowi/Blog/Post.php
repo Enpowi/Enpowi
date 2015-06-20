@@ -65,7 +65,7 @@ class Post {
         $this->created = $bean->created;
 	    $this->contributorIds = explode(',', $bean->contributorIds);
         $this->user = new User(null, $bean->user);
-	    $this->publishedOn = $bean->publishedOn;
+	    $this->publishedOn = R::isoDateTime(date($bean->publishedOn));
     }
 
     public function exists()

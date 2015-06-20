@@ -1,11 +1,11 @@
 {
-  "name": "inpowi",
+  "name": "enpowi",
   "version": "0.0.0",
   "homepage": "https://github.com/inpowi/inpowi",
   "authors": [
     "Robert Lee Plummer Jr. <robertleeplummerjr@gmail.com>"
   ],
-  "description": "web platform, INgineered with POwer and WIsdom",
+  "description": "web platform, ENgineered with POwer and WIsdom",
   "license": "MIT",
   "private": true,
   "ignore": [
@@ -23,7 +23,8 @@
     "class": "~1.0.3",
     "codemirror.wikilingo": "https://github.com/wikiLingo/CodeMirror.git",
     "bootstrap-fileinput": "~4.2.2",
-    "galereya": "https://github.com/VodkaBears/galereya.git#~0.9.94"
+    "galereya": "https://github.com/VodkaBears/galereya.git#~0.9.94",
+    "bootstrap-datepicker": "~1.4.0"
   },
   "resolutions": {
     "vue": "~0.11.5"

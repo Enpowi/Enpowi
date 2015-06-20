@@ -13,22 +13,44 @@ $data = (new DataOut())
 	->add('post', new Post($name))
 	->out();
 ?>
-
 <form
 	class="container"
 	v-module
     data="<?php echo $data?>"
 	action="blog/editService"
     data-done="blog?name={{ post.name }}">
-
 	<h3>
         <span v-t>Editing:</span>
         <span v-show=" !editing ">{{ post.name }}</span><br>
     </h3>
 
-    <span v-show=" editing " class="wide fixed">
-        <input class="form-control" type="text" name="name" v-model="post.name" v-placeholder="Post Name" />
-    </span>
+    <table v-show=" editing " class="wide fixed">
+	    <tbody>
+	    <tr>
+		    <td>
+			    <input
+				    class="form-control"
+				    type="text"
+				    name="name"
+				    v-model="post.name"
+				    v-placeholder="Post Name">
+		    </td>
+		    <td>
+			    <input
+				    class="form-control pull-right"
+				    type="text"
+				    id="publishedOnUI"
+				    v-placeholder="Publish On">
+
+			    <input
+				    type="hidden"
+				    name="publishedOn"
+				    id="publishedOn"
+				    v-model="post.publishedOn">
+		    </td>
+	    </tr>
+	    </tbody>
+    </table>
 
     <div class="form-group">
         <input type="hidden" name="post" value="{{ stringify(post) }}">
@@ -43,3 +65,17 @@ $data = (new DataOut())
 
 	<button type="submit" class="btn btn-success" v-t>Submit</button>
 </form>
+<link href="vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+<script src="vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script>
+	var md = moduleData[0],
+		publishedOn = app.getElementById('publishedOn'),
+		publishedOnUI = app.getElementById('publishedOnUI');
+
+	$(publishedOnUI)
+		.datepicker()
+		.on('changeDate', function(e) {
+			md.post.publishedOn =
+			publishedOn.value = Math.floor(e.date / 1000);
+		});
+</script>

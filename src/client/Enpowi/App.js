@@ -249,6 +249,8 @@ Namespace('Enpowi').
 	            scriptsLocal = document.createDocumentFragment(),
 	            vues = [];
 
+	        window.moduleData = [];
+
             el.innerHTML = html;
 
 	        this.pubTo().process([el]);
@@ -302,6 +304,7 @@ Namespace('Enpowi').
                                 for (i in moduleData) if (i && moduleData.hasOwnProperty(i)) {
                                     data[i] = moduleData[i];
                                 }
+	                            window.moduleData.push(data);
                             }
 
                             return data;
@@ -349,6 +352,7 @@ Namespace('Enpowi').
 	        if (scriptsRemote.length > 0) {
 		        this.loadScripts(scriptsRemote, function() {
 			        if (scriptsLocal.childNodes.length > 0) {
+				        window.moduleData
 				        document.querySelector('script').parentElement.appendChild(scriptsLocal);
 			        }
 		        });
