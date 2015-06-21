@@ -165,6 +165,8 @@ Namespace('Enpowi').
 		            bind: function() {
 			            var el = this.el;
 
+                        if (el.style.display === 'none') return;
+
 			            if (el.hasAttribute('static')) {
 				            app.load(Enpowi.module.url(this.expression), function (html) {
 					            $(el).append(html);
@@ -174,6 +176,7 @@ Namespace('Enpowi').
 		            update: function (url) {
 			            var el = this.el;
 
+                        if (el.style.display === 'none') return;
 			            if (el.hasAttribute('static')) return;
 
 			            app.load(Enpowi.module.url(url), function (html) {

@@ -12,12 +12,13 @@ namespace Enpowi\Template;
 class Renderer {
 
 	public $template;
-	public function __construct($templatePath) {
-		$this->template = file_get_contents($templatePath);
+	public function __construct($template) {
+		$this->template = $template;
 	}
 
-	public function out($template, $args) {
+	public function out($args) {
 		$allArgs = Args::get($args);
+        $template = $this->template . '';
 
 		//TODO: better template engine
 		if (preg_match_all("/{{\s*(.*?)\s*}}/", $template, $m)) {

@@ -25,6 +25,17 @@ class Mail {
 	public static $smtpSecure;
 	public static $port;
 
+    public $args;
+    public function __construct()
+    {
+    }
+
+    public function setArgs($args)
+    {
+        $this->args = $args;
+        return $this;
+    }
+
 	public static function setup($from, $fromName, $host, $username, $password, $smtpAuth, $smtpSecure, $port) {
 		self::$from = $from;
 		self::$fromName = $fromName;
@@ -49,25 +60,21 @@ class Mail {
 
 	public function send($configMailCallback) {
 
+        self::$mailer->isHTML( true );
+        self::$mailer->Body = $this->body();
 
 		$configMailCallback(self::$mailer);
 
 		return self::$mailer->send();
 	}
 
-	public static function body( $args = [], $html = null ) {
+	public function body( $html = null ) {
 		if ($html === null) {
 			$component = App::$component;
 			$html = $component->template();
 		}
 
-		$config = App::$config;
-		$templatePath = $config->moduleDirectory . '/' . $config->themeModule . '/mail.html';
-
-		$r = new Template\Renderer($templatePath);
-		$r->template = str_replace('{{body}}', $r->template, $html);
-		$templateProcessed = $r->out($html, $args);
-
-		return $templateProcessed;
+		$r = (new Template\Renderer($html))->out($this->args);
+		return $r;
 	}
 }

@@ -73,7 +73,7 @@ class User {
 		$this->lastLogin = $bean->lastLogin;
 		$this->created = $bean->created;
 		$this->locked = $bean->locked;
-		$this->valid = $bean->valid;
+		$this->valid = $bean->valid == 1 ? true : false;
 	}
 
 	public static function fromId($id) {
@@ -214,7 +214,7 @@ class User {
 	}
 
 	public function isValid() {
-		return $this->_bean->valid ? true : false;
+		return $this->_bean->valid == 1 ? true : false;
 	}
 
 	public function setValid($valid) {
