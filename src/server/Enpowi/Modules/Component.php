@@ -41,7 +41,7 @@ class Component {
 		$name = $this->name;
 
 		foreach ($this->extensions as $extension) {
-			$file = $module->folder . '/' . $name . '.template' . $extension;
+			$file = $module->folder . '/' . $name . 'Template' . $extension;
 			if (file_exists($file)) {
 				return file_get_contents($file);
 				break;
