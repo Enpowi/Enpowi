@@ -95,18 +95,18 @@
         }
     ],
     "require": {
-        "flp/flp": "dev-master",
-        "slim/slim": "~2.5",
-        "gregwar/captcha": "~1.0",
         "aura/session": "2.*@dev",
-        "wikilingo/wikilingo": "~1.0.1",
-        "respect/validation": "0.8.*",
+        "flp/flp": "dev-master",
         "gabordemooij/redbean": "~4.2.0",
-        "mindplay/jsonfreeze": "~1.2",
-        "skema/skema": "dev-master",
+        "gregwar/captcha": "~1.0",
         "mediumjs/mediumjs": "dev-master",
+        "mindplay/jsonfreeze": "~1.2",
+        "phpmailer/phpmailer": "~5.2",
+        "respect/validation": "0.8.*",
+        "skema/skema": "^1.0",
+        "slim/slim": "~2.5",
         "wikilingo/codemirror": "dev-master",
-        "phpmailer/phpmailer": "~5.2"
+        "wikilingo/wikilingo": "~1.0.1"
     },
     "autoload": {
         "psr-0": {
