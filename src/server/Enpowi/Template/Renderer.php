@@ -8,25 +8,44 @@
 
 namespace Enpowi\Template;
 
+use WikiLingo;
+use WikiLingo\Parser;
+use WikiLingo\Event\Expression\Variable as V;
 
 class Renderer {
-
+    public $engine;
 	public $template;
-	public function __construct($template) {
+    public $userWikiLingo = false;
+	public function __construct($template, $useWikiLingo = false) {
+        if ($useWikiLingo) {
+            $this->engine = new Parser();
+            $this->userWikiLingo = $useWikiLingo;
+        }
 		$this->template = $template;
 	}
 
 	public function out($args) {
-		$allArgs = Args::get($args);
-        $template = $this->template . '';
+        $args = Args::get($args);
 
-		//TODO: better template engine
-		if (preg_match_all("/{{\s*(.*?)\s*}}/", $template, $m)) {
-			foreach ($m[1] as $i => $varname) {
-				$template = str_replace($m[0][$i], $allArgs[$varname], $template);
-			}
-		}
+        if ($this->userWikiLingo) {
+            $this->engine->events->bind(new V\Lookup(function ($key, WikiLingo\Model\Element $element, WikiLingo\Expression\Variable $variable) use ($args) {
+                if (isset($args[$key])) {
+                    $element->staticChildren[] = $args[$key];
+                }
+            }));
 
-		return $template;
+            $rendered = $this->engine->parse($this->template . '');
+        } else {
+            $template = $this->template . '';
+            //TODO: better template engine
+            if (preg_match_all("/{{\s*(.*?)\s*}}/", $template, $m)) {
+                foreach ($m[1] as $i => $varname) {
+                    $template = str_replace($m[0][$i], $args[$varname], $template);
+                }
+            }
+            $rendered = $template;
+        }
+
+		return $rendered;
 	}
 }
