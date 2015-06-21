@@ -40,7 +40,7 @@ class Renderer {
             //TODO: better template engine
             if (preg_match_all("/{{\s*(.*?)\s*}}/", $template, $m)) {
                 foreach ($m[1] as $i => $varname) {
-                    $template = str_replace($m[0][$i], $args[$varname], $template);
+                    $template = str_replace($m[0][$i], htmlentities($args[$varname], ENT_QUOTES), $template);
                 }
             }
             $rendered = $template;
