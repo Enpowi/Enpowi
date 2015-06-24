@@ -7,10 +7,10 @@ Module::is();
 
 $response = [];
 
-$user = User::getByUsernameAndPassword(App::param('username'), App::param('password'));
+$user = User::getByEmailAndPassword(App::param('email'), App::param('password'));
 
 if ($user === null) {
-	$response['paramResponse'] = ['username'=>'Invalid username or password'];
+	$response['paramResponse'] = ['email'=>'Invalid email or password'];
 	$response['id'] = -1;
 } else {
 	$login = $user->login();

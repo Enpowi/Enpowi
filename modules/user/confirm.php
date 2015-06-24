@@ -18,13 +18,13 @@ if ($isValid === false) {
 		$mailed = ( new Mail() )
             ->setArgs([
                 'key'      => $user->validationKey(),
-                'username' => $user->username
+                'email' => $user->email
             ])
             ->send(function ( PHPMailer $mail ) use ( $user ) {
-                $mail->addAddress( $user->email, $user->username );
+                $mail->addAddress( $user->email );
                 $mail->Subject = App::$config->siteName . ' Registration';
             });
-	} else if ($user->validationKey() === $key) {
+	} else if ($user->canValidate() && $user->validationKey() === $key) {
 		$user->setValid(true);
 		$isValid = true;
 	}

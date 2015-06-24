@@ -50,7 +50,7 @@ $data = (new DataOut())
 			<td>{{ post.name }}</td>
 			<td>{{ post.created }}</td>
 			<td>{{ post.publishedOn }}</td>
-			<td>{{ post.user.username }}</td>
+			<td>{{ post.user.email }}</td>
 		</tr>
 		</tbody>
 	</table>

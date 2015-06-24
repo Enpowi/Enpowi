@@ -32,23 +32,32 @@ Class('forms', {
 			});
 		},
 		socket: function(url, serialized, elements, serializedArray, form, vue) {
+            var listening = form.hasAttribute('listen');
+
+            if (listening) {
+                Enpowi.App.pubTo().listen(arguments);
+            }
 			$.getJSON(url, serialized, function(json) {
 				$.each(serializedArray, function() {
 					//vue.$delete(this.name);
 				});
 
-				if (json.paramResponse) {
+				if (json.hasOwnProperty('paramResponse')) {
 					var response = json.paramResponse,
-						i;
+                        i;
 
 					for (i in response) if (i && response.hasOwnProperty(i)) {
 						(function(i) {
 							Enpowi.translation.translate(response[i], function(v) {
-								vue.$add(i, v);
+								vue.$set(i, v);
 							});
 						})(i);
 					}
-				} else if(form.hasAttribute('listen')) {
+
+                    if (listening) {
+                        Enpowi.App.pubTo().listened(response);
+                    }
+				} else if(listening) {
 					return;
 				} else if (form.hasAttribute('data-done')) {
 					var span = document.createElement('span'),

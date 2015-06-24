@@ -13,6 +13,7 @@ class Module {
 
 	public $name;
 	public $folder;
+    private static $paramResponse = [];
 
 	public function __construct($folder, $moduleName)
 	{
@@ -56,4 +57,17 @@ class Module {
 
 		return $moduleMap;
 	}
+
+    public static function paramRespond($param, $value)
+    {
+        self::$paramResponse[$param] = $value;
+    }
+
+    public static function getParamResponse()
+    {
+        if (!empty(self::$paramResponse)) {
+            return self::$paramResponse;
+        }
+        return null;
+    }
 }

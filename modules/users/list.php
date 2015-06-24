@@ -27,25 +27,23 @@ $data = (new DataOut())
 		<tbody>
 			<tr>
 				<td></td>
-				<th v-t>Username</th>
 				<th v-t>Email</th>
 				<th v-t>Created</th>
 				<td>
 					<span v-show="impersonateUser !== null">
-						<span v-t>Impersonating: </span>{{ impersonateUser.username }}
+						<span v-t>Impersonating: </span>{{ impersonateUser.email }}
 					</span>
 				</td>
 			</tr>
 			<tr v-repeat="user : users">
 				<td>
-					<input v-show="action !== 'impersonate'" type="checkbox" name="usernames[]" value="{{ user.username }}">
-					<input v-show="action === 'impersonate'" type="radio" name="impersonateUser" value="{{ user.username }}">
+					<input v-show="action !== 'impersonate'" type="checkbox" name="emails[]" value="{{ user.email }}">
+					<input v-show="action === 'impersonate'" type="radio" name="impersonateUser" value="{{ user.email }}">
 				</td>
-				<td>{{ user.username }}</td>
 				<td>{{ user.email }}</td>
 				<td>{{ user.created }}</td>
 				<td>
-					<a href="#/group/ofUser?username={{ user.username }}" v-t>Groups</a>
+					<a href="#/group/ofUser?email={{ user.email }}" v-t>Groups</a>
 				</td>
 			</tr>
 			<tr>

@@ -12,10 +12,6 @@ $img = Enpowi\Forms\Utilities::captcha(true);
 	class="container">
 	<h2 v-t>Register</h2>
 	<div class="form-group">
-		<input type="text" class="form-control" name="username" v-placeholder="Username">
-		<span v-text="username"></span>
-	</div>
-	<div class="form-group">
 		<input type="text" class="form-control" name="email" v-placeholder="Email">
 		<span v-text="email"></span>
 	</div>

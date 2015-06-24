@@ -38,25 +38,30 @@ Namespace('Enpowi').
                     deep: true,
                     bind: function () {
                         var me = this,
-	                        el = this.el;
+	                        el = this.el,
+                            parent = null,
+                            listenFn = function () {
+                                var form;
 
-	                    el.onchange = function () {
-		                    var form,
-			                    parent;
+                                if (parent === null) {
+                                    parent = el.parentNode;
 
-		                    parent = el.parentNode;
+                                    while (parent !== null && parent.nodeName !== 'FORM') {
+                                        parent = parent.parentNode;
 
-		                    while (parent !== null && parent.nodeName !== 'FORM') {
-			                    parent = parent.parentNode;
+                                    }
 
-		                    }
+                                    if (parent === null) return;
+                                }
 
-		                    if (parent === null) return;
+                                form = parent;
 
-		                    form = parent;
+                                Enpowi.utilities.trigger(form, 'submit');
+                            };
 
-	                        Enpowi.utilities.trigger(form, 'submit');
-                        };
+                        el.addEventListener('change', listenFn);
+                        el.addEventListener('keyup', listenFn);
+                        el.addEventListener('click', listenFn);
                     }
                 });
 
@@ -180,7 +185,7 @@ Namespace('Enpowi').
 			            if (el.hasAttribute('static')) return;
 
 			            app.load(Enpowi.module.url(url), function (html) {
-				            $(el).append(html);
+                            el.appendChild(app.process(html));
 			            });
 		            }
 	            });

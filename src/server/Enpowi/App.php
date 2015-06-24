@@ -70,7 +70,8 @@ class App
 
 	public static function paramBool($param)
 	{
-		return (bool)self::param($param);
+        $value = self::param($param);
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN);
 	}
 
 	public static function paramString($param)
@@ -192,7 +193,7 @@ class App
 	public static function log($moduleName, $componentName, $detail = '') {
 		$bean = R::dispense('log');
 
-		$bean->username = self::user()->username;
+		$bean->email = self::user()->email;
 		$bean->ip = self::getApi()->request->getIp();
 		$bean->time = R::isoDateTime();
 		$bean->moduleName = $moduleName;
@@ -205,7 +206,7 @@ class App
 	public static function logError($detail = '') {
 		$bean = R::dispense('error');
 
-		$bean->username = self::user()->username;
+		$bean->email = self::user()->email;
 		$bean->ip = self::getApi()->request->getIp();
 		$bean->time = R::isoDateTime();
 		$bean->detail = $detail;

@@ -38,12 +38,14 @@ $registeredGroup = Group::create('Registered', true);
 $administratorGroup = Group::create('Administrator', false, false, false, true);
 
 //create first user & put him in admin group
-$administratorUser = User::create('admin', 'admin', '', true);
+$administratorUser = User::create('admin', 'admin', true);
 $administratorGroup->addUser($administratorUser);
 
 //give Anonymous abilities
 Perm::create('user', 'login', $anonymousGroup);
 Perm::create('user', 'register', $anonymousGroup);
+Perm::create('user', 'forgot', $anonymousGroup);
+Perm::create('user', 'confirm', $anonymousGroup);
 
 //give registered abilities
 Perm::create('user', 'view', $registeredGroup);

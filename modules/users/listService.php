@@ -7,8 +7,8 @@ Module::is();
 
 switch (App::param('action')) {
 	case 'delete':
-		foreach(App::param('usernames') as $username) {
-			(new User($username))->remove();
+		foreach(App::param('emails') as $email) {
+			(new User($email))->remove();
 		}
 		echo 1;
 		break;

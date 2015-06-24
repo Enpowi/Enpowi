@@ -29,7 +29,7 @@ $data = (new DataOut())
 		<tr v-repeat="page : pages" v-on="click : go('page?name=' + page.name)">
 			<td>{{ page.name }}</td>
 			<td>{{ page.created }}</td>
-			<td>{{ page.createdBy }}</td>
+			<td>{{ page.user.email }}</td>
 		</tr>
 		</tbody>
 	</table>

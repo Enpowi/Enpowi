@@ -18,8 +18,8 @@ class File {
 	public $name;
 	public $tags;
 	public $sharedGroupNames;
-	public $sharedUsernames;
-	public $username;
+	public $sharedEmails;
+	public $email;
 	public $hash;
 	public $type;
 	public $classType;
@@ -36,11 +36,11 @@ class File {
 			self::$path = path . '/protected/files/';
 		}
 		$this->classType = __CLASS__;
-		$this->username = App::get()->user()->username;
+		$this->email = App::get()->user()->email;
 		$this->bean = $bean;
 
 		if ($bean !== null) {
-			$this->username = $bean->username;
+			$this->email = $bean->email;
 			$this->hash = $bean->hash;
 			$this
 				->setType($bean->type)
@@ -49,7 +49,7 @@ class File {
 				->setName($bean->name)
 				->setTags($bean->tags)
 				->setSharedGroupNames($bean->sharedGroupNames)
-				->setSharedUsernames($bean->sharedUsernames);
+				->setSharedEmails($bean->sharedEmails);
 		}
 	}
 
@@ -90,9 +90,9 @@ class File {
 		$this->sharedGroupNames = $value;
 		return $this;
 	}
-	public function setSharedUsernames($value)
+	public function setSharedEmails($value)
 	{
-		$this->sharedUsernames = $value;
+		$this->sharedEmails = $value;
 		return $this;
 	}
 
@@ -105,8 +105,8 @@ class File {
 			$bean->name = $this->name;
 			$bean->tags = $this->tags;
 			$bean->sharedGroupNames = $this->sharedGroupNames;
-			$bean->sharedUsernames = $this->sharedUsernames;
-			$bean->username = $this->username;
+			$bean->sharedEmails = $this->sharedEmails;
+			$bean->email = $this->email;
 			$hash = $bean->hash = $this->hash = hash_file('md5', $this->tempPath);
 			$newPath = self::$path . '/' . $hash;
 			$uploaded = move_uploaded_file($this->tempPath, $newPath);
@@ -120,8 +120,8 @@ class File {
 	}
 
 	public static function getUserFiles() {
-		$username = App::get()->user()->username;
-		$beans = R::findAll('file', ' username = :username ', [ 'username' => $username ]);
+		$email = App::get()->user()->email;
+		$beans = R::findAll('file', ' email = :email ', [ 'email' => $email ]);
 		$files = [];
 		foreach ($beans as $bean) {
 			$files[] = !empty($bean->classType) ? new $bean->classType($bean) : new File($bean);

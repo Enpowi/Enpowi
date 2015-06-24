@@ -98,7 +98,9 @@ Namespace('Enpowi').
 				process: 'process',
 				processed: 'processed',
 				delay: 'delay',
-				_continue: 'continue'
+				_continue: 'continue',
+                listened: 'listened',
+                listen: 'listen'
 			}
 		},
         construct: function(callback) {
@@ -352,7 +354,6 @@ Namespace('Enpowi').
 	        if (scriptsRemote.length > 0) {
 		        this.loadScripts(scriptsRemote, function() {
 			        if (scriptsLocal.childNodes.length > 0) {
-				        window.moduleData
 				        document.querySelector('script').parentElement.appendChild(scriptsLocal);
 			        }
 		        });

@@ -11,6 +11,7 @@ namespace Enpowi\Pages;
 use Aura\Session\Exception;
 use RedBeanPHP\R;
 use Enpowi;
+use Enpowi\Users\User;
 use WikiLingo\Parser;
 
 class Page
@@ -19,8 +20,8 @@ class Page
 	public $name;
 	public $content;
 	public $created;
-	public $createdBy;
-	public $contributors;
+	public $user;
+	public $contributors = [];
 
 	private $_bean;
 
@@ -59,8 +60,12 @@ class Page
 		$this->name = $bean->name;
 		$this->content = $bean->content;
 		$this->created = $bean->created;
-		$this->createdBy = $bean->createdBy;
-		$this->contributors = $bean->sharedUserList;
+		$this->user = new User(null, R::load('user', $bean->userId));
+		$this->contributors = [];
+
+        foreach ($bean->sharedUser as $contributor) {
+            $this->contributors[] = new User(null, $contributor);
+        }
 	}
 
 	public function exists()
@@ -76,20 +81,29 @@ class Page
 	{
         if (empty($this->name)) throw new Exception('Page needs name before it can be saved');
 
-		$username = Enpowi\App::user()->username;
+		$userBean = Enpowi\App::user()->bean();
 
-		R::exec( 'UPDATE page SET is_revision = 1 WHERE name = ?', [$this->name] );
+		R::exec( 'UPDATE page SET is_revision = 1 WHERE name = ? and is_revision = 0', [$this->name] );
 
-		//TODO: ensure createdBy is set once and contributors is an incremental list
-		$bean = R::dispense('page');
-		$bean->name = $this->name;
-		$bean->content = $content;
-		$bean->created = R::isoDateTime();
-		$bean->createdBy = $username;
-		$this->contributors = [$username];
-		$bean->isRevision = false;
+        $oldBean = $this->_bean;
+        $originalUserBean = $userBean;
+
+        //TODO: ensure createdBy is set once and contributors is an incremental list
+        $bean = R::dispense('page');
+        $bean->name = $this->name;
+        $bean->content = $content;
+        $bean->created = R::isoDateTime();
+        $bean->user = $originalUserBean;
+        $bean->isRevision = false;
+
+        if ($oldBean !== null) {
+            $bean->sharedUser = $oldBean->sharedUser;
+        }
+        $bean->sharedUser[] = $userBean;
 
 		R::store($bean);
+
+        return new Page($this->name, $bean);
 	}
 
 	public function render()

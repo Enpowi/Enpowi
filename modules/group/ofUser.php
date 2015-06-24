@@ -8,7 +8,7 @@ use Enpowi\Modules\Module;
 Module::is();
 
 $data = (new DataOut())
-	->add('user', $user = new User(App::param('username')))
+	->add('user', $user = new User(App::param('email')))
 	->add('groups', Group::editableGroups())
 	->out();
 
@@ -21,7 +21,7 @@ $data = (new DataOut())
 
 	<h3>
 		<span v-t>Groups for: </span>
-		{{ user.username }}
+		{{ user.email }}
 	</h3>
 
 	<input

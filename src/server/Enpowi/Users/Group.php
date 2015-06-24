@@ -136,7 +136,7 @@ class Group {
 		$groupBean = $this->_bean;
 		$users = [];
 		foreach($groupBean->sharedUserList as $userBean) {
-			$users[] = new User($userBean->username, $userBean);
+			$users[] = new User($userBean->email, $userBean);
 		}
 		return $users;
 	}

@@ -34,10 +34,10 @@
 				</div>
 				<button type="submit" class="btn btn-default" v-t>Submit</button>
 			</form>
-			<form class="navbar-form navbar-right" action="user/login" v-module data-done="user/view" v-show="session.user.username === 'Anonymous'">
+			<form class="navbar-form navbar-right" action="user/login" v-module data-done="user/view" v-show="session.user.email === ''">
 				<div class="form-group">
-					<input type="text" v-placeholder="Username" name="username" class="form-control">
-					<span v-text="username"></span>
+					<input type="text" v-placeholder="Email" name="email" class="form-control">
+					<span v-text="email"></span>
 				</div>
 				<div class="form-group">
 					<input type="password" v-placeholder="Password" name="password" class="form-control">
@@ -45,8 +45,8 @@
 				<button type="submit" class="btn btn-success" v-t>Sign in</button>
 				<a class="btn btn-success" v-t v-on="click: go('user/register')">Register</a>
 			</form>
-			<form class="navbar-form navbar-right" action="user/logout" v-module data-done="default" v-show="session.user.username !== 'Anonymous'">
-				<a class="btn btn-success" v-on="click: go('user/view')">{{session.user.username}}</a>
+			<form class="navbar-form navbar-right" action="user/logout" v-module data-done="default" v-show="session.user.email !== ''">
+				<a class="btn btn-success" v-on="click: go('user/view')">{{session.user.email}}</a>
 				<button type="submit" class="btn btn-success" v-t>Sign out</button>
 			</form>
 		</div><!-- /.navbar-collapse -->

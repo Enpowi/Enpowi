@@ -16,6 +16,14 @@ $me = App::loadComponent($path, $module, $component);
 
 if ($me !== null && !empty($me->file)) {
 	require_once $me->file;
+
+    $paramResponse = Module::getParamResponse();
+    if ($paramResponse !== null) {
+        echo json_encode([
+            'paramResponse' => $paramResponse
+        ]);
+    }
+
 } else {
 	echo -1;
 }

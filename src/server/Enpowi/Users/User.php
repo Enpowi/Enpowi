@@ -16,7 +16,6 @@ use Enpowi\Event;
 
 class User {
 
-	public $username;
 	public $email;
 	public $lastLogin;
 	public $created;
@@ -28,14 +27,13 @@ class User {
 	 */
 	public $groups = [];
 
-	private $_emailPassword;
 	private $_bean;
 
-	public function __construct($username = null, $bean = null) {
-		$this->username = $username;
+	public function __construct($email = null, $bean = null) {
+		$this->email = $email;
 
 		if ($bean === null) {
-			$this->_bean = $bean = R::findOne('user', ' username = ? ', [strtolower($this->username)]);
+			$this->_bean = $bean = R::findOne('user', ' email = ? ', [strtolower($this->email)]);
 		} else {
 			$this->_bean = $bean;
 		}
@@ -47,9 +45,9 @@ class User {
 		$this->updateGroups();
 	}
 
-	public static function getByUsernameAndPassword($username, $password)
+	public static function getByEmailAndPassword($email, $password)
 	{
-		$user = new User($username);
+		$user = new User($email);
 		$bean = $user->_bean;
 
 		if ($bean !== null) {
@@ -61,15 +59,23 @@ class User {
 		return null;
 	}
 
+    public static function getByEmail($email)
+    {
+        $bean = R::findOne('user', 'email = :email', ['email' => strtolower($email)]);
+        if ($bean !== null) {
+            $user = new User($bean->email, $bean);
+            return $user;
+        }
+        return null;
+    }
+
 	private function convertFromBean()
 	{
 		$bean = $this->_bean;
 
 		if (!$this->exists()) return;
 
-		$this->username = $bean->username;
-		$this->email = $bean->email;
-		$this->_emailPassword = $bean->emailPassword;
+		$this->email = strtolower($bean->email);
 		$this->lastLogin = $bean->lastLogin;
 		$this->created = $bean->created;
 		$this->locked = $bean->locked;
@@ -81,17 +87,9 @@ class User {
 
 		if ($bean === null) return null;
 
-		$user = new User($bean->username, $bean);
+		$user = new User($bean->email, $bean);
 
 		return $user;
-	}
-
-	public static function isValidUsername($username)
-	{
-		return v::alnum()
-			->noWhitespace()
-			->length(3,200)
-			->validate($username);
 	}
 
 	public static function isValidPassword($password)
@@ -106,9 +104,9 @@ class User {
 		return V::email()->validate($email);
 	}
 
-	public static function isUnique($username)
+	public static function isUnique($email)
 	{
-		$result = R::count('user', ' username = ?', [strtolower($username)]);
+		$result = R::count('user', ' email = ?', [strtolower($email)]);
 		return $result === 0;
 	}
 
@@ -121,18 +119,16 @@ class User {
 		}
 	}
 
-	public static function create($username, $password, $email = '', $valid = false)
+	public static function create($email, $password, $valid = false)
 	{
 		$passwordHash = password_hash($password, PASSWORD_DEFAULT);
-		$numOfUsersWithThisName = R::count('user', ' username = ? ', [$username]);
+		$numOfUsersWithThisName = R::count('user', ' email = ? ', [$email]);
 
 		if ($numOfUsersWithThisName < 1) {
 			$bean = R::dispense('user');
 
-			$bean->username = strtolower($username);
+            $bean->email = strtolower($email);
 			$bean->password = $passwordHash;
-			$bean->email = $email;
-			$bean->emailPassword = '';
 			$bean->valid = $valid;
 			$bean->locked = false;
 			$bean->lastLogin = R::isoDateTime();
@@ -140,12 +136,13 @@ class User {
 			$bean->sharedGroupList;
 			$bean->lockedKey = App::guid();
 			$bean->validationKey = App::guid();
+            $bean->validationDate = R::isoDateTime();
 
 			Event\User\BeforeStore::pub($bean);
 
 			$id = R::store($bean);
 
-			$user = new User($username, $bean);
+			$user = new User($email, $bean);
 
 			Event\User\Create::pub($user);
 
@@ -173,15 +170,10 @@ class User {
 		return $this;
 	}
 
-	public function emailPassword()
-	{
-		return $this->_emailPassword;
-	}
-
 	public function bean()
 	{
 		if ($this->_bean === null) {
-			$this->_bean = R::findOne('user', ' username = ? ', [strtolower($this->username)]);
+			$this->_bean = R::findOne('user', ' email = ? ', [strtolower($this->email)]);
 		}
 
 		return $this->_bean;
@@ -190,7 +182,7 @@ class User {
 	public function ensureExists()
 	{
 		if ($this->_bean === null) {
-			$this->_bean = R::findOne('user', ' username = ? ', [$this->username]);
+			$this->_bean = R::findOne('user', ' email = ? ', [$this->email]);
 		}
 
 		return $this;
@@ -208,6 +200,11 @@ class User {
 	public function isLocked() {
 		return $this->_bean->locked ? true : false;
 	}
+
+    public function canValidate()
+    {
+        return (R::isoDateTime() - (60*60*24)) < $this->_bean->validationDate;
+    }
 
 	public function validationKey() {
 		return $this->_bean->validationKey;
@@ -235,7 +232,7 @@ class User {
 		$group = null;
 
 		//anonymous
-		if ($this->username === 'Anonymous') {
+		if ($this->email === '') {
 			$group = new Group( 'Anonymous' );
 			$groups[] = $group;
 		}
@@ -262,7 +259,7 @@ class User {
 
 	public static function users($pageNumber = 0)
 	{
-		$beans = R::findAll('user', ' order by username limit :offset, :count', [
+		$beans = R::findAll('user', ' order by email limit :offset, :count', [
 			'offset' => $pageNumber * App::$pagingSize,
 			'count' => App::$pagingSize
 		]);
@@ -270,7 +267,7 @@ class User {
 		$users = [];
 
 		foreach($beans as $bean) {
-			$users[] = new User($bean->username, $bean);
+			$users[] = new User($bean->email, $bean);
 		}
 
 		return $users;
@@ -329,7 +326,7 @@ class User {
 
 	public function remove()
 	{
-		$bean = R::findOne( 'user', ' username = ? ', [ $this->username ] );
+		$bean = R::findOne( 'user', ' email = ? ', [ $this->email ] );
 
 		if ($bean !== null) {
 			R::trash($bean);
@@ -337,4 +334,24 @@ class User {
 		}
 		return false;
 	}
+
+    public function updatePassword($password)
+    {
+        if (self::isValidPassword($password)) {
+            $bean = $this->bean();
+            $bean->password = password_hash($password, PASSWORD_DEFAULT);
+            R::store($bean);
+            return true;
+        }
+        return false;
+    }
+
+    public function resetPassword()
+    {
+        $password = Authentication::generatePassword();
+        $bean = $this->_bean;
+        $bean->password = password_hash($password, PASSWORD_DEFAULT);
+        R::store($bean);
+        return $password;
+    }
 }
