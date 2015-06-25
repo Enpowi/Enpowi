@@ -68,14 +68,14 @@ $data = (new DataOut())
 <link href="vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 <script src="vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <script>
-	var md = moduleData[0],
-		publishedOn = app.getElementById('publishedOn'),
+	var data = datas[0],
+        publishedOn = app.getElementById('publishedOn'),
 		publishedOnUI = app.getElementById('publishedOnUI');
 
 	$(publishedOnUI)
 		.datepicker()
 		.on('changeDate', function(e) {
-			md.post.publishedOn =
+			data.post.publishedOn =
 			publishedOn.value = Math.floor(e.date / 1000);
 		});
 </script>

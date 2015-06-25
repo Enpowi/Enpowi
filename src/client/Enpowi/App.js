@@ -245,13 +245,24 @@ Namespace('Enpowi').
 	            script,
 	            i = 0,
 	            max,
-	            scriptBody,
 	            scriptXSS = [],
 	            scriptsRemote = [],
-	            scriptsLocal = document.createDocumentFragment(),
-	            vues = [];
-
-	        window.moduleData = [];
+	            scriptsLocal = [],
+	            vues = [],
+                datas = [],
+                elements = [],
+                runJS = function() {
+                    if (scriptsLocal.length > 0) {
+                        for(var i = 0; i < scriptsLocal.length; i++) {
+                            try {
+                                (new Function('datas', 'vues', 'elements', scriptsLocal[i]))
+                                (datas, vues, elements);
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                    }
+                };
 
             el.innerHTML = html;
 
@@ -271,10 +282,7 @@ Namespace('Enpowi').
 				        scriptsRemote.push(script.getAttribute('src'));
 			        }
 		        } else {
-			        scriptBody = script.innerHTML;
-			        script = document.createElement('script');
-			        script.innerHTML = scriptBody;
-			        scriptsLocal.appendChild(script);
+			        scriptsLocal.push(script.innerHTML);
 		        }
 	        }
 
@@ -283,6 +291,7 @@ Namespace('Enpowi').
             while (el.children.length > 0) {
                 child = el.firstChild;
                 el.removeChild(child);
+                elements.push(child);
                 frag.appendChild(child);
 
                 if (child.nodeType === 1) {
@@ -306,7 +315,7 @@ Namespace('Enpowi').
                                 for (i in moduleData) if (i && moduleData.hasOwnProperty(i)) {
                                     data[i] = moduleData[i];
                                 }
-	                            window.moduleData.push(data);
+	                            datas.push(data);
                             }
 
                             return data;
@@ -353,12 +362,10 @@ Namespace('Enpowi').
 	        //process scripts
 	        if (scriptsRemote.length > 0) {
 		        this.loadScripts(scriptsRemote, function() {
-			        if (scriptsLocal.childNodes.length > 0) {
-				        document.querySelector('script').parentElement.appendChild(scriptsLocal);
-			        }
+                    runJS();
 		        });
-	        } else if (scriptsLocal.childNodes.length > 0) {
-		        document.querySelector('script').parentElement.appendChild(scriptsLocal);
+	        } else {
+                runJS();
 	        }
 
 	        if (scriptXSS.length > 0) {
