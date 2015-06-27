@@ -48,9 +48,13 @@ Class('forms', {
 
 					for (i in response) if (i && response.hasOwnProperty(i)) {
 						(function(i) {
-							Enpowi.translation.translate(response[i], function(v) {
-								vue.$set(i, v);
-							});
+                            if (typeof response[i] === 'string') {
+                                Enpowi.translation.translate(response[i], function (v) {
+                                    vue.$set(i, v);
+                                });
+                            } else {
+                                vue.$set(i, response[i]);
+                            }
 						})(i);
 					}
 
