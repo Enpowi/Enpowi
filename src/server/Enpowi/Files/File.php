@@ -28,7 +28,7 @@ class File {
 
 	public static $path = null;
 
-	private $bean = null;
+    private $_bean = null;
 
 	public function __construct($bean = null)
 	{
@@ -40,6 +40,7 @@ class File {
 		$this->bean = $bean;
 
 		if ($bean !== null) {
+            $this->id = $bean->id;
 			$this->email = $bean->email;
 			$this->hash = $bean->hash;
 			$this
@@ -140,5 +141,10 @@ class File {
 	public function toString()
 	{
 		return file_get_contents(self::$path . '/' . $this->hash, $this->tempPath);
+    }
+
+    public function bean()
+    {
+        return $this->_bean;
 	}
 }
