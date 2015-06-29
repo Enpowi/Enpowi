@@ -74,4 +74,21 @@ class Gallery
     {
         $this->bean()->id;
     }
+
+    public static function galleries($userID, $pageNumber = 0)
+    {
+        $beans = R::findAll('gallery', ' user_id = :userID order by name limit :offset, :count', [
+            'userID' => $userID,
+            'offset' => $pageNumber * App::$pagingSize,
+            'count' => App::$pagingSize
+        ]);
+
+        $galleries = [];
+
+        foreach($beans as $bean) {
+            $galleries[] = new Gallery($bean->id, $bean);
+        }
+
+        return $galleries;
+    }
 }
