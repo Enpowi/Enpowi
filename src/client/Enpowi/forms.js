@@ -38,13 +38,15 @@ Class('forms', {
                 Enpowi.App.pubTo().listen(arguments);
             }
 			$.getJSON(url, serialized, function(json) {
+                var response,
+                    i;
+
 				$.each(serializedArray, function() {
 					//vue.$delete(this.name);
 				});
 
 				if (json.hasOwnProperty('paramResponse')) {
-					var response = json.paramResponse,
-                        i;
+					response = json.paramResponse;
 
 					for (i in response) if (i && response.hasOwnProperty(i)) {
 						(function(i) {
@@ -61,9 +63,20 @@ Class('forms', {
                     if (listening) {
                         Enpowi.App.pubTo().listened(response);
                     }
+                    return;
 				} else if(listening) {
 					return;
-				} else if (form.hasAttribute('data-done')) {
+				}
+
+                if (json.hasOwnProperty('successResponse')) {
+                    response = json.successResponse;
+
+                    for (i in response) if (response.hasOwnProperty(i)) {
+                        vue.$set(i, response[i]);
+                    }
+                }
+
+                if (form.hasAttribute('data-done')) {
 					var span = document.createElement('span'),
 						data = json instanceof Object ? json : {
 							response: json

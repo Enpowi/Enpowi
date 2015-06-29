@@ -14,6 +14,7 @@ class Module {
 	public $name;
 	public $folder;
     private static $paramResponse = [];
+    private static $successResponse = [];
 
 	public function __construct($folder, $moduleName)
 	{
@@ -67,6 +68,19 @@ class Module {
     {
         if (!empty(self::$paramResponse)) {
             return self::$paramResponse;
+        }
+        return null;
+    }
+
+    public static function successRespond($param, $value)
+    {
+        self::$successResponse[$param] = $value;
+    }
+
+    public static function getSuccessResponse()
+    {
+        if (!empty(self::$successResponse)) {
+            return self::$successResponse;
         }
         return null;
     }

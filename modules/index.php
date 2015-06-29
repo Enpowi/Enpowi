@@ -22,6 +22,13 @@ if ($me !== null && !empty($me->file)) {
         echo json_encode([
             'paramResponse' => $paramResponse
         ]);
+    } else {
+        $successResponse = Module::getSuccessResponse();
+        if ($successResponse !== null) {
+            echo json_encode([
+                'successResponse' => $successResponse
+            ]);
+        }
     }
 
 } else {
