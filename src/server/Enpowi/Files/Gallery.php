@@ -91,4 +91,21 @@ class Gallery
 
         return $galleries;
     }
+
+    public static function create($name, $description)
+    {
+        $bean = R::dispense('gallery');
+        $gallery = new Gallery(null, $bean);
+        return $gallery
+            ->setName($name)
+            ->setDescription($description)
+            ->save();
+    }
+
+    public function delete()
+    {
+        $bean = $this->bean();
+        R::trash($bean);
+        return $this;
+    }
 }
