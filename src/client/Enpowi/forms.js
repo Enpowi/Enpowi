@@ -77,21 +77,7 @@ Class('forms', {
                 }
 
                 if (form.hasAttribute('data-done')) {
-					var span = document.createElement('span'),
-						data = json instanceof Object ? json : {
-							response: json
-						};
-
-					span.innerHTML = form.getAttribute('data-done')
-						.replace('(%', '{{')
-						.replace('%)', '}}');
-
-					new Vue({
-						data: data,
-						el: span
-					});
-
-					app.go(span.textContent);
+					app.go(form.getAttribute('data-done'));
 				}
 			});
 		}
