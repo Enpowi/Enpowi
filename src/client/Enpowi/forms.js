@@ -76,9 +76,11 @@ Class('forms', {
                     }
                 }
 
-                if (form.hasAttribute('data-done')) {
-					app.go(form.getAttribute('data-done'));
-				}
+                setTimeout(function() {
+                    if (form.hasAttribute('data-done')) {
+                        app.go(form.getAttribute('data-done'));
+                    }
+                },0);
 			});
 		}
 	}
