@@ -9,16 +9,18 @@
 namespace Enpowi\Files;
 
 use Enpowi\App;
+use Enpowi\Generic\DataItem;
 use RedBeanPHP\R;
 
-class File {
+class File extends DataItem
+{
 	public $id;
 	public $date;
 	public $description;
 	public $name;
 	public $tags;
-	public $sharedGroupNames;
-	public $sharedEmails;
+	public $sharedGroupIds;
+	public $sharedUserIds;
 	public $email;
 	public $hash;
 	public $type;
@@ -35,12 +37,16 @@ class File {
 		if (self::$path === null) {
 			self::$path = path . '/protected/files/';
 		}
-		$this->classType = __CLASS__;
-		$this->email = App::get()->user()->email;
+		$this->convertFromBean();
 		$this->_bean = $bean;
+	}
 
+	public function convertFromBean()
+	{
+		$this->classType = __CLASS__;
+		$bean = $this->_bean;
 		if ($bean !== null) {
-            $this->id = $bean->id;
+			$this->id = $bean->id;
 			$this->email = $bean->email;
 			$this->hash = $bean->hash;
 			$this
@@ -49,9 +55,10 @@ class File {
 				->setDescription($bean->description)
 				->setName($bean->name)
 				->setTags($bean->tags)
-				->setSharedGroupNames($bean->sharedGroupNames)
-				->setSharedEmails($bean->sharedEmails);
+				->setSharedGroupIds($bean->sharedGroupIds)
+				->setSharedUserIds($bean->sharedUserIds);
 		}
+		return $this;
 	}
 
 	public function setType($value) {
@@ -86,42 +93,47 @@ class File {
 		$this->tags = $value;
 		return $this;
 	}
-	public function setSharedGroupNames($value)
+	public function setSharedGroupIds($value)
 	{
-		$this->sharedGroupNames = $value;
+		$this->sharedGroupIds = $value;
 		return $this;
 	}
-	public function setSharedEmails($value)
+	public function setSharedUserIds($value)
 	{
-		$this->sharedEmails = $value;
+		$this->sharedUserIds = $value;
 		return $this;
+	}
+
+	public function upload()
+	{
+		$hash = $this->hash = hash_file('md5', $this->tempPath);
+		$newPath = self::$path . '/' . $hash;
+		if (file_exists($this->tempPath)) {
+			$uploaded = move_uploaded_file( $this->tempPath, $newPath );
+			$this->save();
+		} else {
+			throw new \Exception('File not found');
+		}
+
+		return $uploaded;
 	}
 
 	public function save() {
 		$bean = $this->_bean;
 		if ($bean === null) {
-			$bean = $this->_bean = R::dispense('file');
-			$bean->date = R::isoDateTime();
-			$bean->description = $this->description;
-			$bean->name = $this->name;
-			$bean->tags = $this->tags;
-			$bean->sharedGroupNames = $this->sharedGroupNames;
-			$bean->sharedEmails = $this->sharedEmails;
-			$bean->email = $this->email;
-			$hash = $bean->hash = $this->hash = hash_file('md5', $this->tempPath);
-			$newPath = self::$path . '/' . $hash;
-			if (file_exists($this->tempPath)) {
-				$uploaded = move_uploaded_file( $this->tempPath, $newPath );
-			} else {
-				throw new \Exception('File not found');
-			}
-
-			if ($uploaded) {
-				$this->id = R::store( $bean );
-				return true;
-			}
+			$bean = $this->_bean = R::dispense( 'file' );
 		}
-		return false;
+
+		$bean->date = R::isoDateTime();
+		$bean->description = $this->description;
+		$bean->name = $this->name;
+		$bean->tags = $this->tags;
+		$bean->sharedGroupIds = $this->sharedGroupIds;
+		$bean->sharedUserIds = $this->sharedUserIds;
+		$bean->userId = App::get()->user()->id();
+		$bean->hash = $this->hash;
+
+		return $this->id = R::store( $bean );
 	}
 
 	public static function getUserFiles() {

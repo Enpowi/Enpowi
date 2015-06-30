@@ -13,9 +13,9 @@ use RedBeanPHP\R;
 use Respect\Validation\Validator as v;
 use Enpowi\Authentication;
 use Enpowi\Event;
+use Enpowi\Generic;
 
-class User {
-
+class User extends Generic\PageableDataItem {
 	public $email;
 	public $lastLogin;
 	public $created;
@@ -69,17 +69,19 @@ class User {
         return null;
     }
 
-	private function convertFromBean()
+	public function convertFromBean()
 	{
 		$bean = $this->_bean;
 
-		if (!$this->exists()) return;
+		if (!$this->exists()) return $this;
 
 		$this->email = strtolower($bean->email);
 		$this->lastLogin = $bean->lastLogin;
 		$this->created = $bean->created;
 		$this->locked = $bean->locked;
 		$this->valid = $bean->valid == 1 ? true : false;
+
+		return $this;
 	}
 
 	public static function fromId($id) {
@@ -354,4 +356,9 @@ class User {
         R::store($bean);
         return $password;
     }
+
+	public static function pages()
+	{
+		return R::count('user') / App::$pagingSize;
+	}
 }

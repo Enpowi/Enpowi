@@ -11,8 +11,10 @@ namespace Enpowi\Users;
 use RedBeanPHP\R;
 use Respect\Validation\Validator as v;
 use Enpowi\App;
+use Enpowi\Generic;
 
-class Group {
+class Group extends Generic\PageableDataItem
+{
 
     public $id;
 	public $name;
@@ -31,6 +33,12 @@ class Group {
 			$this->_bean = $bean;
 		}
 
+		$this->convertFromBean();
+	}
+
+	public function convertFromBean()
+	{
+		$bean = $this->_bean;
 		if (
 			$bean !== null
 			&& (
@@ -41,8 +49,10 @@ class Group {
 			)
 		) {
 			$this->isSystem = true;
-            $this->id = $bean->getID();
+			$this->id = $bean->getID();
+			$this->name = $this->_bean->name;
 		}
+		return $this;
 	}
 
 	public static function getWithPermissions($name, $bean = null)
@@ -242,5 +252,10 @@ class Group {
 		}
 
 		return $this;
+	}
+
+	public static function pages()
+	{
+		return R::count('group') / App::$pagingSize;
 	}
 }

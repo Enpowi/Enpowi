@@ -2,17 +2,19 @@
 
 namespace Enpowi\Files;
 
+use Enpowi\Generic\PageableDataItem;
 use RedBeanPHP\R;
 use Enpowi\App;
-use Enpowi\Files\File;
 
-class Gallery
+class Gallery extends PageableDataItem
 {
     public $name;
     public $description;
     public $userId;
 	public $created;
 	public $id;
+	public $sharedGroupIds;
+	public $sharedUserIds;
 
     private $_bean = null;
 
@@ -40,7 +42,7 @@ class Gallery
 		}
 	}
 
-	private function convertFromBean()
+	public function convertFromBean()
 	{
 		$bean = $this->_bean;
 
@@ -152,4 +154,20 @@ class Gallery
         R::trash($bean);
         return $this;
     }
+
+	public static function pages()
+	{
+		return R::count('gallery', '  ') / App::$pagingSize;
+	}
+
+	public function setSharedGroupIds($value)
+	{
+		$this->sharedGroupIds = $value;
+		return $this;
+	}
+	public function setSharedUserIds($value)
+	{
+		$this->sharedUserIds = $value;
+		return $this;
+	}
 }
