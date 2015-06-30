@@ -37,7 +37,7 @@ class File {
 		}
 		$this->classType = __CLASS__;
 		$this->email = App::get()->user()->email;
-		$this->bean = $bean;
+		$this->_bean = $bean;
 
 		if ($bean !== null) {
             $this->id = $bean->id;
@@ -98,9 +98,9 @@ class File {
 	}
 
 	public function save() {
-		$bean = $this->bean;
+		$bean = $this->_bean;
 		if ($bean === null) {
-			$bean = $this->bean = R::dispense('file');
+			$bean = $this->_bean = R::dispense('file');
 			$bean->date = R::isoDateTime();
 			$bean->description = $this->description;
 			$bean->name = $this->name;
@@ -110,7 +110,11 @@ class File {
 			$bean->email = $this->email;
 			$hash = $bean->hash = $this->hash = hash_file('md5', $this->tempPath);
 			$newPath = self::$path . '/' . $hash;
-			$uploaded = move_uploaded_file($this->tempPath, $newPath);
+			if (file_exists($this->tempPath)) {
+				$uploaded = move_uploaded_file( $this->tempPath, $newPath );
+			} else {
+				throw new \Exception('File not found');
+			}
 
 			if ($uploaded) {
 				$this->id = R::store( $bean );
