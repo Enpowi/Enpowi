@@ -13,6 +13,7 @@ class Gallery
     public $userID;
 	public $created;
     public $pictures = [];
+	public $id;
 
     private $_bean = null;
 
@@ -46,6 +47,7 @@ class Gallery
 
 		if (!$this->exists()) return $this;
 
+		$this->id = $bean->id;
 		$this->name = $bean->name;
 		$this->description = $bean->description;
 		$this->created = $bean->created;
@@ -95,11 +97,6 @@ class Gallery
     {
         $bean = $this->bean();
         return R::store($bean);
-    }
-
-    public function id()
-    {
-        $this->bean()->id;
     }
 
     public static function galleries($userID, $pageNumber = 0)
