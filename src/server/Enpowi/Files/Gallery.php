@@ -71,22 +71,20 @@ class Gallery
 
     public function addImage(File $value)
     {
-	    $files = $this->bean()->ownFileList;
-        $files[] = $value->bean();
-        array_unique($files);
+	    $bean = $this->bean();
+	    $bean->ownFileList[] = $value->bean();
         return $this;
     }
 
 	public function images($pageNumber = 0)
 	{
 		$bean = $this->bean();
-		$imageBeans = $bean->ownFileList;
-		$max = count($imageBeans);
+		$max = count($bean->ownFileList);
 		$i = $pageNumber * App::$pagingSize;
         $max = min($i + App::$pagingSize, $max);
 		$images = [];
 		for (; $i < $max; $i++) {
-			$images[] = new File($imageBeans[$i]);
+			$images[] = new File($bean->ownFileList[$i]);
 		}
 		return $images;
 	}
