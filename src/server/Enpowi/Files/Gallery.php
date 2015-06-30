@@ -10,7 +10,7 @@ class Gallery
 {
     public $name;
     public $description;
-    public $userID;
+    public $userId;
 	public $created;
 	public $id;
 
@@ -50,6 +50,7 @@ class Gallery
 		$this->name = $bean->name;
 		$this->description = $bean->description;
 		$this->created = $bean->created;
+		$this->userId = $bean->user_id;
 
 		return $this;
 	}
@@ -100,7 +101,7 @@ class Gallery
     {
         if ($this->_bean === null) {
             $bean = R::dispense('gallery');
-            $bean->userID = App::user()->id();
+            $bean->userId = App::user()->id();
 	        $bean->created = R::isoDateTime();
             $this->_bean = $bean;
         }
@@ -113,10 +114,10 @@ class Gallery
         return R::store($bean);
     }
 
-    public static function galleries($userID, $pageNumber = 0)
+    public static function galleries($userId, $pageNumber = 0)
     {
-        $beans = R::findAll('gallery', ' user_id = :userID order by name limit :offset, :count', [
-            'userID' => $userID,
+        $beans = R::findAll('gallery', ' user_id = :userId order by name limit :offset, :count', [
+            'userId' => $userId,
             'offset' => $pageNumber * App::$pagingSize,
             'count' => App::$pagingSize
         ]);
@@ -133,7 +134,7 @@ class Gallery
     public static function create($name, $description)
     {
         $bean = R::dispense('gallery');
-	    $bean->userID = App::user()->id();
+	    $bean->userId = App::user()->id();
 	    $bean->created = R::isoDateTime();
         $gallery = new Gallery(null, $bean);
 
