@@ -68,7 +68,7 @@ class Gallery
         return $this;
     }
 
-    public function addPicture(File $value)
+    public function addImage(File $value)
     {
 	    $files = $this->bean()->ownFileList;
         $files[] = $value->bean();
@@ -76,21 +76,21 @@ class Gallery
         return $this;
     }
 
-	public function pictures($pageNumber = 0)
+	public function images($pageNumber = 0)
 	{
 		$bean = $this->bean();
-		$pictureBeans = $bean->ownFileList;
-		$max = count($pictureBeans);
+		$imageBeans = $bean->ownFileList;
+		$max = count($imageBeans);
 		$i = $pageNumber * App::$pagingSize;
         $max = min($i + App::$pagingSize, $max);
-		$pictures = [];
+		$images = [];
 		for (; $i < $max; $i++) {
-			$pictures[] = new File($pictureBeans[$i]);
+			$images[] = new File($imageBeans[$i]);
 		}
-		return $pictures;
+		return $images;
 	}
 
-    public function removePicture(File $value)
+    public function removeImage(File $value)
     {
         unset($this->bean()->ownFileList[$value->id]);
         return $this;
