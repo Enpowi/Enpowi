@@ -107,7 +107,7 @@ class Post {
         return (new Parser)->parse($this->content);
     }
 
-    public static function posts($pageNumber = 0, $showAll = false)
+    public static function posts($pageNumber = 1, $showAll = false)
     {
         $beans = R::findAll('blog', '
             where
@@ -115,7 +115,7 @@ class Post {
                 or date(published_on) >= now()
 	        order by created
 	        limit :offset, :count',[
-		        'offset' => $pageNumber * App::$pagingSize,
+		        'offset' => App::pageOffset($pageNumber),
 		        'count' => App::$pagingSize,
 	            'show_all' => $showAll
         ]);
@@ -165,7 +165,7 @@ class Post {
 		return null;
 	}
 
-	public function userPosts($pageNumber = 0, $showAll = false)
+	public function userPosts($pageNumber = 1, $showAll = false)
 	{
 		$beans = R::findAll('blog', '
 			where
@@ -173,7 +173,7 @@ class Post {
 				or date(published_on) >= now()
 			order by created
 			limit :offset, :count', [
-				'offset' => $pageNumber * App::$pagingSize,
+				'offset' => App::pageOffset($pageNumber),
 				'count' => App::$pagingSize,
 				'show_all' => $showAll
 		]);

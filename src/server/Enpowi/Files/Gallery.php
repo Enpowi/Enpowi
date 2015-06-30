@@ -76,16 +76,20 @@ class Gallery
         return $this;
     }
 
-	public function images($pageNumber = 0)
+	public function images($pageNumber = 1)
 	{
-		$bean = $this->bean();
-		$max = count($bean->ownFileList);
-		$i = $pageNumber * App::$pagingSize;
-        $max = min($i + App::$pagingSize, $max);
+		$imageBeans = R::findAll('file', ' gallery_id = :galleryId ORDER BY name LIMIT :offset, :limit ',[
+			'galleryId' => $this->id,
+			'offset' => App::pageOffset($pageNumber),
+			'limit' => App::$pagingSize
+		]);
+
 		$images = [];
-		for (; $i < $max; $i++) {
-			$images[] = new File($bean->ownFileList[$i]);
+
+		foreach ($imageBeans as $imageBean) {
+			$images[] = new File($imageBean);
 		}
+
 		return $images;
 	}
 
@@ -112,11 +116,11 @@ class Gallery
         return R::store($bean);
     }
 
-    public static function galleries($userId, $pageNumber = 0)
+    public static function galleries($userId, $pageNumber = 1)
     {
         $beans = R::findAll('gallery', ' user_id = :userId order by name limit :offset, :count', [
             'userId' => $userId,
-            'offset' => $pageNumber * App::$pagingSize,
+            'offset' => App::pageOffset($pageNumber),
             'count' => App::$pagingSize
         ]);
 

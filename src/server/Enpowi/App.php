@@ -266,4 +266,11 @@ class App
 			return $uuid;
 		}
 	}
+
+	public static function pageOffset($pageNumber)
+	{
+		if ($pageNumber < 1) $pageNumber = 1;
+
+		return ($pageNumber - 1) * self::$pagingSize;
+	}
 }

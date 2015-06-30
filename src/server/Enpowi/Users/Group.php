@@ -141,10 +141,10 @@ class Group {
 		return $users;
 	}
 
-	public static function groups($pageNumber = 0)
+	public static function groups($pageNumber = 1)
 	{
 		$beans = R::find('group', ' order by username limit :offset, :count', [
-			'offset' => $pageNumber * App::$pagingSize,
+			'offset' => App::pageOffset($pageNumber),
 			'count' => App::$pagingSize
 		]);
 		$groups = [];
@@ -156,7 +156,7 @@ class Group {
 		return $groups;
 	}
 
-	public static function editableGroups($updatePerms = false, $excludeSuper = false, $pageNumber = 0)
+	public static function editableGroups($updatePerms = false, $excludeSuper = false, $pageNumber = 1)
 	{
 		$beans = null;
 		$groups = [];
@@ -169,7 +169,7 @@ class Group {
 				and is_super = 0
 				order by name
 				limit :offset, :count', [
-				'offset' => $pageNumber * App::$pagingSize,
+				'offset' => App::pageOffset($pageNumber),
 				'count' => App::$pagingSize
 			]);
 		} else {
@@ -179,7 +179,7 @@ class Group {
 				and is_everyone = 0
 				order by name
 				limit :offset, :count', [
-				'offset' => $pageNumber * App::$pagingSize,
+				'offset' => App::pageOffset($pageNumber),
 				'count' => App::$pagingSize
 			]);
 		}

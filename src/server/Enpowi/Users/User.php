@@ -257,10 +257,10 @@ class User {
 		return $this->groups = $groups;
 	}
 
-	public static function users($pageNumber = 0)
+	public static function users($pageNumber = 1)
 	{
 		$beans = R::findAll('user', ' order by email limit :offset, :count', [
-			'offset' => $pageNumber * App::$pagingSize,
+			'offset' => App::pageOffset($pageNumber),
 			'count' => App::$pagingSize
 		]);
 
