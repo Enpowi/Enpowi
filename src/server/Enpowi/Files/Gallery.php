@@ -12,7 +12,6 @@ class Gallery
     public $description;
     public $userID;
 	public $created;
-    public $pictures = [];
 	public $id;
 
     private $_bean = null;
@@ -71,10 +70,25 @@ class Gallery
 
     public function addPicture(File $value)
     {
-        $this->bean()->ownFileList[] = $value->bean();
-        $this->pictures[] = $value;
+	    $files = $this->bean()->ownFileList;
+        $files[] = $value->bean();
+        array_unique($files);
         return $this;
     }
+
+	public function pictures($pageNumber = 0)
+	{
+		$bean = $this->bean();
+		$pictureBeans = $bean->ownFileList;
+		$max = count($pictureBeans);
+		$i = $pageNumber * App::$pagingSize;
+        $max = min($i + App::$pagingSize, $max);
+		$pictures = [];
+		for (; $i < $max; $i++) {
+			$pictures[] = new File($pictureBeans[$i]);
+		}
+		return $pictures;
+	}
 
     public function removePicture(File $value)
     {
