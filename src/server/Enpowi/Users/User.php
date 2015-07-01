@@ -21,6 +21,7 @@ class User extends Generic\PageableDataItem {
 	public $created;
 	public $locked;
 	public $valid;
+    public $id;
 
 	/**
 	 * @var Group[]
@@ -80,6 +81,7 @@ class User extends Generic\PageableDataItem {
 		$this->created = $bean->created;
 		$this->locked = $bean->locked;
 		$this->valid = $bean->valid == 1 ? true : false;
+        $this->id = $bean->id;
 
 		return $this;
 	}
@@ -188,11 +190,6 @@ class User extends Generic\PageableDataItem {
 		}
 
 		return $this;
-	}
-
-	public function id()
-	{
-		return $this->_bean->getID();
 	}
 
 	public function lockedKey() {

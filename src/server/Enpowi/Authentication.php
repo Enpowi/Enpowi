@@ -65,9 +65,9 @@ class Authentication
 			Event\User\BeforeLogin::pub(true, $user);
 
 			if ($segment->get('impersonateUser') !== null) {
-				$segment->set('impersonateUser', $user->id());
+				$segment->set('impersonateUser', $user->id);
 			} else {
-				$segment->set( 'user', $user->id() );
+				$segment->set( 'user', $user->id );
 			}
 			return true;
 		} else {
@@ -109,7 +109,7 @@ class Authentication
 	public function impersonate(User $user)
 	{
 		if ($user->exists()) {
-			$this->segment->set( 'impersonateUser', $user->id() );
+			$this->segment->set( 'impersonateUser', $user->id );
 			Event\Authentication\Impersonate::pub($user, $this);
 			return true;
 		}

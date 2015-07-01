@@ -19,8 +19,6 @@ class File extends DataItem
 	public $description;
 	public $name;
 	public $tags;
-	public $sharedGroupIds;
-	public $sharedUserIds;
 	public $email;
 	public $hash;
 	public $type;
@@ -54,9 +52,7 @@ class File extends DataItem
 				->setSize($bean->size)
 				->setDescription($bean->description)
 				->setName($bean->name)
-				->setTags($bean->tags)
-				->setSharedGroupIds($bean->sharedGroupIds)
-				->setSharedUserIds($bean->sharedUserIds);
+				->setTags($bean->tags);
 		}
 		return $this;
 	}
@@ -93,16 +89,6 @@ class File extends DataItem
 		$this->tags = $value;
 		return $this;
 	}
-	public function setSharedGroupIds($value)
-	{
-		$this->sharedGroupIds = $value;
-		return $this;
-	}
-	public function setSharedUserIds($value)
-	{
-		$this->sharedUserIds = $value;
-		return $this;
-	}
 
 	public function upload()
 	{
@@ -122,15 +108,13 @@ class File extends DataItem
 		$bean = $this->_bean;
 		if ($bean === null) {
 			$bean = $this->_bean = R::dispense( 'file' );
+            $bean->userId = App::get()->user()->id;
 		}
 
 		$bean->date = R::isoDateTime();
 		$bean->description = $this->description;
 		$bean->name = $this->name;
 		$bean->tags = $this->tags;
-		$bean->sharedGroupIds = $this->sharedGroupIds;
-		$bean->sharedUserIds = $this->sharedUserIds;
-		$bean->userId = App::get()->user()->id();
 		$bean->hash = $this->hash;
 
 		return $this->id = R::store( $bean );
@@ -148,7 +132,7 @@ class File extends DataItem
 
 	public static function getFromHash($hash)
 	{
-		if ($bean = R::findOne('file', ' hash = :hash ', ['hash' => $hash])) {
+		if (($bean = R::findOne('file', ' hash = :hash ', ['hash' => $hash])) && self::inShare($bean)) {
 			return !empty($bean->classType) ? new $bean->classType($bean) : new File($bean);
 		}
 		return null;

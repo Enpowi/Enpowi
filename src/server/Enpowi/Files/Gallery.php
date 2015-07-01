@@ -13,8 +13,6 @@ class Gallery extends PageableDataItem
     public $userId;
 	public $created;
 	public $id;
-	public $sharedGroupIds;
-	public $sharedUserIds;
 
     private $_bean = null;
 
@@ -105,7 +103,7 @@ class Gallery extends PageableDataItem
     {
         if ($this->_bean === null) {
             $bean = R::dispense('gallery');
-            $bean->userId = App::user()->id();
+            $bean->userId = App::user()->id;
 	        $bean->created = R::isoDateTime();
             $this->_bean = $bean;
         }
@@ -138,7 +136,7 @@ class Gallery extends PageableDataItem
     public static function create($name, $description)
     {
         $bean = R::dispense('gallery');
-	    $bean->userId = App::user()->id();
+	    $bean->userId = App::user()->id;
 	    $bean->created = R::isoDateTime();
         $gallery = new Gallery(null, $bean);
 
@@ -158,16 +156,5 @@ class Gallery extends PageableDataItem
 	public static function pages()
 	{
 		return R::count('gallery', '  ') / App::$pagingSize;
-	}
-
-	public function setSharedGroupIds($value)
-	{
-		$this->sharedGroupIds = $value;
-		return $this;
-	}
-	public function setSharedUserIds($value)
-	{
-		$this->sharedUserIds = $value;
-		return $this;
 	}
 }

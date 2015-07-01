@@ -34,4 +34,4 @@ if ($stop) {
 
 $user = User::create($email, $password);
 
-echo json_encode( [ 'id' => $user->id() ] );
+echo json_encode( [ 'id' => $user->id ] );

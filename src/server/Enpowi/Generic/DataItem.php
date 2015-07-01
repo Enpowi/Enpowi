@@ -9,12 +9,11 @@
 namespace Enpowi\Generic;
 
 
-abstract class DataItem implements IDataItem
+abstract class DataItem extends Shareable implements IDataItem
 {
-	private $_bean = null;
 	public function exists()
 	{
-		if ($this->_bean === null) {
+		if ($this->bean() === null) {
 			return false;
 		}
 		return true;

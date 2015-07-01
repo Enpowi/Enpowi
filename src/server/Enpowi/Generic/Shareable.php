@@ -3,20 +3,75 @@
  * Created by PhpStorm.
  * User: robert
  * Date: 6/30/15
- * Time: 5:28 PM
+ * Time: 8:04 PM
  */
 
 namespace Enpowi\Generic;
 
+use Enpowi\App;
+use Enpowi\Users\Group;
+use Enpowi\Users\User;
 
-class Shareable implements IShareable
+
+abstract class Shareable
 {
-	public $sharedGroupNames;
-	public $sharedEmails;
-	public $type;
+    public function addSharedGroup(Group $group)
+    {
+        $bean = $this->bean();
+        if ($bean === null) return $this;
 
-	public function __construct()
-	{
+        $bean->sharedGroupList[] = $group->bean();
 
-	}
+        return $this;
+    }
+
+    public function addSharedUser(User $user)
+    {
+        $bean = $this->bean();
+        if ($bean === null) return $this;
+
+        $bean->sharedUserList[] = $user->bean();
+
+        return $this;
+    }
+
+
+    public function removeSharedGroup(Group $group)
+    {
+        $bean = $this->bean();
+        if ($bean === null) return $this;
+
+        unset($bean->sharedGroupList[$group->id]);
+
+        return $this;
+    }
+
+    public function removeSharedUser(User $user)
+    {
+        $bean = $this->bean();
+        if ($bean === null) return $this;
+
+        unset($bean->sharedGroupList[$user->id]);
+
+        return $this;
+    }
+
+    public static function inShare($bean)
+    {
+        $user = App::user();
+
+        foreach ($user->groups as $userGroup) {
+            if (isset($bean->sharedGroupList[$userGroup->id])) {
+                return true;
+            }
+        }
+
+        if (isset($bean->sharedUserList[$user->id])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public abstract function bean();
 }

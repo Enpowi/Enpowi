@@ -52,9 +52,9 @@ $user = User::create($email, $password);
 
 if ($user !== null) {
 	$user->login();
-	echo json_encode( [ 'id' => $user->id() ] );
+	echo json_encode( [ 'id' => $user->id ] );
 	die;
 } else {
-	echo json_encode( [ 'id' => $user->id() ] );
+	echo json_encode( [ 'id' => $user->id ] );
 	die;
 }

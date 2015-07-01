@@ -14,7 +14,7 @@ if ($user === null) {
 	$response['id'] = -1;
 } else {
 	$login = $user->login();
-	$response['id'] = $user->id();
+	$response['id'] = $user->id;
 }
 
 echo json_encode($response);
