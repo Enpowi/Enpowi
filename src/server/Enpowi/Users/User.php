@@ -49,7 +49,7 @@ class User extends Generic\PageableDataItem {
 	public static function getByEmailAndPassword($email, $password)
 	{
 		$user = new User($email);
-		$bean = $user->_bean;
+		$bean = $user->bean();
 
 		if ($bean !== null) {
 			if (password_verify($password, $bean->password)) {
@@ -72,7 +72,7 @@ class User extends Generic\PageableDataItem {
 
 	public function convertFromBean()
 	{
-		$bean = $this->_bean;
+		$bean = $this->bean();
 
 		if (!$this->exists()) return $this;
 
@@ -112,15 +112,6 @@ class User extends Generic\PageableDataItem {
 	{
 		$result = R::count('user', ' email = ?', [strtolower($email)]);
 		return $result === 0;
-	}
-
-	public function exists()
-	{
-		if ($this->_bean === null) {
-			return false;
-		} else {
-			return true;
-		}
 	}
 
 	public static function create($email, $password, $valid = false)
@@ -229,16 +220,17 @@ class User extends Generic\PageableDataItem {
 	{
 		$groups = [];
 		$group = null;
+		$bean = $this->bean();
 
 		//anonymous
-		if ($this->email === '') {
+		if ($bean === null) {
 			$group = new Group( 'Anonymous' );
 			$groups[] = $group;
 		}
 
 		//not anonymous
 		else {
-			$groupBeans = $this->_bean->sharedGroupList;
+			$groupBeans = $bean->sharedGroupList;
 
 			$group = new Group( 'Registered' );
 			$groups[] = $group;
@@ -348,10 +340,14 @@ class User extends Generic\PageableDataItem {
     public function resetPassword()
     {
         $password = Authentication::generatePassword();
-        $bean = $this->_bean;
-        $bean->password = password_hash($password, PASSWORD_DEFAULT);
-        R::store($bean);
-        return $password;
+        $bean = $this->bean();
+	    if ($bean !== null) {
+		    $bean->password = password_hash( $password, PASSWORD_DEFAULT );
+		    R::store( $bean );
+		    return $password;
+	    }
+
+	    return null;
     }
 
 	public static function pages()

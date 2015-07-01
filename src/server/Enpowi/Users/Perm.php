@@ -48,15 +48,6 @@ class Perm {
 		return $result === 0;
 	}
 
-	public function exists()
-	{
-		if ($this->_bean === null) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
 	public static function create($module, $component, $group)
 	{
 		if (self::isUnique($module, $component, $group->name)) {
