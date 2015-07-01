@@ -1,0 +1,8 @@
+<Directory .git>
+    order allow,deny
+    deny from all
+</Directory>
+<Directory protected>
+    order allow,deny
+    deny from all
+</Directory>
