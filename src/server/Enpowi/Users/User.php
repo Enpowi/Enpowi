@@ -8,7 +8,7 @@
 
 namespace Enpowi\Users;
 
-use ENpowi\App;
+use Enpowi\App;
 use RedBeanPHP\R;
 use Respect\Validation\Validator as v;
 use Enpowi\Authentication;
