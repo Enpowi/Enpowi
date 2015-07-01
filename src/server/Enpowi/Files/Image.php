@@ -11,20 +11,32 @@ namespace Enpowi\Files;
 use Imagick;
 
 class Image extends File {
+	public static $thumbnailWidth = 220;
+	public static $thumbnailHeight = 220;
+
 	public function __construct($bean = null) {
 		parent::__construct($bean);
 		$this->classType = __CLASS__;
 	}
 
-	public function resize()
+	public function thumbnail()
 	{
+		if (empty($this->hash)) return $this;
 
+		$imagick = new Imagick(self::$path . '/' . $this->hash);
+		$imagick->scaleImage(self::$thumbnailWidth, self::$thumbnailHeight, true);
+		$imagick->writeImage(self::$path . '/' . $this->hash . 'thumb');
+
+		return $this;
 	}
 
 	public function upload()
 	{
 		if (getimagesize($this->tempPath) !== false) {
-			return parent::upload();
+			if (parent::upload()) {
+				$this->thumbnail();
+				return true;
+			}
 		}
 		return false;
 	}

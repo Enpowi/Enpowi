@@ -57,7 +57,7 @@ $data = (new DataOut())
 				v-repeat="gallery : galleries"
 				title="{{ gallery.name }}"
 				v-show="galleriesImages[ $index ]"
-				src="modules/?m=gallery&c=image&image={{ galleriesImages[ $index ] }}"
+				src="modules/?m=gallery&c=image&image={{ galleriesImages[ $index ] }}thumb"
 				href="#/gallery?g={{ gallery.id }}">
 		</div>
 	</div>
@@ -81,7 +81,7 @@ $data = (new DataOut())
 			<img
 				v-repeat="image : images"
 				title="{{ image.name }}"
-				src="modules/?m=gallery&c=image&image={{ image.hash }}"
+				src="modules/?m=gallery&c=image&image={{ image.hash }}thumb"
 				data-fullsrc="modules/?m=gallery&c=image&image={{ image.hash }}"
 				data-desc="{{ image.description }}">
 		</div>
