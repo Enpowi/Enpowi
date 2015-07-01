@@ -141,7 +141,7 @@ class File extends DataItem
 
 	public function toString()
 	{
-		return file_get_contents(self::$path . '/' . $this->hash, $this->tempPath);
+		return file_get_contents(self::$path . '/' . $this->hash);
     }
 
     public function bean()

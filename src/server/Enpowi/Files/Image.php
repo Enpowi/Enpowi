@@ -40,4 +40,13 @@ class Image extends File {
 		}
 		return false;
 	}
+
+	public function toThumbString()
+	{
+		$path = self::$path . '/' . $this->hash . 'thumb';
+		if (!file_exists($path)) {
+			$this->thumbnail();
+		}
+		return file_get_contents($path);
+	}
 }

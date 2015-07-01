@@ -1,10 +1,14 @@
 <?php
 use Enpowi\App;
-use Enpowi\Files\File;
+use Enpowi\Files\Image;
 use Enpowi\Modules\Module;
 Module::is();
 
-$file = File::getFromHash(App::param('image'));
-if ($file !== null && $file->inShare()) {
-	echo $file->toString();
+$image = \Enpowi\Types::Files_Image(Image::getFromHash(App::param('image')));
+if ($image !== null && $image->inShare()) {
+	if (App::paramIs('thumb')) {
+		echo $image->toThumbString();
+	} else {
+		echo $image->toString();
+	}
 }

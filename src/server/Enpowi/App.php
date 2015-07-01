@@ -146,6 +146,11 @@ class App
 		return null;
 	}
 
+	public static function paramIs($param)
+	{
+		return isset($_REQUEST[$param]);
+	}
+
 	/**
 	 * @param {String} $param
 	 * @param {String} [$class]
