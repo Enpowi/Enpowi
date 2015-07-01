@@ -19,7 +19,7 @@ class File extends DataItem
 	public $description;
 	public $name;
 	public $tags;
-	public $email;
+	public $userId;
 	public $hash;
 	public $type;
 	public $classType;
@@ -35,8 +35,8 @@ class File extends DataItem
 		if (self::$path === null) {
 			self::$path = path . '/protected/files/';
 		}
-		$this->convertFromBean();
 		$this->_bean = $bean;
+		$this->convertFromBean();
 	}
 
 	public function convertFromBean()
@@ -45,7 +45,7 @@ class File extends DataItem
 		$bean = $this->_bean;
 		if ($bean !== null) {
 			$this->id = $bean->id;
-			$this->email = $bean->email;
+			$this->userId = $bean->userId;
 			$this->hash = $bean->hash;
 			$this
 				->setType($bean->type)
@@ -111,6 +111,7 @@ class File extends DataItem
             $bean->userId = App::get()->user()->id;
 		}
 
+		$bean->classType = $this->classType;
 		$bean->date = R::isoDateTime();
 		$bean->description = $this->description;
 		$bean->name = $this->name;
@@ -121,8 +122,8 @@ class File extends DataItem
 	}
 
 	public static function getUserFiles() {
-		$email = App::get()->user()->email;
-		$beans = R::findAll('file', ' email = :email ', [ 'email' => $email ]);
+		$id = App::user()->id;
+		$beans = R::findAll('file', ' user_id = :userId ', [ 'userId' => $id ]);
 		$files = [];
 		foreach ($beans as $bean) {
 			$files[] = !empty($bean->classType) ? new $bean->classType($bean) : new File($bean);
@@ -132,7 +133,7 @@ class File extends DataItem
 
 	public static function getFromHash($hash)
 	{
-		if (($bean = R::findOne('file', ' hash = :hash ', ['hash' => $hash])) && self::inShare($bean)) {
+		if (($bean = R::findOne('file', ' hash = :hash ', ['hash' => $hash]))) {
 			return !empty($bean->classType) ? new $bean->classType($bean) : new File($bean);
 		}
 		return null;

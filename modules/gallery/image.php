@@ -5,6 +5,6 @@ use Enpowi\Modules\Module;
 Module::is();
 
 $file = File::getFromHash(App::param('image'));
-if ($file !== null && $file->email === App::user()->email) {
+if ($file !== null && $file->inShare()) {
 	echo $file->toString();
 }

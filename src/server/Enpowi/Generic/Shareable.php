@@ -56,16 +56,24 @@ abstract class Shareable
         return $this;
     }
 
-    public static function inShare($bean)
+    public function inShare()
     {
+	    $bean = $this->bean();
         $user = App::user();
 
+	    //owner
+	    if ($bean->userId === App::user()->id) {
+		    return true;
+	    }
+
+	    //shared to group
         foreach ($user->groups as $userGroup) {
             if (isset($bean->sharedGroupList[$userGroup->id])) {
                 return true;
             }
         }
 
+	    //shared to specific user
         if (isset($bean->sharedUserList[$user->id])) {
             return true;
         }

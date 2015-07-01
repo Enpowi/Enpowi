@@ -40,6 +40,16 @@ class Gallery extends PageableDataItem
 		}
 	}
 
+	public static function isUnique($name)
+	{
+		$count = R::count('gallery', ' name = :name and user_id = :userId', [
+			'name' => $name,
+			'userId' => App::user()->id
+		]);
+
+		return $count < 1;
+	}
+
 	public function convertFromBean()
 	{
 		$bean = $this->_bean;
@@ -69,13 +79,18 @@ class Gallery extends PageableDataItem
         return $this;
     }
 
-    public function addImage(File $value)
+    public function addImage(Image $value)
     {
 	    $bean = $this->bean();
 	    $bean->ownFileList[] = $value->bean();
         return $this;
     }
 
+	/**
+	 * @param int $pageNumber
+	 *
+	 * @return Image[]
+	 */
 	public function images($pageNumber = 1)
 	{
 		$imageBeans = R::findAll('file', ' gallery_id = :galleryId ORDER BY name LIMIT :offset, :limit ',[
@@ -87,7 +102,7 @@ class Gallery extends PageableDataItem
 		$images = [];
 
 		foreach ($imageBeans as $imageBean) {
-			$images[] = new File($imageBean);
+			$images[] = new Image($imageBean);
 		}
 
 		return $images;
@@ -116,6 +131,12 @@ class Gallery extends PageableDataItem
         return R::store($bean);
     }
 
+	/**
+	 * @param $userId
+	 * @param int $pageNumber
+	 *
+	 * @return Gallery[]
+	 */
     public static function galleries($userId, $pageNumber = 1)
     {
         $beans = R::findAll('gallery', ' user_id = :userId order by name limit :offset, :count', [

@@ -21,10 +21,10 @@ class Image extends File {
 
 	}
 
-	public function save()
+	public function upload()
 	{
 		if (getimagesize($this->tempPath) !== false) {
-			return parent::save();
+			return parent::upload();
 		}
 		return false;
 	}
