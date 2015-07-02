@@ -28,6 +28,7 @@ class Types {
 
 	public static function Modules_Component(Modules\Component $component) { return $component; }
 
+	public static function Files_EntityImage(Files\EntityImage $entityImage) { return $entityImage; }
 	public static function Files_File(Files\File $file) { return $file; }
 	public static function Files_Image(Files\Image $image) { return $image; }
 }

@@ -9,7 +9,7 @@
 namespace Enpowi\Files;
 
 
-class StaticFile extends Image
+class EntityImage extends Image
 {
 	public $entityName = null;
 	public $entityId = null;
