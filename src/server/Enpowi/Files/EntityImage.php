@@ -100,7 +100,7 @@ class EntityImage
 
 	public function toThumbString()
 	{
-		$path = $this->path();
+		$path = $this->path() . 'thumb';
 		if (!file_exists($path)) {
 			$this->thumbnail();
 		}
