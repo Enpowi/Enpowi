@@ -59,13 +59,17 @@ class EntityImage
 				return false;
 		}
 
-		return move_uploaded_file($tmp, $path);
+		if (move_uploaded_file($tmp, $path)) {
+			$this->thumbnail();
+			return true;
+		}
+
+		return false;
 	}
 
 	public function thumbnail()
 	{
 		$path = $this->path();
-		if (!file_exists($path)) return $this;
 
 		$imagick = new Imagick($path);
 		$imagick->scaleImage(self::$thumbnailWidth, self::$thumbnailHeight, true);
