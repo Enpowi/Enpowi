@@ -136,12 +136,19 @@ class App
 			$file = $_FILES[$param];
 			$type = ($class !== null ? new $class() : new File());
 
-			return $type
-				->setName($file['name'])
-				->setTempPath($file['tmp_name'])
-				->setType($file['type'])
-				->setSize($file['size']);
+			if (method_exists($type, 'bean')) {
+				return $type
+					->setName( $file['name'] )
+					->setTempPath( $file['tmp_name'] )
+					->setType( $file['type'] )
+					->setSize( $file['size'] );
+			} else if (method_exists($type, 'setUploadData')) {
+				return $type->setUploadData( $file );
+			} else {
+				return $type;
+			}
 		}
+
 
 		return null;
 	}
