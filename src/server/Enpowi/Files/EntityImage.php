@@ -71,9 +71,11 @@ class EntityImage
 	{
 		$path = $this->path();
 
-		$imagick = new Imagick($path);
-		$imagick->scaleImage(self::$thumbnailWidth, self::$thumbnailHeight, true);
-		$imagick->writeImage($path . 'thumb');
+		if (file_exists($path)) {
+			$imagick = new Imagick( $path );
+			$imagick->scaleImage( self::$thumbnailWidth, self::$thumbnailHeight, true );
+			$imagick->writeImage( $path . 'thumb' );
+		}
 
 		return $this;
 	}
@@ -108,7 +110,12 @@ class EntityImage
 		if (!file_exists($path)) {
 			$this->thumbnail();
 		}
-		return file_get_contents($path);
+
+		if (!file_exists($path)) {
+			return file_get_contents($path);
+		}
+
+		return '';
 	}
 
 	public function toThumbBase64()
