@@ -10,11 +10,15 @@ Namespace('Enpowi').
 	            }
 
                 var tempRouter = crossroads.create(),
-                    url = '';
-                this.app.bindRouteUrls(tempRouter, function (_url) {
-                    url = _url;
+                    url;
+                this.app.bindRouteUrls(tempRouter, function (_url, request, module, component) {
+                    url = new String(_url);
+	                url.request = request;
+	                url.module = module;
+	                url.component = component;
                 });
-                tempRouter.parse(moduleAndComponentOrPlainUrl);
+
+	            tempRouter.parse(moduleAndComponentOrPlainUrl);
 
                 return url;
             }

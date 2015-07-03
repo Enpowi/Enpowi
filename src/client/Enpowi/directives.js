@@ -178,14 +178,15 @@ Namespace('Enpowi').
 				            });
 			            }
 		            },
-		            update: function (url) {
-			            var el = this.el;
+		            update: function (urlRaw) {
+			            var el = this.el,
+				            url;
 
                         if (el.style.display === 'none') return;
 			            if (el.hasAttribute('static')) return;
 
-			            app.load(Enpowi.module.url(url), function (html) {
-                            el.appendChild(app.process(html));
+			            app.load(url = Enpowi.module.url(urlRaw), function (html) {
+                            el.appendChild(app.process(html, url.module, url.component));
 			            });
 		            }
 	            });
