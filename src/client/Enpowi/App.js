@@ -308,7 +308,7 @@ Namespace('Enpowi').
 		                            'module': m,
 		                            'component': c,
 		                            'appModule': Enpowi.App.m,
-		                            'appComponent': Enpowi.App.m
+		                            'appComponent': Enpowi.App.c
                                 },
                                 jsonEncoded = child.getAttribute('data'),
                                 jsonDecoded,
