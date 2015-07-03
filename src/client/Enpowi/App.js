@@ -121,7 +121,7 @@ Namespace('Enpowi').
             //setup router
             var router = this.router,
                 app = this,
-                landRoute = function(url, route) {
+                landRoute = function(url, route, module, component) {
 	                var init = false,
 		                completed = false,
 		                timer = setInterval(function() {
@@ -145,7 +145,7 @@ Namespace('Enpowi').
 	                    }
                         app.loadScript('modules/?module=app&component=session.js', function() {
 	                        completed = true;
-                            var result = app.process(data);
+                            var result = app.process(data, module, component);
                             app.routeCallback(result);
                             app.pubTo().land([route]);
                         });
@@ -177,22 +177,22 @@ Namespace('Enpowi').
             router.normalizeFn = crossroads.NORM_AS_OBJECT;
 
             router.addRoute('/', function() {
-                callback('modules/?module=' + Enpowi.session.theme + '&component=index', '');
+                callback('modules/?module=' + Enpowi.session.theme + '&component=index', '', '', '');
             });
             router.addRoute('/{module}', function(path) {
                 callback('modules/?module=' + path.module, path.request_);
             });
             router.addRoute('/{module}{?query}', function(path) {
-                callback('modules/?module=' + path.module + '&'  + path['?query_'], path.request_);
+                callback('modules/?module=' + path.module + '&'  + path['?query_'], path.request_, path.module, '');
             });
             router.addRoute('/{module}/{component}', function(path) {
-                callback('modules/?module=' + path.module + '&component=' + path.component, path.request_);
+                callback('modules/?module=' + path.module + '&component=' + path.component, path.request_, path.module, path.component);
             });
             router.addRoute('/{module}/{component}/{id}', function(path) {
-                callback('modules/?module=' + path.module + '&component=' + path.component + '&id' + path.id, path.request_);
+                callback('modules/?module=' + path.module + '&component=' + path.component + '&id' + path.id, path.request_, path.module, path.component);
             });
             router.addRoute('/{module}/{component}{?query}', function(path) {
-                callback('modules/?module=' + path.module + '&component=' + path.component + '&'  + path['?query_'], path.request_);
+                callback('modules/?module=' + path.module + '&component=' + path.component + '&'  + path['?query_'], path.request_, path.module, path.component);
             });
 
 	        router.routed.add(function(route) {
@@ -237,7 +237,7 @@ Namespace('Enpowi').
 		 * @type {DocumentFragment}
 		 */
 		processContainer: null,
-        process: function(html) {
+        process: function(html, module, component) {
             var el = document.createElement('div'),
                 frag = this.processContainer = document.createDocumentFragment(),
                 child,
@@ -299,7 +299,9 @@ Namespace('Enpowi').
                         el: child,
                         data: (function () {
                             var data = {
-                                    session: Enpowi.session
+                                    session: Enpowi.session,
+		                            module: module,
+		                            component: component
                                 },
                                 jsonEncoded = child.getAttribute('data'),
                                 jsonDecoded,
