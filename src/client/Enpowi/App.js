@@ -6,6 +6,8 @@
 Namespace('Enpowi').
     Class('App', {
 		Static: {
+			m: null,
+			c: null,
 			pubs: {},
 			one: function(eventName, callback) {
 				var parentCallback = function() {
@@ -104,15 +106,16 @@ Namespace('Enpowi').
 			}
 		},
         construct: function(callback) {
+            Enpowi.app = this;
+
             this.router = crossroads;
             this.routes = [];
             this.hasher = hasher;
             this.loadingElement = null;
             this.routeCallback = callback;
 
-            Enpowi.directives.setup(this);
-            Enpowi.module.setup(this);
-            Enpowi.translation.setup(this);
+            Enpowi.directives.setup();
+            Enpowi.translation.setup();
 
             this.setupRoutes();
         },
@@ -121,7 +124,7 @@ Namespace('Enpowi').
             //setup router
             var router = this.router,
                 app = this,
-                landRoute = function(url, route, module, component) {
+                landRoute = function(url, route, m, c) {
 	                var init = false,
 		                completed = false,
 		                timer = setInterval(function() {
@@ -145,7 +148,9 @@ Namespace('Enpowi').
 	                    }
                         app.loadScript('modules/?module=app&component=session.js', function() {
 	                        completed = true;
-                            var result = app.process(data, module, component);
+	                        Enpowi.App.m = m;
+	                        Enpowi.App.c = c;
+                            var result = app.process(data, m, c);
                             app.routeCallback(result);
                             app.pubTo().land([route]);
                         });
@@ -179,20 +184,20 @@ Namespace('Enpowi').
             router.addRoute('/', function() {
                 callback('modules/?module=' + Enpowi.session.theme + '&component=index', '', '', '');
             });
-            router.addRoute('/{module}', function(path) {
-                callback('modules/?module=' + path.module, path.request_);
+            router.addRoute('/{m}', function(path) {
+                callback('modules/?module=' + path.m, path.request_, '', '');
             });
-            router.addRoute('/{module}{?query}', function(path) {
-                callback('modules/?module=' + path.module + '&'  + path['?query_'], path.request_, path.module, '');
+            router.addRoute('/{m}{?query}', function(path) {
+                callback('modules/?module=' + path.m + '&'  + path['?query_'], path.request_, path.m, '');
             });
-            router.addRoute('/{module}/{component}', function(path) {
-                callback('modules/?module=' + path.module + '&component=' + path.component, path.request_, path.module, path.component);
+            router.addRoute('/{m}/{c}', function(path) {
+                callback('modules/?module=' + path.m + '&component=' + path.c, path.request_, path.m, path.c);
             });
-            router.addRoute('/{module}/{component}/{id}', function(path) {
-                callback('modules/?module=' + path.module + '&component=' + path.component + '&id' + path.id, path.request_, path.module, path.component);
+            router.addRoute('/{m}/{c}/{id}', function(path) {
+                callback('modules/?module=' + path.m + '&component=' + path.c + '&id' + path.id, path.request_, path.m, path.c);
             });
-            router.addRoute('/{module}/{component}{?query}', function(path) {
-                callback('modules/?module=' + path.module + '&component=' + path.component + '&'  + path['?query_'], path.request_, path.module, path.component);
+            router.addRoute('/{m}/{c}{?query}', function(path) {
+                callback('modules/?module=' + path.m + '&component=' + path.c + '&'  + path['?query_'], path.request_, path.m, path.c);
             });
 
 	        router.routed.add(function(route) {
@@ -237,7 +242,7 @@ Namespace('Enpowi').
 		 * @type {DocumentFragment}
 		 */
 		processContainer: null,
-        process: function(html, module, component) {
+        process: function(html, m, c) {
             var el = document.createElement('div'),
                 frag = this.processContainer = document.createDocumentFragment(),
                 child,
@@ -299,9 +304,11 @@ Namespace('Enpowi').
                         el: child,
                         data: (function () {
                             var data = {
-                                    session: Enpowi.session,
-		                            module: module,
-		                            component: component
+                                    'session': Enpowi.session,
+		                            'module': m,
+		                            'component': c,
+		                            'appModule': Enpowi.App.m,
+		                            'appComponent': Enpowi.App.m
                                 },
                                 jsonEncoded = child.getAttribute('data'),
                                 jsonDecoded,
@@ -339,12 +346,12 @@ Namespace('Enpowi').
 
                                 return null;
                             },
-                            hasPerm: function (module, component) {
+                            hasPerm: function (m, c) {
                                 var hasPerm = false;
                                 $.each(Enpowi.session.user.groups, function () {
                                     $.each(this.perms, function () {
-                                        if (this.module === module || this.module === '*') {
-                                            if (this.component === component || this.component === '*') {
+                                        if (this['module'] === m || this['module'] === '*') {
+                                            if (this['component'] === c || this['component'] === '*') {
                                                 hasPerm = true;
                                             }
                                         }
@@ -455,11 +462,12 @@ Namespace('Enpowi').
 				return this.processContainer.querySelector('#' + id);
 			}
 		},
-        loadModule: function(url, callback) {
-            var app = this;
+        loadModule: function(urlRaw, callback) {
+            var app = this,
+	            url;
 
-            this.load(Enpowi.module.url(url), function(moduleHtml) {
-                callback(app.process(moduleHtml));
+            this.load(url = Enpowi.utilities.url(urlRaw), function(moduleHtml) {
+                callback(app.process(moduleHtml, url.m, url.c));
             });
 
             return this;

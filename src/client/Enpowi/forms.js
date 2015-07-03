@@ -26,7 +26,7 @@ Class('forms', {
 					elements[item.name] = el.querySelector('[name="' + item.name + '"]');
 				}
 
-				me.socket(Enpowi.module.url(el.getAttribute('action')), $el.serialize(), elements, items, el, vue);
+				me.socket(Enpowi.utilities.url(el.getAttribute('action')), $el.serialize(), elements, items, el, vue);
 
 				return false;
 			});

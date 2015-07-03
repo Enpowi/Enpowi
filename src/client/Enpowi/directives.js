@@ -17,8 +17,9 @@ Namespace('Enpowi').
 			        Enpowi.App.pub('directive.ready');
 		        }
 	        },
-            setup: function (app) {
-                var me = this;
+            setup: function () {
+                var me = this,
+	                app = Enpowi.app;
                 me.app = app;
 
                 Vue.directive('module', {
@@ -173,7 +174,7 @@ Namespace('Enpowi').
                         if (el.style.display === 'none') return;
 
 			            if (el.hasAttribute('static')) {
-				            app.load(Enpowi.module.url(this.expression), function (html) {
+				            app.load(Enpowi.utilities.url(this.expression), function (html) {
 					            $(el).append(html);
 				            });
 			            }
@@ -185,8 +186,8 @@ Namespace('Enpowi').
                         if (el.style.display === 'none') return;
 			            if (el.hasAttribute('static')) return;
 
-			            app.load(url = Enpowi.module.url(urlRaw), function (html) {
-                            el.appendChild(app.process(html, url.module, url.component));
+			            app.load(url = Enpowi.utilities.url(urlRaw), function (html) {
+                            el.appendChild(app.process(html, url.m, url.c));
 			            });
 		            }
 	            });
