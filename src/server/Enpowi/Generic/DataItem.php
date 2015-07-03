@@ -18,4 +18,16 @@ abstract class DataItem extends Shareable implements IDataItem
 		}
 		return true;
 	}
+
+	public function updateBean()
+	{
+		$publicVars = create_function('$obj', 'return get_object_vars($obj);');
+		foreach($publicVars($this) as $publicVar) {
+			$method = 'set' . ucfirst($publicVar);
+			if (method_exists($this, $method)) {
+				$this->{$method}( $this->{$publicVar} );
+			}
+		}
+		return $this;
+	}
 }
