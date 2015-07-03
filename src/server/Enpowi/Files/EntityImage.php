@@ -92,6 +92,10 @@ class EntityImage
 
 	public function toString()
 	{
+		if ($this->entityId === null) {
+			return '';
+		}
+
 		$imgPath = $this->path();
 		if (file_exists($imgPath)) {
 			return file_get_contents($imgPath);
@@ -101,11 +105,19 @@ class EntityImage
 
 	public function toStringBase64()
 	{
+		if ($this->entityId === null) {
+			return '';
+		}
+
 		return 'data:image/;base64,' . base64_encode($this->toString());
 	}
 
 	public function toThumbString()
 	{
+		if ($this->entityId === null) {
+			return '';
+		}
+
 		$path = $this->path() . 'thumb';
 		if (!file_exists($path)) {
 			$this->thumbnail();
@@ -120,6 +132,10 @@ class EntityImage
 
 	public function toThumbBase64()
 	{
+		if ($this->entityId === null) {
+			return '';
+		}
+
 		return 'data:image/;base64,' . base64_encode($this->toThumbString());
 	}
 
