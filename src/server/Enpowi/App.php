@@ -74,14 +74,31 @@ class App
         return filter_var($value, FILTER_VALIDATE_BOOLEAN);
 	}
 
-	public static function paramString($param)
+	public static function paramString($param, $limit = 0)
 	{
-		return (string)self::param($param);
+
+		$value = (string)self::param($param);
+
+		if ($limit > 0 && strlen($value > $limit)) {
+			$value = substr($value, 0, $limit);
+		}
+
+		return $value;
 	}
 
 	public static function paramFloat($param)
 	{
 		return (float)self::param($param);
+	}
+
+	public static function params($param)
+	{
+		$result = [];
+		$values = self::param($param);
+		foreach ($values as $value) {
+			$result[] = $value;
+		}
+		return $result;
 	}
 
 	public static function paramInts($param)
@@ -104,11 +121,14 @@ class App
 		return $result;
 	}
 
-	public static function paramStrings($param)
+	public static function paramStrings($param, $limit = 0)
 	{
 		$result = [];
 		$values = self::param($param);
-		foreach ($values as $value) {
+		if ($limit > 0) foreach ($values as $value) {
+			$value = substr($value, 0, $limit);
+			$result[] = (string)$value;
+		} else foreach ($values as $value) {
 			$result[] = (string)$value;
 		}
 		return $result;
@@ -128,7 +148,7 @@ class App
 	 * @param {String} $param
 	 * @param {String} [$class]
 	 *
-	 * @return File|null
+	 * @return Files\*
 	 */
 	public static function paramFile($param, $class = null)
 	{
