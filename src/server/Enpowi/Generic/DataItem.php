@@ -21,13 +21,19 @@ abstract class DataItem extends Shareable implements IDataItem
 
 	public function updateBean()
 	{
-		$publicVars = create_function('$obj', 'return get_object_vars($obj);');
-		foreach($publicVars($this) as $publicVar) {
-			$method = 'set' . ucfirst($publicVar);
+		$getPublicProperties = function($obj) {
+			return get_object_vars($obj);
+		};
+
+		$properties = $getPublicProperties($this);
+
+		foreach($properties as $property => $value) {
+			$method = 'set' . ucfirst($property);
 			if (method_exists($this, $method)) {
-				$this->{$method}( $this->{$publicVar} );
+				$this->{$method}( $value );
 			}
 		}
+
 		return $this;
 	}
 }
