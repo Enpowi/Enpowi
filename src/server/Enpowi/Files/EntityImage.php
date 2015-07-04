@@ -21,15 +21,28 @@ class EntityImage
 	public $entityId = null;
 	public $uploadData = [];
 
+	private $oldEntityName = null;
+	private $oldEntityId = null;
+
 	public function setEntityName($value)
 	{
-		$this->entityName = $value;
+		if ($this->oldEntityName === $this->entityName) {
+			$this->oldEntityName =
+			$this->entityName = $value;
+		} else {
+			$this->entityName = $value;
+		}
 		return $this;
 	}
 
 	public function setEntityId($value)
 	{
-		$this->entityId = $value;
+		if ($this->oldEntityId === $this->entityId) {
+			$this->oldEntityId =
+			$this->entityId = $value;
+		} else {
+			$this->entityId = $value;
+		}
 		return $this;
 	}
 
@@ -85,9 +98,19 @@ class EntityImage
 		return path . "/protected/" . $this->entityName . "/";
 	}
 
+	private function oldDir()
+	{
+		return path . "/protected/" . $this->oldEntityName . "/";
+	}
+
 	public function path()
 	{
 		return $this->dir() . $this->entityId;
+	}
+
+	private function oldPath()
+	{
+		return $this->oldDir() . $this->oldEntityId;
 	}
 
 	public function toString()
@@ -141,6 +164,22 @@ class EntityImage
 
 	public function setUploadData($file) {
 		$this->uploadData = $file;
+		return $this;
+	}
+
+	public function convert()
+	{
+		if ($this->oldEntityId !== $this->entityId || $this->oldEntityName !== $this->entityName) {
+			$oldPath = $this->oldPath();
+			$newPath = $this->path();
+			if (file_exists($oldPath)) {
+				if (rename($oldPath, $newPath)) {
+					$this->oldEntityId = $this->entityId;
+					$this->oldEntityName = $this->entityName;
+				}
+			}
+		}
+
 		return $this;
 	}
 }
