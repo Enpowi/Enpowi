@@ -153,7 +153,7 @@ class Group extends Generic\PageableDataItem
 
 	public static function groups($pageNumber = 1)
 	{
-		$beans = R::find('group', ' order by username limit :offset, :count', [
+		$beans = R::find('group', ' order by name limit :offset, :count', [
 			'offset' => App::pageOffset($pageNumber),
 			'count' => App::$pagingSize
 		]);
