@@ -74,4 +74,11 @@ class Config
 
 		return $this;
 	}
+
+	public function requireSSL()
+	{
+		App::requireSSL();
+		
+		return $this;
+	}
 }
