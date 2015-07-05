@@ -33,7 +33,7 @@ class Module {
 
 	public static function map()
 	{
-		$parentDir = dirname(__FILE__) . '/../../../../modules/';
+		$parentDir = path . '/modules/';
 		$notModule = array('.', '..', 'app', 'setup', 'default', 'index.php');
 		$notComponent = array('.', '..');
 		$moduleFolders = array_diff(scandir($parentDir), $notModule);

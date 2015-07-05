@@ -28,3 +28,14 @@ app.load('modules/default/loading.html', function(html){
 new Vue({
 	el: document.body
 });
+
+$(document).keydown(function(e) {
+	if (e.ctrlKey) {
+		switch (e.key) {
+			case 'U':
+			case 'u':
+				window.open(Enpowi.utilities.url(app.hasher.getHash()));
+				return false;
+		}
+	}
+});

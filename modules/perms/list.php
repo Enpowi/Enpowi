@@ -43,17 +43,18 @@ $data = (new DataOut())
 			</tr>
 		</thead>
 		<tbody v-repeat="components : moduleMap">
-			<tr v-repeat="component : components" v-with="module : $key">
-				<td>{{ module }}</td>
+			<tr v-repeat="component : components">
+				<td>{{ $key }}</td>
 				<td>{{ component }}</td>
+
 
 				<!--Anonymous-->
 				<td class="center">
                     <input
                         v-module-item
                         type="checkbox"
-                        v-model="anonymousGroup.perms[ module + '/' + component ]"
-                        value="{{ anonymousGroup.name + '@' + module + '/' + component }}"
+                        v-model="anonymousGroup.perms[ $key + '/' + component ]"
+                        value="{{ anonymousGroup.name + '@' + $key + '/' + component }}"
                         name="perm[]">
 				</td>
 
@@ -62,8 +63,8 @@ $data = (new DataOut())
                     <input
                         v-module-item
                         type="checkbox"
-                        v-model="registeredGroup.perms[ module + '/' + component ]"
-                        value="{{ registeredGroup.name + '@' + module + '/' + component }}"
+                        v-model="registeredGroup.perms[ $key + '/' + component ]"
+                        value="{{ registeredGroup.name + '@' + $key + '/' + component }}"
                         name="perm[]">
 				</td>
 
@@ -72,8 +73,8 @@ $data = (new DataOut())
                     <input
                         v-module-item
                         type="checkbox"
-                        v-model="group.perms[ module + '/' + component ]"
-                        value="{{ group.name + '@' + module + '/' + component }}"
+                        v-model="group.perms[ $key + '/' + component ]"
+                        value="{{ group.name + '@' + $key + '/' + component }}"
                         name="perm[]">
 				</td>
 			</tr>

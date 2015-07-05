@@ -8,6 +8,8 @@
 
 namespace Enpowi\Modules;
 
+define('Enpowi_Modules_Component_Active', 'active');
+define('Enpowi_Modules_Component_Static', 'static');
 
 class Component {
 
@@ -16,23 +18,31 @@ class Component {
 	public $file;
 
 	private $extensions = [
-		'.php',
-		'.html',
+		'.php' => Enpowi_Modules_Component_Active,
+		'.html' => Enpowi_Modules_Component_Static,
 		''
 	];
+
+	private $active = false;
 
 	public function __construct(Module $module, $componentName = 'index')
 	{
 		$this->module = $module;
 		$this->name = $componentName;
 
-		foreach ($this->extensions as $extension) {
+		foreach ($this->extensions as $extension => $processType) {
 			$file = $module->folder . '/' . $componentName . $extension;
 			if (file_exists($file)) {
+				$this->active = ($processType === Enpowi_Modules_Component_Active);
 				$this->file = $file;
 				break;
 			}
 		}
+	}
+
+	public function isActive()
+	{
+		return $this->active;
 	}
 
 	public function template()

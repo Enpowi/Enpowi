@@ -1,6 +1,7 @@
 <?php
 
 (new \Enpowi\Config())
+	->showErrors()
 	//->requireSSL()
 	->setupSite('Enpowi', 'http://www.enpowi.com')
 	->setupMySql('localhost', 'Enpowi', 'Enpowi', 'Enpowi')

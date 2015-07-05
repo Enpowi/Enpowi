@@ -78,7 +78,15 @@ class Config
 	public function requireSSL()
 	{
 		App::requireSSL();
-		
+
+		return $this;
+	}
+
+	public function showErrors()
+	{
+		error_reporting(E_ALL);
+		ini_set("display_errors", 1);
+
 		return $this;
 	}
 }
