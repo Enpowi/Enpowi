@@ -19,8 +19,10 @@ abstract class DataItem extends Shareable implements IDataItem
 		return true;
 	}
 
-	public function updateBean()
+	public function updateBean($fn = null)
 	{
+		$fn = $fn  ?: function() {};
+
 		$getPublicProperties = function($obj) {
 			return get_object_vars($obj);
 		};
@@ -28,9 +30,23 @@ abstract class DataItem extends Shareable implements IDataItem
 		$properties = $getPublicProperties($this);
 
 		foreach($properties as $property => $value) {
-			$method = 'set' . ucfirst($property);
-			if (method_exists($this, $method)) {
-				$this->{$method}( $value );
+			$methodValidate = 'validate' . ucfirst($property);
+			$methodSet = 'set' . ucfirst($property);
+
+			if (method_exists($this, $methodValidate)) {
+				if ($this->{$methodValidate}( $property, $value, $fn)) {
+					if ( method_exists( $this, $methodSet ) ) {
+						$this->{$methodSet}( $value );
+					}
+				}
+			} else if ( method_exists($this, 'validateEach')) {
+				if ($this->validateEach( $property, $value, $fn )) {
+					if ( method_exists( $this, $methodSet ) ) {
+						$this->{$methodSet}( $value );
+					}
+				}
+			} else if ( method_exists( $this, $methodSet ) ) {
+				$this->{$methodSet}( $value );
 			}
 		}
 
