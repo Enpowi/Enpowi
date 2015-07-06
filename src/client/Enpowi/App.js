@@ -185,7 +185,7 @@ Namespace('Enpowi').
                 callback('modules/?module=' + Enpowi.session.theme + '&component=index', '', '', '');
             });
             router.addRoute('/{m}', function(path) {
-                callback('modules/?module=' + path.m, path.request_, '', '');
+                callback('modules/?module=' + path.m, path.request_, path.m, '');
             });
             router.addRoute('/{m}{?query}', function(path) {
                 callback('modules/?module=' + path.m + '&'  + path['?query_'], path.request_, path.m, '');
