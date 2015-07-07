@@ -365,6 +365,9 @@ Namespace('Enpowi').
                             },
 	                        indexOf: function (array, value) {
 		                        return array.indexOf(value);
+	                        },
+	                        inArray: function (array, value) {
+		                        return array.indexOf(value) > -1;
 	                        }
                         }
                     }));
