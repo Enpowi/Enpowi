@@ -266,6 +266,9 @@ class User extends Generic\PageableDataItem {
 
 	public function hasPerm($module, $component)
 	{
+		//services need a user that exists
+		$userExists = App::user()->exists();
+
 		foreach($this->groups as $group) {
 			$group->updatePerms();
 			foreach($group->perms as $perm) {
@@ -275,7 +278,10 @@ class User extends Generic\PageableDataItem {
 				) {
 					if (
 						$perm->component === $component
-						|| ($perm->component . 'Service') === $component
+						|| (
+							($perm->component . 'Service') === $component
+							&& $userExists
+						)
 					    || $perm->component === '*'
 					) {
 						return true;
