@@ -16,4 +16,4 @@ foreach(Enpowi\App::param('perm') as $permUnparsed) {
 	\Enpowi\Users\Perm::create($parsed['module'], $parsed['component'], $group);
 }
 
-echo 1;
+Module::successRespond('success', true);

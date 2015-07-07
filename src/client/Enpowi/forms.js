@@ -35,7 +35,7 @@ Class('forms', {
             var listening = form.hasAttribute('listen');
 
             if (listening) {
-                Enpowi.App.pubTo().listen(arguments);
+	            Enpowi.App.pubTo().listen(arguments);
             }
 			$.getJSON(url, serialized, function(json) {
                 var response,
@@ -47,6 +47,8 @@ Class('forms', {
 
 				if (json.hasOwnProperty('paramResponse')) {
 					response = json.paramResponse;
+
+					Enpowi.App.pubTo().paramResponse(response);
 
 					for (i in response) if (i && response.hasOwnProperty(i)) {
 						(function(i) {
@@ -61,20 +63,24 @@ Class('forms', {
 					}
 
                     if (listening) {
-                        Enpowi.App.pubTo().listened(response);
+	                    Enpowi.App.pubTo().listened(response);
                     }
                     return;
-				} else if(listening) {
-					return;
 				}
 
                 if (json.hasOwnProperty('successResponse')) {
                     response = json.successResponse;
 
-                    for (i in response) if (response.hasOwnProperty(i)) {
-                        vue.$set(i, response[i]);
+	                Enpowi.App.pubTo().successResponse(response);
+
+	                for (i in response) if (response.hasOwnProperty(i)) {
+                        //vue.$set(i, response[i]);
                     }
                 }
+
+				if(listening) {
+					return;
+				}
 
                 setTimeout(function() {
                     if (form.hasAttribute('data-done')) {

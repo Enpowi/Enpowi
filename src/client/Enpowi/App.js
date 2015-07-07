@@ -92,17 +92,34 @@ Namespace('Enpowi').
 				return caller;
 			},
 
-
 			event: {
+				_continue: 'continue',
+				delay: 'delay',
 				deny: 'deny',
 				go: 'go',
 				land: 'land',
+				listened: 'listened',
+				listen: 'listen',
+				paramResponse: 'paramResponse',
 				process: 'process',
 				processed: 'processed',
-				delay: 'delay',
-				_continue: 'continue',
-                listened: 'listened',
-                listen: 'listen'
+				successResponse: 'successResponse'
+			},
+
+			nonPersistentEvents: {
+				paramResponse: 'paramResponse',
+				successResponse: 'successResponse'
+			},
+
+			garbageEvents: function() {
+				var nPE = this.nonPersistentEvents,
+					i;
+
+				for (i in nPE) if (nPE.hasOwnProperty(i)) {
+					this.pubs[i] = [];
+				}
+
+				return this;
 			}
 		},
         construct: function(callback) {
@@ -125,6 +142,8 @@ Namespace('Enpowi').
             var router = this.router,
                 app = this,
                 landRoute = function(url, route, m, c) {
+	                app.garbageEvents();
+
 	                var init = false,
 		                completed = false,
 		                timer = setInterval(function() {
