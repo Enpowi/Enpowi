@@ -362,7 +362,10 @@ Namespace('Enpowi').
                             },
                             hasKey: function (key, array) {
                                 return array[key] !== undefined;
-                            }
+                            },
+	                        indexOf: function (array, value) {
+		                        return array.indexOf(value);
+	                        }
                         }
                     }));
                 }
