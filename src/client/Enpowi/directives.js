@@ -173,6 +173,7 @@ Namespace('Enpowi').
 			            var el = this.el;
 
                         if (el.style.display === 'none') return;
+			            if (this.expression === null) return;
 
 			            if (el.hasAttribute('static')) {
 				            app.load(Enpowi.utilities.url(this.expression), function (html) {
