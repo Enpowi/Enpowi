@@ -299,11 +299,15 @@ class App
 		}
 	}
 
-	public static function pageOffset($pageNumber)
+	public static function pageOffset($pageNumber, $pageSizeOverride = null)
 	{
 		if ($pageNumber < 1) $pageNumber = 1;
 
-		return ($pageNumber - 1) * self::$pagingSize;
+		if ($pageSizeOverride === null) {
+			return ( $pageNumber - 1 ) * self::$pagingSize;
+		} else {
+			return ( $pageNumber - 1 ) * $pageSizeOverride;
+		}
 	}
 
 	public static function requireSSL() {
