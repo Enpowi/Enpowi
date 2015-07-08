@@ -103,13 +103,23 @@ Namespace('Enpowi').
 
                 Vue.directive('side', {
                     bind: function () {
-	                    var directive = this;
-	                    me.setBinding(directive);
-	                    var el = this.el;
+	                    var directive = this,
+		                    el = this.el,
+	                        callback = function() {
+		                        app.loadModule(Enpowi.session.theme + '/' + this.expression, function (html) {
+			                        el.appendChild(html);
+			                        me.doneBinding(directive);
+		                        });
+	                        };
 
-	                    app.loadModule(Enpowi.session.theme + '/' + this.expression, function (html) {
-		                    el.appendChild(html);
-		                    me.doneBinding(directive);
+	                    me.setBinding(directive);
+
+	                    callback();
+
+	                    Enpowi.App.subTo().sessionChange(function(type, value) {
+		                    if (type === 'user') {
+			                    callback();
+		                    }
 	                    });
                     }
                 });

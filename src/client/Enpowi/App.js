@@ -106,6 +106,7 @@ Namespace('Enpowi').
 				paramResponse: 'paramResponse',
 				process: 'process',
 				processed: 'processed',
+				sessionChange: 'sessionChange',
 				successResponse: 'successResponse'
 			},
 
