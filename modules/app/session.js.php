@@ -12,6 +12,8 @@ $authentication = new Enpowi\Authentication();
 $user = $authentication->getUser()->updatePerms();
 $replies['user'] = $user;
 $replies['theme'] = App::$config->themeModule;
+$replies['siteName'] = App::$config->siteName;
+$replies['siteUrl'] = App::$config->siteUrl;
 
 
 //iterate through all replies and reply them as json

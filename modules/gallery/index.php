@@ -36,6 +36,7 @@ $data = (new DataOut())
 	->add('g', $galleryId)
 	->out();
 ?>
+<title>{{session.siteName}} - Gallery</title>
 <div
 	data="<?php echo $data;?>"
 	v-module

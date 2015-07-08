@@ -9,7 +9,9 @@ $data = (new DataOut())
 	->add('pages', Page::pages())
 	->out();
 
-?><div
+?>
+<title>{{session.siteName}} - Pages</title>
+<div
 	v-module
     data="<?php echo $data?>"
 	class="container">

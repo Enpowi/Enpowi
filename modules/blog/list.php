@@ -13,7 +13,9 @@ $data = (new DataOut())
 	->add('page', $page)
 	->out();
 
-?><div
+?>
+<title>{{session.siteName }} - Blog</title>
+<div
 	v-module
     data="<?php echo $data?>"
 	class="container">

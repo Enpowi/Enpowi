@@ -12,7 +12,8 @@ $data = (new DataOut())
     ->add('name', $name)
     ->add('rendered', (new Post($name))->render())
     ->out();
-?><div
+?>
+<div
     v-module
     data="<?php echo $data?>"
     class="container">

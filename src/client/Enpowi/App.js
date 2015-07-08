@@ -128,6 +128,7 @@ Namespace('Enpowi').
         construct: function(callback) {
             Enpowi.app = this;
 
+	        this.titleElement = document.querySelector('title');
             this.router = crossroads;
             this.routes = [];
             this.hasher = hasher;
@@ -139,6 +140,12 @@ Namespace('Enpowi').
 
             this.setupRoutes();
         },
+
+		changeTitle: function(title) {
+			this.titleElement.textContent = title;
+
+			return this;
+		},
 
         setupRoutes: function() {
             //setup router
@@ -173,7 +180,16 @@ Namespace('Enpowi').
 	                        completed = true;
 	                        Enpowi.App.m = m;
 	                        Enpowi.App.c = c;
-                            var result = app.process(data, m, c);
+                            var result = app.process(data, m, c),
+	                            title = result.querySelector('title');
+
+	                        if (title) {
+		                        app.changeTitle(title.textContent);
+		                        result.removeChild(title);
+	                        } else {
+		                        app.changeTitle(Enpowi.session.siteName);
+	                        }
+
                             app.routeCallback(result);
                             pubTo.land([route]);
                         });
