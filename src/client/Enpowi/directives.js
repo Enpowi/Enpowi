@@ -107,6 +107,9 @@ Namespace('Enpowi').
 		                    el = this.el,
 		                    expression = this.expression,
 	                        callback = function() {
+		                        while (el.firstChild) {
+			                        el.removeChild(el.lastChild);
+		                        }
 		                        app.loadModule(Enpowi.session.theme + '/' + expression, function (html) {
 			                        el.appendChild(html);
 			                        me.doneBinding(directive);
