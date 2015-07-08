@@ -105,25 +105,17 @@ Namespace('Enpowi').
                     bind: function () {
 	                    var directive = this,
 		                    el = this.el,
-		                    expression = this.expression,
-	                        callback = function() {
-		                        while (el.firstChild) {
-			                        el.removeChild(el.lastChild);
-		                        }
-		                        app.loadModule(Enpowi.session.theme + '/' + expression, function (html) {
-			                        el.appendChild(html);
-			                        me.doneBinding(directive);
-		                        });
-	                        };
+		                    expression = this.expression;
 
 	                    me.setBinding(directive);
 
-	                    callback();
+	                    while (el.firstChild) {
+		                    el.removeChild(el.lastChild);
+	                    }
 
-	                    Enpowi.App.subTo().sessionChange(function(type, value) {
-		                    if (type === 'user') {
-			                    callback();
-		                    }
+	                    app.loadModule(Enpowi.session.theme + '/' + expression, function (html) {
+		                    el.appendChild(html);
+		                    me.doneBinding(directive);
 	                    });
                     }
                 });
