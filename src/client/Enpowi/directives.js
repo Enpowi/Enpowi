@@ -105,8 +105,9 @@ Namespace('Enpowi').
                     bind: function () {
 	                    var directive = this,
 		                    el = this.el,
+		                    expression = this.expression,
 	                        callback = function() {
-		                        app.loadModule(Enpowi.session.theme + '/' + this.expression, function (html) {
+		                        app.loadModule(Enpowi.session.theme + '/' + expression, function (html) {
 			                        el.appendChild(html);
 			                        me.doneBinding(directive);
 		                        });
