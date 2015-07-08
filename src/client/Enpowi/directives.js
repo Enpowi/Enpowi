@@ -187,7 +187,7 @@ Namespace('Enpowi').
 
                         if (el.style.display === 'none') return;
 			            if (el.hasAttribute('static')) return;
-			            if (this.expression === null) return;
+			            if (urlRaw === null) return;
 
 			            app.load(url = Enpowi.utilities.url(urlRaw), function (html) {
                             el.appendChild(app.process(html, url.m, url.c));
