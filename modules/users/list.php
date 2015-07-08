@@ -11,7 +11,7 @@ $auth = $app->authentication;
 $data = (new DataOut())
 	->add('users', User::users())
 	->add('availableGroups', Group::groups())
-	->add('impersonateUser', $auth->isImpersonate() ? $auth->getUser() : null)
+	->add('impersonateUser', $auth->isImpersonate() ? $auth->getUser() : [])
 	->add('action', '')
 	->out();
 
@@ -30,7 +30,7 @@ $data = (new DataOut())
 				<th v-t>Email</th>
 				<th v-t>Created</th>
 				<td>
-					<span v-show="impersonateUser !== null">
+					<span v-show="impersonateUser.email">
 						<span v-t>Impersonating: </span>{{ impersonateUser.email }}
 					</span>
 				</td>

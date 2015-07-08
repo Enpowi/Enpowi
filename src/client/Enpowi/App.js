@@ -8,12 +8,12 @@ Namespace('Enpowi').
 		Static: {
 			m: null,
 			c: null,
-			pubs: {},
+			subs: {},
 			one: function(eventName, callback) {
 				var parentCallback = function() {
 					callback.apply(this, arguments);
 
-					var array = this.pubs[eventName];
+					var array = this.subs[eventName];
 
 					array.splice(array.indexOf(parentCallback), 1);
 				};
@@ -21,24 +21,24 @@ Namespace('Enpowi').
 				return this.sub(eventName, parentCallback);
 			},
 			sub: function(eventName, callback) {
-				var pubs;
-				if ((pubs = this.pubs[eventName]) === undefined) pubs = this.pubs[eventName] = [];
-				pubs.push(callback);
+				var subs;
+				if ((subs = this.subs[eventName]) === undefined) subs = this.subs[eventName] = [];
+				subs.push(callback);
 
 				return this;
 			},
 			pub: function(eventName, data) {
-				var pubs,
+				var subs,
 					max,
 					i;
 
-				if ((pubs = this.pubs[eventName]) === undefined) return this;
+				if ((subs = this.subs[eventName]) === undefined) return this;
 
 				i = 0;
-				max = pubs.length;
+				max = subs.length;
 
 				for (;i <max;i++) {
-					pubs[i].apply(this, data);
+					subs[i].apply(this, data);
 				}
 
 				return this;
@@ -52,7 +52,8 @@ Namespace('Enpowi').
 				for (n in this.event) if (this.event.hasOwnProperty(n)) {
 					caller[n] = (function(eventName) {
 						return function(callback) {
-							return me.one(eventName, callback);
+							me.one(eventName, callback);
+							return caller;
 						};
 					})(n);
 				}
@@ -68,7 +69,8 @@ Namespace('Enpowi').
 				for (n in this.event) if (this.event.hasOwnProperty(n)) {
 					caller[n] = (function (eventName) {
 						return function (callback) {
-							return me.sub(eventName, callback);
+							me.sub(eventName, callback);
+							return caller;
 						};
 					})(n);
 				}
@@ -84,7 +86,8 @@ Namespace('Enpowi').
 				for (n in this.event) if (this.event.hasOwnProperty(n)) {
 					caller[n] = (function (eventName) {
 						return function (args) {
-							return me.pub(eventName, args);
+							me.pub(eventName, args);
+							return caller;
 						};
 					})(n);
 				}
@@ -116,7 +119,7 @@ Namespace('Enpowi').
 					i;
 
 				for (i in nPE) if (nPE.hasOwnProperty(i)) {
-					this.pubs[i] = [];
+					this.subs[i] = [];
 				}
 
 				return this;
@@ -159,8 +162,9 @@ Namespace('Enpowi').
 		                }, 500);
 
                     app.load(url, function(data) {
+	                    var pubTo = app.pubTo();
 	                    if (data == -1) {
-		                    var result = app.pubTo().deny([url]);
+		                    var result = pubTo.deny([url]);
 		                    if (result === false) {
 			                    return;
 		                    }
@@ -171,7 +175,7 @@ Namespace('Enpowi').
 	                        Enpowi.App.c = c;
                             var result = app.process(data, m, c);
                             app.routeCallback(result);
-                            app.pubTo().land([route]);
+                            pubTo.land([route]);
                         });
                     });
                 };
@@ -192,7 +196,7 @@ Namespace('Enpowi').
         },
 
         bindRouteUrls: function(router, callback) {
-	        var me = this;
+	        var pubTo = this.pubTo();
             //none
             //moduleName
             //moduleName/component
@@ -220,7 +224,7 @@ Namespace('Enpowi').
             });
 
 	        router.routed.add(function(route) {
-		        me.pubTo().go([route]);
+		        pubTo.go([route]);
 	        });
         },
 

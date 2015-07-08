@@ -1,14 +1,14 @@
 $.holdReady(true);
 
-Enpowi.App
-	.subTo()._continue(function() {
+Enpowi.App.subTo()
+	._continue(function() {
 		$.holdReady(false);
 		if (app.modal) app.modal.modal('hide');
 	})
-	.subTo().delay(function() {
+	.delay(function() {
 		app.modal = $('<div>').modal('show');
 	})
-	.subTo().deny(function() {
+	.deny(function() {
 		app.go('#/');
 		return false;
 	});
