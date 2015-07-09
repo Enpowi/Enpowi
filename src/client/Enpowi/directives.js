@@ -19,7 +19,11 @@ Namespace('Enpowi').
 	        },
             setup: function () {
                 var me = this,
-	                app = Enpowi.app;
+	                app = Enpowi.app,
+	                emptyEl = function(el) {
+		                while (el.firstChild) el.removeChild(el.lastChild);
+	                };
+
                 me.app = app;
 
                 Vue.directive('module', {
@@ -73,6 +77,8 @@ Namespace('Enpowi').
 
 	                    me.setBinding(directive);
 
+	                    emptyEl(el);
+
                         app.loadModule(Enpowi.session.theme + '/header', function (html) {
                             el.appendChild(html);
 	                        me.doneBinding(directive);
@@ -86,6 +92,8 @@ Namespace('Enpowi').
 	                        directive = this;
 
 	                    me.setBinding(directive);
+
+	                    emptyEl(el);
 
                         app.loadModule(Enpowi.session.theme + '/navigation', function (html) {
                             el.appendChild(html);
@@ -108,6 +116,8 @@ Namespace('Enpowi').
 
 	                    me.setBinding(directive);
 
+	                    emptyEl(el);
+
 	                    app.loadModule(Enpowi.session.theme + '/' + this.expression, function (html) {
 		                    el.appendChild(html);
 		                    me.doneBinding(directive);
@@ -120,6 +130,8 @@ Namespace('Enpowi').
 	                    var directive = this;
 	                    me.setBinding(directive);
                         var el = this.el;
+
+	                    emptyEl(el);
 
                         app.loadModule(Enpowi.session.theme + '/footer', function (html) {
                             el.appendChild(html);
@@ -176,6 +188,7 @@ Namespace('Enpowi').
 			            if (this.expression === null) return;
 
 			            if (el.hasAttribute('static')) {
+				            emptyEl(el);
 				            app.load(Enpowi.utilities.url(this.expression), function (html) {
 					            $(el).append(html);
 				            });
@@ -188,6 +201,8 @@ Namespace('Enpowi').
                         if (el.style.display === 'none') return;
 			            if (el.hasAttribute('static')) return;
 			            if (urlRaw === null) return;
+
+			            emptyEl(el);
 
 			            app.load(url = Enpowi.utilities.url(urlRaw), function (html) {
                             el.appendChild(app.process(html, url.m, url.c));
