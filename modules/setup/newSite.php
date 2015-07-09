@@ -48,6 +48,7 @@ Perm::create('user', 'forgot', $anonymousGroup);
 Perm::create('user', 'confirm', $anonymousGroup);
 
 //give registered abilities
+Perm::create('gallery', '*', $registeredGroup);
 Perm::create('user', 'view', $registeredGroup);
 Perm::create('user', 'logout', $registeredGroup);
 Perm::create('user', 'confirm', $registeredGroup);
