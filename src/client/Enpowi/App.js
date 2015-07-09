@@ -387,18 +387,7 @@ Namespace('Enpowi').
                                 return null;
                             },
                             hasPerm: function (m, c) {
-                                var hasPerm = false;
-                                $.each(Enpowi.session.user.groups, function () {
-                                    $.each(this.perms, function () {
-                                        if (this['module'] === m || this['module'] === '*') {
-                                            if (this['component'] === c || this['component'] === '*') {
-                                                hasPerm = true;
-                                            }
-                                        }
-                                    });
-                                });
-
-                                return hasPerm;
+                                return app.hasPerm(m, c);
                             },
                             hasKey: function (key, array) {
                                 return array[key] !== undefined;
@@ -538,5 +527,19 @@ Namespace('Enpowi').
             }
 
             return this;
+        },
+        hasPerm: function (m, c) {
+            var hasPerm = false;
+            $.each(Enpowi.session.user.groups, function () {
+                $.each(this.perms, function () {
+                    if (this['module'] === m || this['module'] === '*') {
+                        if (this['component'] === c || this['component'] === '*') {
+                            hasPerm = true;
+                        }
+                    }
+                });
+            });
+
+            return hasPerm;
         }
     });
