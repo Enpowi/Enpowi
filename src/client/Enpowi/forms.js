@@ -75,7 +75,7 @@ Class('forms', {
 	                pubTo.successResponse(response);
 
 	                for (i in response) if (response.hasOwnProperty(i)) {
-                        //vue.$set(i, response[i]);
+                        vue.$set(i, response[i]);
                     }
                 }
 
