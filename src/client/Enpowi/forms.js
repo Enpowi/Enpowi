@@ -41,13 +41,15 @@ Class('forms', {
 			$.getJSON(url, serialized, function(json) {
                 var response,
                     i;
-
-				$.each(serializedArray, function() {
-					//vue.$delete(this.name);
-				});
+				
+				if (vue.paramResponseCache) {
+					for (i in vue.paramResponseCache) if (i && vue.paramResponseCache.hasOwnProperty(i)) {
+						vue.$set(i, null);
+					}
+				}
 
 				if (json.hasOwnProperty('paramResponse')) {
-					response = json.paramResponse;
+					response = vue.paramResponseCache = json.paramResponse;
 
 					pubTo.paramResponse(response);
 
@@ -70,7 +72,7 @@ Class('forms', {
 				}
 
                 if (json.hasOwnProperty('successResponse')) {
-                    response = json.successResponse;
+                    response = vue.successResponseCache = json.successResponse;
 
 	                pubTo.successResponse(response);
 
