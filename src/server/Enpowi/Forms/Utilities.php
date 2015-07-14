@@ -46,14 +46,23 @@ class Utilities
 		$checkable = [];
 		if ($lookupArray === null) {
 			foreach ($dictionary as $key => $language) {
-				$checkable[$key] = false;
+				$checkable[$key] = [
+					'value' => $language,
+					'checked' => false
+				];
 			}
 		} else {
 			foreach ($dictionary as $key => $language) {
 				if (in_array($key, $lookupArray)) {
-					$checkable[$key] = true;
+					$checkable[$key] = [
+						'value' => $language,
+						'checked' => true
+					];
 				} else {
-					$checkable[$key] = false;
+					$checkable[$key] = [
+						'value' => $language,
+						'checked' => false
+					];
 				}
 			}
 		}
