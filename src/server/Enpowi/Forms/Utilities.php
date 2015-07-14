@@ -41,4 +41,23 @@ class Utilities
 		}
 		return false;
 	}
+
+	public static function checkableDictionary($dictionary, $lookupArray = null) {
+		$checkable = [];
+		if ($lookupArray === null) {
+			foreach ($dictionary as $key => $language) {
+				$checkable[$key] = false;
+			}
+		} else {
+			foreach ($dictionary as $key => $language) {
+				if (in_array($key, $lookupArray)) {
+					$checkable[$key] = true;
+				} else {
+					$checkable[$key] = false;
+				}
+			}
+		}
+
+		return $checkable;
+	}
 }
