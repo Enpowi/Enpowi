@@ -181,32 +181,25 @@ Namespace('Enpowi').
                 });
 
 	            Vue.directive('frame', {
-		            bind: function() {
-			            var el = this.el;
-
-                        if (el.style.display === 'none') return;
-			            if (this.expression === null) return;
-
-			            if (el.hasAttribute('static')) {
-				            emptyEl(el);
-				            app.load(Enpowi.utilities.url(this.expression), function (html) {
-					            $(el).append(html);
-				            });
-			            }
-		            },
 		            update: function (urlRaw) {
 			            var el = this.el,
 				            url;
 
-                        if (el.style.display === 'none') return;
-			            if (el.hasAttribute('static')) return;
+			            if (el.style.display === 'none') return;
+			            if (this.expression === null) return;
 			            if (urlRaw === null) return;
 
-			            emptyEl(el);
-
-			            app.load(url = Enpowi.utilities.url(urlRaw), function (html) {
-                            el.appendChild(app.process(html, url.m, url.c));
-			            });
+			            if (el.hasAttribute('static')) {
+				            emptyEl(el);
+				            app.load(Enpowi.utilities.url(urlRaw), function (html) {
+					            $(el).append(html);
+				            });
+				            this.expression = '';
+			            } else {
+				            app.load(url = Enpowi.utilities.url(urlRaw), function (html) {
+					            el.appendChild(app.process(html, url.m, url.c));
+				            });
+			            }
 		            }
 	            });
             }

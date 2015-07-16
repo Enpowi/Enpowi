@@ -41,7 +41,7 @@ Class('forms', {
 			$.getJSON(url, serialized, function(json) {
                 var response,
                     i;
-				
+
 				if (vue.paramResponseCache) {
 					for (i in vue.paramResponseCache) if (i && vue.paramResponseCache.hasOwnProperty(i)) {
 						vue.$set(i, null);
