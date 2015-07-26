@@ -24,7 +24,8 @@
     "codemirror.wikilingo": "https://github.com/wikiLingo/CodeMirror.git",
     "bootstrap-fileinput": "~4.2.2",
     "galereya": "https://github.com/VodkaBears/galereya.git#~0.9.94",
-    "bootstrap-datepicker": "~1.4.0"
+    "bootstrap-datepicker": "~1.4.0",
+    "moment": "~2.10.3"
   },
   "resolutions": {
     "vue": "~0.11.5"

@@ -397,6 +397,12 @@ Namespace('Enpowi').
 	                        },
 	                        inArray: function (array, value) {
 		                        return array.indexOf(value) > -1;
+	                        },
+	                        dateFormatted: function(value) {
+		                        return moment(value * 1000).format('LL');
+	                        },
+	                        timeFormatted: function(value, format) {
+		                        return moment(value * 1000).format(format || 'LLL');
 	                        }
                         }
                     }));

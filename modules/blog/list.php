@@ -50,8 +50,8 @@ $data = (new DataOut())
 		<tbody>
 		<tr v-repeat="post : posts" v-on="click : go('blog?name=' + post.name)">
 			<td>{{ post.name }}</td>
-			<td>{{ post.created }}</td>
-			<td>{{ post.publishedOn }}</td>
+			<td>{{ dateFormatted(post.created) }}</td>
+			<td>{{ dateFormatted(post.publishedOn) }}</td>
 			<td>{{ post.user.email }}</td>
 		</tr>
 		</tbody>

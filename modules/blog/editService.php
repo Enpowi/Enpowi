@@ -10,6 +10,12 @@ $post = Types::Blog_Post((new DataIn())
     ->in('post'));
 
 $post->bean();
-$post->replace(App::param('content'));
 
-echo 1;
+$user = App::user();
+
+if ($user->hasPerm('*', '*') || $post->user()->email === $user->email) {
+	$post->replace( App::param( 'content' ) );
+	echo 1;
+} else  {
+	echo -1;
+}

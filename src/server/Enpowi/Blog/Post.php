@@ -21,7 +21,10 @@ class Post {
     public $content;
     public $created;
 	public $edited;
-    public $user = null;
+	/**
+	 * @var \Enpowi\Users\User
+	 */
+    private $_user = null;
 	public $contributorIds = [];
 	public $publishedOn;
 
@@ -61,11 +64,14 @@ class Post {
         $this->id = $bean->getID();
         $this->name = $bean->name;
         $this->content = $bean->content;
-	    $this->edited = $bean->edited;
-        $this->created = $bean->created;
+	    $this->edited = strtotime($bean->edited);
+        $this->created = strtotime($bean->created);
 	    $this->contributorIds = explode(',', $bean->contributorIds);
-        $this->user = new User(null, $bean->user);
-	    $this->publishedOn = R::isoDateTime(date($bean->publishedOn));
+        $this->_user = new User(null, $bean->user);
+	    $publishedOn = $bean->publishedOn;
+	    if ($publishedOn !== '') {
+		    $this->publishedOn = strtotime($bean->publishedOn );
+	    }
     }
 
     public function exists()
@@ -93,11 +99,15 @@ class Post {
         $bean->created = $this->created ?: R::isoDateTime();
 
 	    $otherUserBean = App::user()->bean();
-        $bean->user = $this->user !== null ? $this->user->bean() : $otherUserBean;
+        $bean->user = $this->_user !== null ? $this->_user->bean() : $otherUserBean;
 	    $this->contributorIds[] = $otherUserBean->getID();
 	    $this->contributorIds = array_unique( $this->contributorIds );
 	    $bean->contributorIds = implode(',',$this->contributorIds);
-	    $bean->publishedOn = $this->publishedOn;
+	    if (!empty($this->publishedOn)) {
+		    $bean->publishedOn = R::isoDateTime( $this->publishedOn );
+	    } else {
+		    $bean->publishedOn = null;
+	    }
 
 	    R::store( $bean );
     }
@@ -190,8 +200,17 @@ class Post {
 	public function bean()
 	{
 		if ($this->_bean === null) {
-			$this->_bean = R::findOne( 'blog', ' name = ? ', [ $this->name ] );
+			$bean = $this->_bean = R::findOne( 'blog', ' name = ? ', [ $this->name ] );
+			if ($bean !== null) {
+				$this->_user = new User( null, $bean->user );
+				$this->created = strtotime($bean->created);
+			}
 		}
 		return $this->_bean;
+	}
+
+	public function user()
+	{
+		return $this->_user;
 	}
 }

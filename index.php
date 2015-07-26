@@ -31,6 +31,10 @@
 <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="vendor/vue/dist/vue.js"></script>
 <script src="vendor/class/Class.js"></script>
+<script src="vendor/moment/min/moment-with-locales.min.js"></script>
+<script>
+	moment.locale('en');
+</script>
 
 <script src="src/client/Enpowi/App.js"></script>
 <script src="src/client/Enpowi/forms.js"></script>
