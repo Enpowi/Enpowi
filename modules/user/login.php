@@ -18,6 +18,8 @@ if ($user === null) {
 	$response['id'] = $user->id;
     if (App::paramIs('remember')) {
         App::get()->authentication->rememberUserId();
+    } else {
+        App::get()->authentication->forgetUserId();
     }
 }
 

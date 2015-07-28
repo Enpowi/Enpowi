@@ -90,6 +90,12 @@ class Authentication
         return $this;
     }
 
+    public function forgetUserId()
+    {
+        setcookie(App::$config->siteName . '-remember', null);
+        return $this;
+    }
+
     public function recallUserId()
     {
         $key = App::$config->siteName . '-remember';
