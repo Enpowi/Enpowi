@@ -20,11 +20,11 @@ $replies['siteUrl'] = App::$config->siteUrl;
 foreach($replies as $key => $reply) {
 	$className = null;
 	if ($reply !== null) {
-		echo "Enpowi.session.update('$key', " . json_encode($reply) . ");\n";
+		echo "Enpowi.session.update('$key', " . json_encode($reply) . ");";
 	} else {
 		$className = 'Enpowi\\' . ucfirst($key);
 		if (class_exists($className)) {
-			echo "Enpowi.session.update('$key', " . json_encode(get_class_vars($className)) . ");\n";
+			echo "Enpowi.session.update('$key', " . json_encode(get_class_vars($className)) . ");";
 		} else {
 			throw new \Exception('Unhandled type: ' . $key);
 		}

@@ -1,3 +1,5 @@
+'use strict';
+
 Namespace('Enpowi').
     Class('translation', {
         setup: function() {

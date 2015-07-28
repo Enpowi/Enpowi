@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @name App
  * @memberOf {Enpowi}
@@ -126,6 +128,10 @@ Namespace('Enpowi').
 				return this;
 			}
 		},
+
+        sessionTick: 1000 * 60,
+        sessionInterval: null,
+
         construct: function(callback) {
             Enpowi.app = this;
 
@@ -139,7 +145,9 @@ Namespace('Enpowi').
             Enpowi.directives.setup();
             Enpowi.translation.setup();
 
-            this.setupRoutes();
+            this
+                .setupRoutes()
+                .sessionListen();
         },
 
 		changeTitle: function(title) {
@@ -210,6 +218,7 @@ Namespace('Enpowi').
             hasher.changed.add(parseHash); //parse hash changes
             hasher.init(); //start listening for history change
 
+            return this;
         },
 
         bindRouteUrls: function(router, callback) {
@@ -245,6 +254,18 @@ Namespace('Enpowi').
 	        });
         },
 
+        sessionListen: function() {
+            this.sessionInterval = window.setInterval(function() {
+                app.loadScript('modules/?module=app&component=session.js');
+            }, this.sessionTick);
+
+            return this;
+        },
+        sessionUnlisten: function() {
+            window.clearInterval(this.sessionInterval);
+
+            return this;
+        },
         logRoutes: function() {
             this.router.routed.add(console.log, console); //log all routes
 

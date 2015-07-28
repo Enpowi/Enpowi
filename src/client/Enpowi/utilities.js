@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @name utilities
  * @memberOf Enpowi
