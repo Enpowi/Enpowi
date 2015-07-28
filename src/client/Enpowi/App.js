@@ -536,6 +536,7 @@ Namespace('Enpowi').
         },
         hasPerm: function (m, c) {
             var hasPerm = false;
+            if (Enpowi.session.user.groups === undefined) return false;
             $.each(Enpowi.session.user.groups, function () {
                 $.each(this.perms, function () {
                     if (this['module'] === m || this['module'] === '*') {
