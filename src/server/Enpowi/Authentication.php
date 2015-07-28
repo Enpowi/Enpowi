@@ -13,6 +13,8 @@ use Enpowi\Users\User;
 
 class Authentication
 {
+    //1 week = 7 * 24 * 60 * 60 = 604800
+    public static $rememberDuration = 604800;
 	public $segment;
 	public function __construct()
 	{
@@ -75,6 +77,27 @@ class Authentication
 		}
 
 	}
+
+    public function rememberUserId()
+    {
+        $segment = $this->segment;
+
+        if (($_user = $segment->get('user')) !== null) {
+            $hour = time() + self::$rememberDuration;
+            setcookie(App::$config->siteName . '-remember', $_user, $hour);
+        }
+
+        return $this;
+    }
+
+    public function recallUserId()
+    {
+        $key = App::$config->siteName . '-remember';
+        if (isset($_COOKIE[$key])) {
+            return $_COOKIE[$key];
+        }
+        return null;
+    }
 
 	public function logout()
 	{
