@@ -23,7 +23,10 @@ $img = Enpowi\Forms\Utilities::captcha(true);
 	<div class="form-group">
 		<table>
 			<tr>
-				<td><img class="captcha" src="<?php echo $img?>"/></td>
+				<td>
+                    <img id="captcha" class="captcha" src="<?php echo $img?>"/>
+                    <a href="#" id="reload-captcha"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a>
+                </td>
 				<td>
 					<input type="text" class="form-control" name="captcha" v-placeholder="Captcha">
 					<span v-text="captcha"></span>
@@ -33,3 +36,15 @@ $img = Enpowi\Forms\Utilities::captcha(true);
 	</div>
 	<button type="submit" class="btn btn-success" v-t>Submit</button>
 </form>
+<script>
+    var captchaImage = app.getElementById('captcha'),
+        reloadCaptchaAnchor = app.getElementById('reload-captcha');
+
+    reloadCaptchaAnchor.onclick = function() {
+        $.get(Enpowi.utilities.url('app/captcha'), function(imageData) {
+            captchaImage.setAttribute('src', imageData);
+        });
+
+        return false;
+    };
+</script>
