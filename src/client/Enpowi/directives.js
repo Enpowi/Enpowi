@@ -183,7 +183,18 @@ Namespace('Enpowi').
                 });
 
 	            Vue.directive('frame', {
+		            bind: function() {
+			            var me = this,
+				            el = this.el;
+
+			            this.vm.reload = function() {
+				            me.update(me.urlRaw);
+			            };
+
+			            $(el).bind('reload', this.vm.reload);
+		            },
 		            update: function (urlRaw) {
+			            this.urlRaw = urlRaw;
 			            var el = this.el,
 				            url;
 
