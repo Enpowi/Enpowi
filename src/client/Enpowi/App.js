@@ -516,13 +516,16 @@ Namespace('Enpowi').
             return this;
         },
 		getElementById: function(id) {
-			var el = document.getElementById(id);
+            var el,
+                pC;
 
-			if (el !== null) return el;
+            if ((pC = this.processContainer) !== null) {
+                el = pC.querySelector('#' + id);
+            }
 
-			if (this.processContainer !== null) {
-				return this.processContainer.querySelector('#' + id);
-			}
+            if (el !== null) return el;
+
+            return document.getElementById(id);
 		},
         loadModule: function(urlRaw, callback) {
             var app = this,
