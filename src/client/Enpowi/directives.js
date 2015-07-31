@@ -218,7 +218,7 @@ Namespace('Enpowi').
 
                 Vue.directive('pager', {
                     update: function(value) {
-                        if (value.pages < 2) return;
+                        if (value.pages <= 1) return;
 
                         var page = value.page,
                             pages = value.pages,
@@ -275,9 +275,6 @@ Namespace('Enpowi').
 
                 Vue.directive('find', {
                     update: function (value) {
-
-                        console.log(value);
-
                         if (this.el.vFindActive) return;
 
                         var el = this.el,
