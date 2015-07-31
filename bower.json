@@ -25,7 +25,8 @@
     "bootstrap-fileinput": "~4.2.2",
     "galereya": "https://github.com/VodkaBears/galereya.git#~0.9.94",
     "bootstrap-datepicker": "~1.4.0",
-    "moment": "~2.10.3"
+    "moment": "~2.10.3",
+    "bs-typeahead": "~0.0.5"
   },
   "resolutions": {
     "vue": "~0.11.5"

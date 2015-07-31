@@ -2,6 +2,7 @@
 use Enpowi\App;
 use Enpowi\Users\User;
 use Enpowi\Modules\Module;
+use RedBeanPHP\R;
 
 Module::is();
 
@@ -23,6 +24,14 @@ switch (App::param('action')) {
 			->authentication
 			->impersonateAnonymous();
 		echo 1;
+		break;
+	case 'find':
+		$beans = R::findAll('user', 'email like :like limit 5', ['like' => '%' . App::param('query') . '%']);
+		$users = [];
+		foreach ($beans as $bean) {
+			$users[] = $bean->email;
+		}
+		echo json_encode($users);
 		break;
 	default:
 		echo 0;

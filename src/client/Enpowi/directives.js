@@ -215,6 +215,100 @@ Namespace('Enpowi').
 			            }
 		            }
 	            });
+
+                Vue.directive('pager', {
+                    update: function(value) {
+                        if (value.pages < 2) return;
+
+                        var page = value.page,
+                            pages = value.pages,
+                            size = value.size || 5,
+                            url = value.url,
+                            i = Math.max(1, page - size),
+                            max = Math.min(pages, page + size),
+                            pageBeforeAnchor = '',
+                            pageAfterAnchor = '',
+                            pageAnchors = '',
+                            el = this.el;
+
+                        if (el.nodeName !== 'NAV') {
+                            console.log('Warning: pager should be used with nav elements');
+                        }
+
+                        for (; i <= max; i++) {
+                            pageAnchors += '<li' + (page === i ? ' class="active"' : '') + '><a href="' + url + i + '">' + i + '</a></li>';
+                        }
+
+                        if (page > 1) {
+                            pageBeforeAnchor = '<li>\
+                                <a href="' + url + (page - 1) + '" aria-label="Previous">\
+                                    <span aria-hidden="true">&laquo;</span>\
+                                </a>\
+                            </li>';
+                        } else {
+                            pageBeforeAnchor = '<li>\
+                                <a aria-label="Previous">\
+                                    <span aria-hidden="true">&laquo;</span>\
+                                </a>\
+                            </li>';
+                        }
+
+                        if (page < pages) {
+                            pageAfterAnchor = '<li>\
+                                <a href="' + url + (page + 1) + '" aria-label="Next">\
+                                    <span aria-hidden="true">&raquo;</span>\
+                                </a>\
+                            </li>';
+                        } else {
+                            pageAfterAnchor = '<li>\
+                                <a aria-label="Next">\
+                                    <span aria-hidden="true">&raquo;</span>\
+                                </a>\
+                            </li>';
+                        }
+
+                        el.innerHTML = '<ul class="pagination">\
+                            ' + pageBeforeAnchor + pageAnchors + pageAfterAnchor + '\
+                        </ul>';
+                    }
+                });
+
+                Vue.directive('find', {
+                    update: function (value) {
+
+                        console.log(value);
+
+                        if (this.el.vFindActive) return;
+
+                        var el = this.el,
+                            find = Enpowi.utilities.url(value.find),
+                            init = function() {
+                                el.setAttribute('autocomplete', 'off');
+                                $(el).typeahead({
+                                    ajax: {
+                                        url: find,
+                                        triggerLength: 1
+                                    },
+                                    item: '<li><a href="#"></a></li>',
+                                    onSelect: function(selection) {
+                                        app.go('users/list?email=' + selection.value);
+                                    }
+                                });
+
+                                el.vFindActive = true;
+                            };
+
+                        if (el.nodeName !== 'INPUT') {
+                            console.log('Warning: find should be used with input elements');
+                        }
+
+                        if ($.fn.typeahead === undefined) {
+                            app.loadScript('vendor/bs-typeahead/js/bootstrap-typeahead.js', init);
+                        } else {
+                            init();
+                        }
+                    }
+                });
             }
         }
     });

@@ -8,8 +8,22 @@ use Enpowi\Modules\Module;
 Module::is();
 $app = App::get();
 $auth = $app->authentication;
+$page = (App::paramIs('page') ? App::paramInt('page') : 1);
+$users = null;
+
+if (App::paramIs('email')) {
+	$users = [User::getByEmail(App::param('email'))];
+	$pages = 0;
+} else {
+	$users = User::users($page);
+	$pages = User::pages();
+}
+
 $data = (new DataOut())
-	->add('users', User::users())
+	->add('email', App::param('email'))
+	->add('pages', $pages)
+	->add('page', $page)
+	->add('users', $users)
 	->add('availableGroups', Group::groups())
 	->add('impersonateUser', $auth->isImpersonate() ? $auth->getUser() : [])
 	->add('action', '')
@@ -19,10 +33,18 @@ $data = (new DataOut())
 	v-module
     data="<?php echo $data?>"
 	action="users/listService"
-	data-done="users/list"
+	v-attr="data-done: page ? 'users/list?page=' + page : 'users/list'"
 	class="container">
 	<h3><span v-t>Users</span>
 		<a v-title="New User" href="#/users/new"><span class="glyphicon glyphicon-plus-sign"></span></a></h3>
+	<input
+		name="q"
+		v-placeholder="find user"
+		v-find="{
+			find: 'users/listService?action=find&q=',
+			url: 'users/list?email='
+		}"
+		v-model="email">
 	<table class="table">
 		<tbody>
 			<tr>
@@ -58,4 +80,9 @@ $data = (new DataOut())
 			</tr>
 		</tbody>
 	</table>
+	<nav v-pager="{
+		pages: pages,
+		page: page,
+		url: '#/users/list?page='
+	}"></nav>
 </form>
