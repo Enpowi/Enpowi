@@ -57,7 +57,14 @@ class EntityImage
 
 		$path = $this->path();
 		$tmp = $this->uploadData['tmp_name'];
-		$check = getimagesize($tmp);
+
+		if (!file_exists($tmp)) return false;
+
+		try {
+			$check = getimagesize($tmp);
+		} catch (\Exception $e) {
+			return false;
+		}
 
 		if($check === false) {
 			return false;
