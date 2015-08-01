@@ -422,6 +422,9 @@ Namespace('Enpowi').
 	                        dateFormatted: function(value) {
 		                        return moment(value * 1000).format('LL');
 	                        },
+                            fileSize: function (value) {
+                                return Enpowi.utilities.humanFileSize(value);
+                            },
 	                        timeFormatted: function(value, format) {
 		                        return moment(value * 1000).format(format || 'LLL');
 	                        }
