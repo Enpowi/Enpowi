@@ -189,4 +189,9 @@ class EntityImage
 
 		return $this;
 	}
+
+	public static function getMaximumFileUploadSize()
+	{
+		return File::getMaximumFileUploadSize();
+	}
 }
