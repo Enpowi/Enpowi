@@ -32,7 +32,10 @@ class Image extends File {
 
 	public function upload()
 	{
-		if (getimagesize($this->tempPath) !== false) {
+		if (
+			file_exists($this->tempPath)
+			&& getimagesize($this->tempPath) !== false
+		) {
 			if (parent::upload()) {
 				$this->thumbnail();
 				return true;
