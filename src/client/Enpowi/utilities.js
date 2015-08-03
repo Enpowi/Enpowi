@@ -51,6 +51,29 @@ Namespace('Enpowi').
 					++u;
 				} while (Math.abs(bytes) >= thresh && u < units.length - 1);
 				return bytes.toFixed(1) + ' ' + units[u];
+			},
+
+
+			fileTooLarge: 'file too large',
+
+			fileReponseCheck: function (maxFileSize, data) {
+				if (data.response === -1) {
+					if (data.files) {
+						var files = data.files,
+							max = files.length,
+							i = 0,
+							file;
+
+						for (; i < max; i++) {
+							file = files[i];
+							if (maxFileSize < file.size) {
+								return this.fileTooLarge;
+							}
+						}
+					}
+
+					return null;
+				}
 			}
         }
     });
