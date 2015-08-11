@@ -37,13 +37,14 @@ Namespace('Enpowi').
 		},
 
         update: function(type, sessionItems) {
-            var oldSessionItems = this[type],
+            var util = Enpowi.utilities,
+				oldSessionItems = this[type],
                 key,
 	            changed = false,
 	            compare = this[type + 'Compare'];
 
 	        //if object has properties, and has a compare function
-	        if (Object.getOwnPropertyNames(this[type]).length > 0 && compare !== undefined) {
+	        if (compare !== undefined && util.isObject(this[type])) {
 		        if (!compare(this[type], sessionItems)) return this;
 	        }
 

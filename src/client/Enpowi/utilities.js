@@ -33,6 +33,10 @@ Namespace('Enpowi').
 
 		        return url;
 	        },
+
+			isObject: function(obj) {
+				return obj === Object(obj);
+			},
 			//[modified] http://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable#answer-14919494
 			humanFileSize: function (bytes, si) {
 				if (si === undefined) {
