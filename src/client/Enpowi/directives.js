@@ -203,13 +203,14 @@ Namespace('Enpowi').
 			            if (urlRaw === null) return;
 
 			            if (el.hasAttribute('static')) {
-				            emptyEl(el);
+                            emptyEl(el);
 				            app.load(Enpowi.utilities.url(urlRaw), function (html) {
 					            $(el).append(html);
 				            });
 				            this.expression = '';
 			            } else {
 				            app.load(url = Enpowi.utilities.url(urlRaw), function (html) {
+                                emptyEl(el);
 					            el.appendChild(app.process(html, url.m, url.c));
 				            });
 			            }
