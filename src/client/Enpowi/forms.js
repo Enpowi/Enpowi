@@ -11,11 +11,6 @@ Class('forms', {
 			el.addEventListener('submit', function(e) {
                 e.preventDefault();
 
-                if (!el.hasAttribute('data-done') && !el.hasAttribute('listen')) {
-                    app.go(el.getAttribute('action'));
-                    return;
-                }
-
 				var elements = {},
 					i = 0,
 					items = $el.serializeArray(),
