@@ -38,9 +38,17 @@ Namespace('Enpowi').
 
 				i = 0;
 				max = subs.length;
+				
+				data = data || [];
 
-				for (;i <max;i++) {
-					subs[i].apply(this, data);
+				if (data.constructor === Array) {
+					for (;i <max;i++) {
+						subs[i].apply(this, data);
+					}
+				} else {
+					for (;i <max;i++) {
+						subs[i].call(this, data);
+					}
 				}
 
 				return this;
