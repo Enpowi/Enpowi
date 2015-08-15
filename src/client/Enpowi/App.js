@@ -38,6 +38,8 @@ Namespace('Enpowi').
 
 				if ((subs = this.subs[eventName]) === undefined) return this;
 
+				subs = this.subs[eventName] = subs.filter(function(v){ return v !== null && v !== undefined; });
+
 				i = 0;
 				max = subs.length;
 				
@@ -52,8 +54,6 @@ Namespace('Enpowi').
 						subs[i].call(this, data);
 					}
 				}
-
-				this.subs[eventName] = subs.filter(function(v){ return v !== null && v !== undefined; });
 
 				return this;
 			},
