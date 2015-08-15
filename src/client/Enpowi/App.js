@@ -13,11 +13,13 @@ Namespace('Enpowi').
 			subs: {},
 			one: function(eventName, callback) {
 				var parentCallback = function() {
-					callback.apply(this, arguments);
+					var array = this.subs[eventName] || [],
+					index = array.indexOf(parentCallback);
+					if (index > -1) {
+						callback.apply(this, arguments);
 
-					var array = this.subs[eventName];
-
-					array.splice(array.indexOf(parentCallback), 1);
+						this.subs[eventName][index] = null;
+					}
 				};
 
 				return this.sub(eventName, parentCallback);
@@ -50,6 +52,8 @@ Namespace('Enpowi').
 						subs[i].call(this, data);
 					}
 				}
+
+				this.subs[eventName] = subs.filter(function(v){ return v !== null && v !== undefined; });
 
 				return this;
 			},
