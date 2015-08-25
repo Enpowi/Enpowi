@@ -138,7 +138,9 @@ Namespace('Enpowi').
 				}
 
 				return this;
-			}
+			},
+
+			global: {}
 		},
 
         sessionTick: 1000 * 60,
@@ -377,6 +379,7 @@ Namespace('Enpowi').
                         el: child,
                         data: (function () {
                             var data = {
+									'global': Enpowi.App.global,
                                     'session': Enpowi.session,
 		                            'module': m,
 		                            'component': c,
