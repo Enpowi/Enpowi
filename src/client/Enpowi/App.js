@@ -138,21 +138,6 @@ Namespace('Enpowi').
 				}
 
 				return this;
-			},
-
-			global: {
-				_val: {},
-				set: function(key, val) {
-					Enpowi.App.global[key] = val;
-
-					return Enpowi.App.global;
-				},
-				getValue: function() {
-					return this._val;
-				},
-				setValue: function(val) {
-					this._val = val;
-				}
 			}
 		},
 
@@ -341,6 +326,7 @@ Namespace('Enpowi').
 	            scriptXSS = [],
 	            scriptsRemote = [],
 	            scriptsLocal = [],
+				vue,
 	            vues = [],
                 datas = [],
                 elements = [],
@@ -388,11 +374,11 @@ Namespace('Enpowi').
                 frag.appendChild(child);
 
                 if (child.nodeType === 1) {
-                    vues.push(new Vue({
+                    vue = new Vue({
                         el: child,
                         data: (function () {
                             var data = {
-									'global': Enpowi.App.global,
+									'global': Enpowi.App.global === undefined ? {} : Enpowi.App.global,
                                     'session': Enpowi.session,
 		                            'module': m,
 		                            'component': c,
@@ -457,7 +443,13 @@ Namespace('Enpowi').
 		                        return moment(value * 1000).format(format || 'LLL');
 	                        }
                         }
-                    }));
+                    });
+
+					if (Enpowi.App.global === undefined) {
+						Enpowi.App.global = vue.$data.global;
+					}
+
+					vues.push(vue);
                 }
             }
 
