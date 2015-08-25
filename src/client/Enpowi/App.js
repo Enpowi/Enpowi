@@ -140,7 +140,15 @@ Namespace('Enpowi').
 				return this;
 			},
 
-			global: {}
+			global: {
+				_val: {},
+				getValue: function() {
+					return this._val;
+				},
+				setValue: function(val) {
+					this._val = val;
+				}
+			}
 		},
 
         sessionTick: 1000 * 60,
