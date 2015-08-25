@@ -142,6 +142,11 @@ Namespace('Enpowi').
 
 			global: {
 				_val: {},
+				set: function(key, val) {
+					Enpowi.App.global[key] = val;
+
+					return Enpowi.App.global;
+				},
 				getValue: function() {
 					return this._val;
 				},
