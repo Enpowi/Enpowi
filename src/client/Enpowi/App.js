@@ -262,7 +262,7 @@ Namespace('Enpowi').
             });
 
 	        router.routed.add(function(route, args) {
-				var params = args.params;
+				var params = args.params[0];
 		        pubTo.go([params.m, params.c, route, params._request]);
 	        });
         },
