@@ -212,7 +212,7 @@ Namespace('Enpowi').
 	                        }
 
                             app.routeCallback(result);
-                            pubTo.land([route]);
+                            pubTo.land([m, c, route, url]);
                         });
                     });
                 };
@@ -261,8 +261,9 @@ Namespace('Enpowi').
                 callback('modules/?module=' + path.m + '&component=' + path.c + '&'  + path['?query_'], path.request_, path.m, path.c);
             });
 
-	        router.routed.add(function(route) {
-		        pubTo.go([route]);
+	        router.routed.add(function(route, args) {
+				var params = args.params;
+		        pubTo.go([params.m, params.c, route, params._request]);
 	        });
         },
 
