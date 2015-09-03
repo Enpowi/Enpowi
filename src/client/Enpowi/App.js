@@ -339,6 +339,7 @@ Namespace('Enpowi').
                                 (datas, vues, elements);
                             } catch (e) {
                                 console.log(e);
+								console.log(scriptsLocal[i]);
                             }
                         }
                     }
