@@ -74,7 +74,11 @@ class Mail {
 			$html = $component->template();
 		}
 
-		$r = (new Template\Renderer($html))->out($this->args);
-		return $r;
+		if (strlen($html) > 0) {
+			$r = (new Template\Renderer($html))->out($this->args);
+			return $r;
+		}
+
+		return '';
 	}
 }
