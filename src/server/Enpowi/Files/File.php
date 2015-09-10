@@ -28,7 +28,7 @@ class File extends DataItem
 
 	public static $path = null;
 
-    private $_bean = null;
+	private $_bean = null;
 
 	public function __construct($bean = null)
 	{
@@ -57,18 +57,21 @@ class File extends DataItem
 		return $this;
 	}
 
-	public function setType($value) {
+	public function setType($value)
+	{
 		$this->type = $value;
 
 		return $this;
 	}
 
-	public function setSize($value) {
+	public function setSize($value)
+	{
 		$this->size = $value;
 		return $this;
 	}
 
-	public function setTempPath($value) {
+	public function setTempPath($value)
+	{
 		$this->tempPath = $value;
 		return $this;
 	}
@@ -84,6 +87,7 @@ class File extends DataItem
 		$this->name = $value;
 		return $this;
 	}
+
 	public function setTags($value)
 	{
 		$this->tags = $value;
@@ -95,7 +99,7 @@ class File extends DataItem
 		$hash = $this->hash = hash_file('md5', $this->tempPath);
 		$newPath = self::$path . '/' . $hash;
 		if (file_exists($this->tempPath)) {
-			$uploaded = move_uploaded_file( $this->tempPath, $newPath );
+			$uploaded = move_uploaded_file($this->tempPath, $newPath);
 			$this->save();
 		} else {
 			throw new \Exception('File not found');
@@ -104,11 +108,12 @@ class File extends DataItem
 		return $uploaded;
 	}
 
-	public function save() {
+	public function save()
+	{
 		$bean = $this->_bean;
 		if ($bean === null) {
-			$bean = $this->_bean = R::dispense( 'file' );
-            $bean->userId = App::get()->user()->id;
+			$bean = $this->_bean = R::dispense('file');
+			$bean->userId = App::get()->user()->id;
 		}
 
 		$bean->classType = $this->classType;
@@ -118,12 +123,13 @@ class File extends DataItem
 		$bean->tags = $this->tags;
 		$bean->hash = $this->hash;
 
-		return $this->id = R::store( $bean );
+		return $this->id = R::store($bean);
 	}
 
-	public static function getUserFiles() {
+	public static function getUserFiles()
+	{
 		$id = App::user()->id;
-		$beans = R::findAll('file', ' user_id = :userId ', [ 'userId' => $id ]);
+		$beans = R::findAll('file', ' user_id = :userId ', ['userId' => $id]);
 		$files = [];
 		foreach ($beans as $bean) {
 			$files[] = !empty($bean->classType) ? new $bean->classType($bean) : new File($bean);
@@ -134,6 +140,14 @@ class File extends DataItem
 	public static function getFromHash($hash)
 	{
 		if (($bean = R::findOne('file', ' hash = :hash ', ['hash' => $hash]))) {
+			return !empty($bean->classType) ? new $bean->classType($bean) : new File($bean);
+		}
+		return null;
+	}
+
+	public static function getFromId($id)
+	{
+		if (($bean = R::findOne('file',' id = :id ', ['id' => $id]))) {
 			return !empty($bean->classType) ? new $bean->classType($bean) : new File($bean);
 		}
 		return null;
