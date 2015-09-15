@@ -174,8 +174,15 @@ class Gallery extends PageableDataItem
         return $this;
     }
 
+    public function sets()
+    {
+        return R::count('file', ' gallery_id = :galleryId ',[
+            'galleryId' => $this->id
+        ])  / App::$pagingSize;
+    }
+
 	public static function pages()
 	{
-		return R::count('gallery', '  ') / App::$pagingSize;
+		return R::count('gallery') / App::$pagingSize;
 	}
 }
