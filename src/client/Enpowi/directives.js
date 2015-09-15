@@ -223,7 +223,7 @@ Namespace('Enpowi').
 
                         if (value.pages <= 1) return;
 
-                        var page = value.page,
+                        var page = value.page || 1,
                             pages = value.pages,
                             size = value.size || 5,
                             url = value.url,
