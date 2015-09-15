@@ -219,6 +219,8 @@ Namespace('Enpowi').
 
                 Vue.directive('pager', {
                     update: function(value) {
+                        value.pages = value.pages || 0;
+
                         if (value.pages <= 1) return;
 
                         var page = value.page,
