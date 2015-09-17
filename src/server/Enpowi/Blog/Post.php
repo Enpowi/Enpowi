@@ -175,18 +175,23 @@ class Post {
 		return null;
 	}
 
-	public function userPosts($pageNumber = 1, $showAll = false)
+	public function userPosts(User $user, $pageNumber = 1, $showAll = false)
 	{
 		$beans = R::findAll('blog', '
 			where
-				true = :show_all
-				or date(published_on) >= now()
+				user_id = :user_id
+				and (
+					true = :show_all
+					or date(published_on) >= now()
+				)
 			order by created
 			limit :offset, :count', [
+				'user_id' => $user->bean()->getID(),
 				'offset' => App::pageOffset($pageNumber),
 				'count' => App::$pagingSize,
 				'show_all' => $showAll
 		]);
+
 
 		$posts = [];
 
