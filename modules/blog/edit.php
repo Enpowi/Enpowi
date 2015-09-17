@@ -52,7 +52,6 @@ $data = (new DataOut())
 		    id="publishedOn"
 		    v-model="post.publishedOn">
     </div>
-	<pre>{{ stringify(post) }}</pre>
     <div class="form-group">
         <input type="hidden" name="post" v-model=" stringify(post) ">
         <div class="form-control height-auto">
