@@ -175,7 +175,7 @@ class Post {
 		return null;
 	}
 
-	public function userPosts(User $user, $pageNumber = 1, $showAll = false)
+	public static function userPosts(User $user, $pageNumber = 1, $showAll = false)
 	{
 		$beans = R::findAll('blog', '
 			where
@@ -186,10 +186,10 @@ class Post {
 				)
 			order by created
 			limit :offset, :count', [
-				'user_id' => $user->bean()->getID(),
-				'offset' => App::pageOffset($pageNumber),
-				'count' => App::$pagingSize,
-				'show_all' => $showAll
+                'user_id' => $user->bean()->getID(),
+                'offset' => App::pageOffset($pageNumber),
+                'count' => App::$pagingSize,
+                'show_all' => $showAll
 		]);
 
 
@@ -200,6 +200,50 @@ class Post {
 		}
 
 		return $posts;
+	}
+
+	public static function userPages(User $user, $showAll = false)
+	{
+		$count = R::count('blog', '
+			where
+				user_id = :user_id
+				and (
+					true = :show_all
+					or date(published_on) >= now()
+				)
+			order by created', [
+			'user_id' => $user->bean()->getID(),
+			'show_all' => $showAll
+		]);
+
+		$result = [];
+		$max = $count / App::$pagingSize;
+		$i = 0;
+		for(;$i < $max; $i++) {
+			$result[] = $i;
+		}
+		return $result;
+	}
+
+	public static function userMostRecentPost(User $user, $showAll = false)
+	{
+		$bean = R::findOne('blog', '
+			where
+				user_id = :user_id
+				and (
+					true = :show_all
+					or date(published_on) >= now()
+				)
+			order by created limit 0, 1', [
+			'user_id' => $user->bean()->getID(),
+			'show_all' => $showAll
+		]);
+
+		if ($bean !== null) {
+			return new Post($bean->name, $bean);
+		}
+
+		return null;
 	}
 
 	public function bean()
