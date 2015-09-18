@@ -124,7 +124,13 @@ class Post {
 			} else {
 				$this->cache = $rendered = $this->render();
 
-				$noTagsDirty = strip_tags($rendered, self::$cacheShortAllowedTagNames);
+				$allowedTags = join('><', self::$cacheShortAllowedTagNames);
+				if (strlen($allowedTags) > 0) {
+					$allowedTags = '<' . $allowedTags . '>';
+				} else {
+					$allowedTags = null;
+				}
+				$noTagsDirty = strip_tags($rendered, join(' ', $allowedTags));
 				$noTags = preg_replace('!\s+!', ' ', $noTagsDirty);
 
 				if (strlen($noTags) > self::$cacheShortLimit) {
