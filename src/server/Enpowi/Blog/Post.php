@@ -130,7 +130,7 @@ class Post {
 				} else {
 					$allowedTags = null;
 				}
-				$noTagsDirty = strip_tags($rendered, join(' ', $allowedTags));
+				$noTagsDirty = strip_tags($rendered, $allowedTags);
 				$noTags = preg_replace('!\s+!', ' ', $noTagsDirty);
 
 				if (strlen($noTags) > self::$cacheShortLimit) {
