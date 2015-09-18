@@ -30,6 +30,8 @@ class Post {
 
     private $_bean = null;
 
+	public static $parser = null;
+
     public function __construct($name, $bean = null)
     {
         if ($bean === null) {
@@ -114,7 +116,11 @@ class Post {
 
     public function render()
     {
-        return (new Parser)->parse($this->content);
+		if (self::$parser === null) {
+			self::$parser = new Parser;
+		}
+		$parser = self::$parser;
+        return $parser->parse($this->content);
     }
 
     public static function posts($pageNumber = 1, $showAll = false)
