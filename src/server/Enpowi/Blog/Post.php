@@ -19,6 +19,8 @@ class Post {
     public $id;
     public $name;
     public $content;
+	public $cache;
+	public $cacheShort;
     public $created;
 	public $edited;
 	/**
@@ -31,6 +33,7 @@ class Post {
     private $_bean = null;
 
 	public static $parser = null;
+	public static $cacheShortLimit = 500;
 
     public function __construct($name, $bean = null)
     {
@@ -66,6 +69,8 @@ class Post {
         $this->id = $bean->getID();
         $this->name = $bean->name;
         $this->content = $bean->content;
+		$this->cache = $bean->cache;
+		$this->cacheShort = $bean->cacheShort;
 	    $this->edited = strtotime($bean->edited);
         $this->created = strtotime($bean->created);
 	    $this->contributorIds = explode(',', $bean->contributorIds);
@@ -85,7 +90,7 @@ class Post {
         }
     }
 
-    public function replace($content = '')
+    public function replace($content = '', $updateCache = true)
     {
         if (empty($this->name)) throw new Exception('Blog post needs name before it can be saved');
 
@@ -110,6 +115,18 @@ class Post {
 	    } else {
 		    $bean->publishedOn = null;
 	    }
+
+		if ($updateCache) {
+			$this->cache = $bean->cache = $rendered = $this->render();
+			$noTagsDirty = strip_tags($rendered);
+			$noTags = preg_replace('!\s+!', ' ', $noTagsDirty);
+
+			if (strlen($noTags) > self::$cacheShortLimit) {
+				$noTags = substr($noTags, 0, self::$cacheShortLimit) . '...';
+			}
+
+			$this->cacheShort = $bean->cacheShort = $noTags;
+		}
 
 	    R::store( $bean );
     }
@@ -172,6 +189,21 @@ class Post {
 				or date(published_on) >= now()
 			order by created limit 0, 1', [
 				'show_all' => $showAll
+		]);
+
+		if ($bean !== null) {
+			return new Post($bean->name, $bean);
+		}
+
+		return null;
+	}
+
+	public static function userPost(User $user, $name) {
+		$bean = R::findOne('blog', '
+			user_id = :user_id
+			and name = :name', [
+			'user_id' => $user->bean()->getID(),
+			'name' => $name
 		]);
 
 		if ($bean !== null) {
