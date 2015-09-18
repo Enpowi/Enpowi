@@ -64,6 +64,11 @@ abstract class Base
 		self::push($callback);
 	}
 
+	public static function length()
+	{
+		return count(self::get());
+	}
+
 	public static function reset()
 	{
 		while (self::pop() !== null) {}

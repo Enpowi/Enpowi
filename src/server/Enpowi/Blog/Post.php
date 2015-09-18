@@ -14,6 +14,7 @@ use RedBeanPHP\R;
 use RedBeanPHP\RedException;
 use WikiLingo\Parser;
 use Enpowi\Users\User;
+use Enpowi\Event;
 
 class Post {
     public $id;
@@ -34,6 +35,7 @@ class Post {
 
 	public static $parser = null;
 	public static $cacheShortLimit = 500;
+	public static $cacheShortAllowedTagNames = [];
 
     public function __construct($name, $bean = null)
     {
@@ -117,18 +119,30 @@ class Post {
 	    }
 
 		if ($updateCache) {
-			$this->cache = $bean->cache = $rendered = $this->render();
-			$noTagsDirty = strip_tags($rendered);
-			$noTags = preg_replace('!\s+!', ' ', $noTagsDirty);
+			if (Event\Blog\Cache::length() > 0) {
+				Event\Blog\Cache::pub($this);
+			} else {
+				$this->cache = $rendered = $this->render();
 
-			if (strlen($noTags) > self::$cacheShortLimit) {
-				$noTags = substr($noTags, 0, self::$cacheShortLimit) . '...';
+				$noTagsDirty = strip_tags($rendered, self::$cacheShortAllowedTagNames);
+				$noTags = preg_replace('!\s+!', ' ', $noTagsDirty);
+
+				if (strlen($noTags) > self::$cacheShortLimit) {
+					$noTags = substr($noTags, 0, self::$cacheShortLimit) . '...';
+				}
+
+				$this->cacheShort = $noTags;
 			}
 
-			$this->cacheShort = $bean->cacheShort = $noTags;
+			$bean->cache = $this->cache;
+			$bean->cacheShort = $this->cacheShort;
 		}
 
-	    R::store( $bean );
+	    $id = R::store( $bean );
+
+		Event\Blog\Replace::pub($this);
+
+		return $id;
     }
 
     public function render()
