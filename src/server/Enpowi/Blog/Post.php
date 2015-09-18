@@ -178,21 +178,13 @@ class Post {
 
 	public static function pages($showAll = false)
 	{
-		$count = R::count('blog', '
+		return R::count('blog', '
 			where
 				true = :show_all
 				or date(published_on) >= now()
 			order by created', [
 				'show_all' => $showAll
-		]);
-
-		$result = [];
-		$max = $count / App::$pagingSize;
-		$i = 0;
-		for(;$i < $max; $i++) {
-			$result[] = $i;
-		}
-		return $result;
+		]) / App::$pagingSize;
 	}
 
 	public static function mostRecentPost($showAll = false)
@@ -256,7 +248,7 @@ class Post {
 
 	public static function userPages(User $user, $showAll = false)
 	{
-		$count = R::count('blog', '
+		return R::count('blog', '
 			where
 				user_id = :user_id
 				and (
@@ -266,15 +258,7 @@ class Post {
 			order by created', [
 			'user_id' => $user->bean()->getID(),
 			'show_all' => $showAll
-		]);
-
-		$result = [];
-		$max = $count / App::$pagingSize;
-		$i = 0;
-		for(;$i < $max; $i++) {
-			$result[] = $i;
-		}
-		return $result;
+		]) / App::$pagingSize;
 	}
 
 	public static function userMostRecentPost(User $user, $showAll = false)
