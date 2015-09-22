@@ -160,6 +160,11 @@ class Post {
         return $parser->parse($this->content);
     }
 
+	/**
+	 * @param int $pageNumber
+	 * @param bool|false $showAll
+	 * @return Post[]
+	 */
     public static function posts($pageNumber = 1, $showAll = false)
     {
         $beans = R::findAll('blog', '
@@ -182,6 +187,10 @@ class Post {
         return $posts;
     }
 
+	/**
+	 * @param bool|false $showAll
+	 * @return float
+	 */
 	public static function pages($showAll = false)
 	{
 		return R::count('blog', '
@@ -193,6 +202,10 @@ class Post {
 		]) / App::$pagingSize;
 	}
 
+	/**
+	 * @param bool|false $showAll
+	 * @return Post|null
+	 */
 	public static function mostRecentPost($showAll = false)
 	{
 		$bean = R::findOne('blog', '
@@ -210,6 +223,11 @@ class Post {
 		return null;
 	}
 
+	/**
+	 * @param User $user
+	 * @param $name
+	 * @return Post|null
+	 */
 	public static function userPost(User $user, $name) {
 		$bean = R::findOne('blog', '
 			user_id = :user_id
@@ -225,6 +243,12 @@ class Post {
 		return null;
 	}
 
+	/**
+	 * @param User $user
+	 * @param int $pageNumber
+	 * @param bool|false $showAll
+	 * @return Post[]
+	 */
 	public static function userPosts(User $user, $pageNumber = 1, $showAll = false)
 	{
 		$beans = R::findAll('blog', '
@@ -252,6 +276,11 @@ class Post {
 		return $posts;
 	}
 
+	/**
+	 * @param User $user
+	 * @param bool|false $showAll
+	 * @return float
+	 */
 	public static function userPages(User $user, $showAll = false)
 	{
 		return R::count('blog', '
@@ -267,6 +296,11 @@ class Post {
 		]) / App::$pagingSize;
 	}
 
+	/**
+	 * @param User $user
+	 * @param bool|false $showAll
+	 * @return Post|null
+	 */
 	public static function userMostRecentPost(User $user, $showAll = false)
 	{
 		$bean = R::findOne('blog', '
@@ -288,6 +322,9 @@ class Post {
 		return null;
 	}
 
+	/**
+	 * @return \RedBeanPHP\OODBBean
+	 */
 	public function bean()
 	{
 		if ($this->_bean === null) {
@@ -300,6 +337,9 @@ class Post {
 		return $this->_bean;
 	}
 
+	/**
+	 * @return User
+	 */
 	public function user()
 	{
 		return $this->_user;
