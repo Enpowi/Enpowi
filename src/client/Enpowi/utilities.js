@@ -78,6 +78,35 @@ Namespace('Enpowi').
 
 					return null;
 				}
+			},
+
+			/**
+			 *
+			 * @param html
+			 * @returns {*}
+			 */
+			parseHtml: function (html) {
+				var ids = {},
+					elements,
+					element,
+					parser = document.createElement('span'),
+					i = 0,
+					max;
+				parser.innerHTML = html;
+
+				elements = parser.querySelectorAll('[id]');
+				max = elements.length;
+
+				for(;i < max; i++) {
+					element = elements[i];
+					ids[element.getAttribute('id').replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })] = element;
+				}
+
+				if (max > 0) {
+					return ids;
+				}
+
+				return parser.children;
 			}
         }
     });
