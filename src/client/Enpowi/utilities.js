@@ -100,6 +100,7 @@ Namespace('Enpowi').
 				for(;i < max; i++) {
 					element = elements[i];
 					ids[element.getAttribute('id').replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })] = element;
+					element.removeAttribute('id');
 				}
 
 				if (max > 0) {
