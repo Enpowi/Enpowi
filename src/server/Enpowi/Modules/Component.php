@@ -45,6 +45,14 @@ class Component {
 		return $this->active;
 	}
 
+	public function runInit() {
+		$file = $this->module->folder . '/init.php';
+		if (file_exists($file)) {
+			require $file;
+		}
+		return $this;
+	}
+
 	public function template()
 	{
 		$module = $this->module;

@@ -12,6 +12,7 @@ $component = App::loadComponent($path, $moduleName, $componentName);
 if ($component !== null && !empty($component->file)) {
 	if ($component->isActive()) {
 		Module::run();
+		$component->runInit();
 		require_once $component->file;
 
 		$paramResponse = Module::getParamResponse();
