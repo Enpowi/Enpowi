@@ -206,7 +206,7 @@ Namespace('Enpowi').
 
 	                        if (title) {
 		                        app.changeTitle(title.textContent);
-		                        result.removeChild(title);
+		                        title.parentNode.removeChild(title);
 	                        } else {
 		                        app.changeTitle(Enpowi.session.siteName);
 	                        }
