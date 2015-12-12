@@ -291,7 +291,11 @@ Namespace('Enpowi').
                                     },
                                     item: '<li><a href="#"></a></li>',
                                     onSelect: function(selection) {
-                                        app.go('users/list?email=' + selection.value);
+                                    	if (value.url) {
+                                        	app.go(value.url + selection.value);
+                                    	} else {
+                                    		el.value = selection.value;
+                                    	}
                                     }
                                 });
 
