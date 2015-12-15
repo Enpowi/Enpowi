@@ -436,7 +436,16 @@ Namespace('Enpowi').
 		                        return array.indexOf(value) > -1;
 	                        },
 	                        dateFormatted: function(value) {
+	                        	if (isNaN(value)) {
+	                        		return '';
+	                        	}
 		                        return moment(value * 1000).format('LL');
+	                        },
+	                        dateFormattedShort: function(value) {
+	                        	if (isNaN(value)) {
+	                        		return '';
+	                        	}
+		                        return moment(value * 1000).format('L');
 	                        },
                             fileSize: function (value) {
                                 return Enpowi.utilities.humanFileSize(value);
