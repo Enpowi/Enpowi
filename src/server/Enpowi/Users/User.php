@@ -276,6 +276,7 @@ class User extends Generic\PageableDataItem {
 					if (
 						$perm->component === $component
 						|| ($perm->component . 'Service') === $component
+						|| ($perm->component . '_service') === $component
 					    || $perm->component === '*'
 					) {
 						return true;
