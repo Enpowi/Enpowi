@@ -295,6 +295,7 @@ Namespace('Enpowi').
                                         	app.go(value.url + selection.value);
                                     	} else {
                                     		el.value = selection.value;
+                                    		Enpowi.utilities.trigger(el, 'change');
                                     	}
                                     }
                                 });
