@@ -296,6 +296,7 @@ Namespace('Enpowi').
                                     	} else {
                                     		el.value = selection.value;
                                     		Enpowi.utilities.trigger(el, 'change');
+                                    		Enpowi.utilities.trigger(el, 'input');
                                     	}
                                     }
                                 });
