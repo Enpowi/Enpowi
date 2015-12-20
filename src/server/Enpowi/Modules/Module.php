@@ -48,7 +48,10 @@ class Module {
 
 			$components = [];
 			foreach($componentsRaw as $componentRaw) {
-				if (!preg_match('/Service[.]php$|[.]js$|[.]html$/', $componentRaw)) {
+				if (
+					!preg_match('/Service[.]php$|[.]js$|[.]html$/', $componentRaw)
+					&& !preg_match('/_service[.]php$|[.]js$|[.]html$/', $componentRaw)
+				) {
 					$components[] = preg_replace('/[.](php|html)$/i', '', $componentRaw);
 				}
 			}
