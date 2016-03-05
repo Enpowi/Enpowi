@@ -62,7 +62,7 @@ $data = (new DataOut())
 					<input v-show="action !== 'impersonate'" type="checkbox" name="emails[]" value="{{ user.email }}">
 					<input v-show="action === 'impersonate'" type="radio" name="impersonateUser" value="{{ user.email }}">
 				</td>
-				<td>{{ user.email }}</td>
+				<td><a href="#/users/view?id={{ user.id }}">{{ user.email }}</td>
 				<td>{{ user.created }}</td>
 				<td>
 					<a href="#/group/ofUser?email={{ user.email }}" v-t>Groups</a>

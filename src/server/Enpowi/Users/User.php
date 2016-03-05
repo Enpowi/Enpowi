@@ -338,6 +338,17 @@ class User extends Generic\PageableDataItem {
         return false;
     }
 
+	public function updateEmail($email)
+	{
+		if (self::isEmailValid($email)) {
+			$bean = $this->bean();
+			$bean->email = $email;
+			R::store($bean);
+			return true;
+		}
+		return false;
+	}
+
     public function resetPassword()
     {
         $password = Authentication::generatePassword();
