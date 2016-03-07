@@ -112,5 +112,8 @@
         "psr-0": {
             "Enpowi\\": "./src/server/"
         }
+    },
+    "require-dev": {
+        "bafs/testify": "dev-master"
     }
 }
