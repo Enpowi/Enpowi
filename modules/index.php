@@ -31,6 +31,6 @@ if ($component !== null && !empty($component->file)) {
 	} else {
 		require_once $component->file;
 	}
-} else {
+} else if (!defined('testing')) {
 	echo -1;
 }
