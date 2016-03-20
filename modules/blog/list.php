@@ -48,7 +48,7 @@ $data = (new DataOut())
 		</tr>
 		</thead>
 		<tbody>
-		<tr v-repeat="post : posts" v-on="click : go('blog?name=' + post.name)">
+		<tr v-for="post in posts" v-on:click=" go('blog?name=' + post.name)">
 			<td>{{ post.name }}</td>
 			<td>{{ dateFormatted(post.created) }}</td>
 			<td>{{ dateFormatted(post.publishedOn) }}</td>

@@ -58,16 +58,14 @@ if (App::paramIs('name')) {
 	<div v-show="list">
 		<h3><span v-t>Blog</span>
 			<a v-title="New Post" href="#/blog/edit"><span class="glyphicon glyphicon-plus-sign"></span></a></h3>
-		<div v-repeat=" post : posts ">
+		<div v-for=" post in posts ">
 			<h5>{{ post.name }} <span v-t>on</span> {{ dateFormatted(post.publishedOn) }}</h5>
 			<p>
 				{{ post.cacheShort }}
 
 				<a
 					href=""
-					v-attr="
-					href: '#/blog/index?name=' + post.name
-				"
+					v-bind:href=" '#/blog/index?name=' + post.name "
 					v-t>Read More</a>
 			</p>
 			<hr>

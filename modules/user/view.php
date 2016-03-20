@@ -42,7 +42,7 @@ $data = (new DataOut())
 		<tr>
 			<th v-t>Groups: </th>
 			<td>
-				<span v-repeat="group : session.user.groupList">{{group.name}}</span>
+				<span v-for="group in session.user.groupList">{{group.name}}</span>
 			</td>
 		</tr>
         <tr>

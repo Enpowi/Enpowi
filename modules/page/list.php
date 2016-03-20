@@ -28,7 +28,7 @@ $data = (new DataOut())
 		</tr>
 		</thead>
 		<tbody>
-		<tr v-repeat="page : pages" v-on="click : go('page?name=' + page.name)">
+		<tr v-for="page in pages" v-on:click="go('page?name=' + page.name)">
 			<td>{{ page.name }}</td>
 			<td>{{ page.created }}</td>
 			<td>{{ page.user.email }}</td>

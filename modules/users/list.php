@@ -33,7 +33,7 @@ $data = (new DataOut())
 	v-module
     data="<?php echo $data?>"
 	action="users/listService"
-	v-attr="data-done: page ? 'users/list?page=' + page : 'users/list'"
+	v-bind:data-done="page ? 'users/list?page=' + page : 'users/list'"
 	class="container">
 	<h3><span v-t>Users</span>
 		<a v-title="New User" href="#/users/new"><span class="glyphicon glyphicon-plus-sign"></span></a></h3>
@@ -57,7 +57,7 @@ $data = (new DataOut())
 					</span>
 				</td>
 			</tr>
-			<tr v-repeat="user : users">
+			<tr v-for="user in users">
 				<td>
 					<input v-show="action !== 'impersonate'" type="checkbox" name="emails[]" value="{{ user.email }}">
 					<input v-show="action === 'impersonate'" type="radio" name="impersonateUser" value="{{ user.email }}">

@@ -43,10 +43,10 @@
 					<input type="password" v-placeholder="Password" name="password" class="form-control">
 				</div>
 				<button type="submit" class="btn btn-success" v-t>Sign in</button>
-				<a class="btn btn-success" v-t v-on="click: go('user/register')">Register</a>
+				<a class="btn btn-success" v-t v-on:click="go('user/register')">Register</a>
 			</form>
 			<form class="navbar-form navbar-right" action="user/logout" v-module data-done="default" v-show="session.user.email !== ''">
-				<a class="btn btn-success" v-on="click: go('user/view')">{{session.user.email}}</a>
+				<a class="btn btn-success" v-on:click="go('user/view')">{{session.user.email}}</a>
 				<button type="submit" class="btn btn-success" v-t>Sign out</button>
 			</form>
 		</div><!-- /.navbar-collapse -->

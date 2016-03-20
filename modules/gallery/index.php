@@ -55,7 +55,7 @@ $data = (new DataOut())
 			class="galleries"
 			style="opacity: 0.01">
 			<img
-				v-repeat="gallery : galleries"
+				v-for="gallery in galleries"
 				title="{{ gallery.name }}"
 				v-show="galleriesImages[ $index ]"
 				src="modules/?m=gallery&c=image&image={{ galleriesImages[ $index ] }}&thumb"
@@ -80,7 +80,7 @@ $data = (new DataOut())
 			class="gallery"
 			style="opacity: 0.01;">
 			<img
-				v-repeat="image : images"
+				v-for="image in images"
 				title="{{ image.name }}"
 				src="modules/?m=gallery&c=image&image={{ image.hash }}&thumb"
 				data-fullsrc="modules/?m=gallery&c=image&image={{ image.hash }}"

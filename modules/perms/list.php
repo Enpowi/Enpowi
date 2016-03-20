@@ -36,14 +36,14 @@ $data = (new DataOut())
 					{{ registeredGroup.name }}
 					<input type="hidden" name="groupNames[]" value="{{ registeredGroup.name }}">
 				</th>
-				<th v-repeat=" group : editableGroups " class="center">
+				<th v-for=" group in editableGroups " class="center">
 					{{ group.name }}
 					<input type="hidden" name="groupNames[]" value="{{ group.name }}">
 				</th>
 			</tr>
 		</thead>
-		<tbody v-repeat="components : moduleMap">
-			<tr v-repeat="component : components">
+		<tbody v-for="components in moduleMap">
+			<tr v-for="component in components">
 				<td>{{ $key }}</td>
 				<td>{{ component }}</td>
 
@@ -69,7 +69,7 @@ $data = (new DataOut())
 				</td>
 
 				<!-- Registered -->
-				<td v-repeat="group : editableGroups" class="center">
+				<td v-for="group in editableGroups" class="center">
                     <input
                         v-module-item
                         type="checkbox"

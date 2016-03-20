@@ -29,7 +29,7 @@ $data = (new DataOut())
 		type="hidden"
 		value="{{ stringify( user ) }}">
 
-	<div v-repeat=" group : groups ">
+	<div v-for=" group in groups ">
 
 		<input
 			v-module-item

@@ -35,7 +35,7 @@ $out = (new DataOut())
 		</tr>
 		</thead>
 		<tbody>
-		<tr v-repeat="page : history">
+		<tr v-for="page in history">
 			<td>{{ page.created }}</td>
 			<td>{{ page.createdBy }}</td>
 			<td class="center"><input type="radio" name="left" value="{{ page.id }}" v-model="left"></td>

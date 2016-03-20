@@ -20,7 +20,7 @@ $data = (new DataOut())
 		<tr>
 			<th v-t>Group Name</th>
 		</tr>
-		<tr v-repeat="group : groups">
+		<tr v-for="group in groups">
 			<td class="checkbox" colspan="2">
 				<label>
 					<input
