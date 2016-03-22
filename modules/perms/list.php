@@ -5,16 +5,15 @@ use Enpowi\Modules\Module;
 
 Module::is();
 
-$data = (new DataOut())
+(new DataOut)
 	->add('moduleMap', Module::map())
 	->add('anonymousGroup', (new Group('Anonymous'))->updatePerms())
 	->add('registeredGroup', (new Group('Registered'))->updatePerms())
 	->add('editableGroups', Group::editableGroups(true, true))
-	->out();
+	->bind();
 
 ?><form
 	v-module
-    data="<?php echo $data?>"
 	action="perms/listService"
 	listen
 	class="container">

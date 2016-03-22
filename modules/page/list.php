@@ -5,15 +5,13 @@ use Enpowi\Modules\Module;
 
 Module::is();
 
-$data = (new DataOut())
+(new DataOut)
 	->add('pages', Page::pages())
-	->out();
-
+	->bind();
 ?>
 <title>{{session.siteName}} - Pages</title>
 <div
 	v-module
-    data="<?php echo $data?>"
 	class="container">
 	<!--TODO page name-->
 	<h3><span v-t>Pages</span>

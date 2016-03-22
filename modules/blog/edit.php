@@ -8,16 +8,15 @@ Module::is();
 
 $name = App::param('name');
 
-$data = (new DataOut())
+(new DataOut)
 	->add('post', new Post($name))
-	->out();
+	->bind();
 ?>
 <form
 	class="container"
 	v-module
-    data="<?php echo $data?>"
 	action="blog/editService"
-    data-done="blog?name={{ post.name }}">
+	data-done="blog?name={{ post.name }}">
 	<h3>
         <span v-t>Editing:</span>
         <span v-show=" !editing ">{{ post.name }}</span><br>
@@ -67,9 +66,8 @@ $data = (new DataOut())
 <link href="vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 <script src="vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <script>
-	var data = datas[0],
-		post = data.post,
-        publishedOn = app.getElementById('publishedOn'),
+	var post = data.post,
+		publishedOn = app.getElementById('publishedOn'),
 		publishedOnUI = app.getElementById('publishedOnUI'),
 		$publishedOnUI = $(publishedOnUI)
 			.datepicker()

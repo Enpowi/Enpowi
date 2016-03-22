@@ -6,13 +6,12 @@ use Enpowi\App;
 Module::is();
 
 $g = App::paramInt('g');
-$data = (new DataOut)
+(new DataOut)
 	->add('gallery', new Gallery($g))
 	->add('g', $g)
-	->out();
+	->bind();
 ?>
 <form
-	data="<?php echo $data?>"
 	class="form container"
 	action="gallery"
 	v-module>
@@ -24,7 +23,6 @@ $data = (new DataOut)
 <link href="vendor/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
 <script src="vendor/bootstrap-fileinput/js/fileinput.min.js"></script>
 <script>
-	var data = datas[0];
 	$(app.getElementById('image')).fileinput({
 		uploadAsync: false,
 		uploadUrl: "modules/?module=gallery&component=uploadService&g=" + data.g,

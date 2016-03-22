@@ -10,30 +10,28 @@ $user = App::user();
 if (App::paramIs('name')) {
 	$name = App::param( 'name' );
 	$post = new Post($name);
-	$data = (new DataOut)
+	(new DataOut)
 		->add( 'list', false )
 		->add( 'name', $name )
 		->add( 'post', $post)
 		->add( 'rendered', $post->render() )
 		->add( 'username', $post->user()->email)
-		->out();
+		->bind();
 } else {
 	$page = App::paramInt('page');
 	$showAll = $user->hasPerm('*', '*');
-	$data = (new DataOut)
+	(new DataOut)
 		->add( 'list', true )
 		->add( 'post', [] )
 		->add( 'posts', Post::posts($page, $showAll))
 		->add( 'page', $page)
 		->add( 'pages', Post::pages($showAll))
-		->out();
+		->bind();
 }
 ?>
 <div
     v-module
-    data="<?php echo $data?>"
     class="container">
-
 	<!-- individual post -->
 	<div v-show="!list">
 	    <h3>{{ name }}

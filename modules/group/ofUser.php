@@ -7,15 +7,14 @@ use Enpowi\Modules\Module;
 
 Module::is();
 
-$data = (new DataOut())
+(new DataOut)
 	->add('user', $user = new User(App::param('email')))
 	->add('groups', Group::editableGroups())
-	->out();
+	->bind();
 
 ?><form
 	listen
 	v-module
-    data="<?php echo $data?>"
 	action="group/ofUserService"
 	class="container">
 

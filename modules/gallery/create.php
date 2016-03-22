@@ -3,14 +3,13 @@ use Enpowi\Modules\Module;
 use Enpowi\Modules\DataOut;
 Module::is();
 
-$data = (new DataOut)
+(new DataOut)
 	->add('g', 0)
 	->add('name', '')
-	->out();
+	->bind();
 ?>
 <form
 	v-module
-	data="<?php echo $data?>"
 	class="container"
 	action="gallery/createService"
 	data-done="gallery?g={{ g }}">

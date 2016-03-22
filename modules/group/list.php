@@ -5,13 +5,12 @@ use Enpowi\Modules\Module;
 
 Module::is();
 
-$data = (new DataOut())
+(new DataOut)
 	->add('groups', Group::groups())
-	->out();
+	->bind();
 
 ?><form
 	v-module
-    data="<?php echo $data; ?>"
 	action="group/listService"
 	data-done="group/list"
 	class="container">

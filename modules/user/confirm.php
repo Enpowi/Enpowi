@@ -30,16 +30,14 @@ if ($isValid === false) {
 	}
 }
 
-$data = (new DataOut())
+(new DataOut)
 	->add('isValid', $isValid)
-    ->add('justValidated', $justValidated)
+	->add('justValidated', $justValidated)
 	->add('mailed', $mailed)
-	->out();
+	->bind();
 
 ?>
-<div
-    data="<?php echo $data?>"
-    class="container">
+<div class="container">
 	<div v-show="!isValid && mailed">
 		<h5 v-t>Confirmation On it's way!</h5>
 		<span v-t>We cannot wait to have you on board!</span>

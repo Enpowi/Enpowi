@@ -8,18 +8,17 @@ Module::is();
 
 $name = App::param('name');
 
-$out = (new DataOut())
+(new DataOut)
 	->add('name', $name)
-    ->add('left', 0)
-    ->add('right', 0)
+  ->add('left', 0)
+  ->add('right', 0)
 	->add('history', (new Page($name))->history())
-	->out();
+	->bind();
 
 ?><form
 	v-module
-    data="<?php echo $out?>"
 	class="container"
-    action="page/compare?name={{ name }}&left={{ left }}&right={{ right }}">
+  action="page/compare?name={{ name }}&left={{ left }}&right={{ right }}">
 
     <input type="hidden" value="{{ name }}" name="name">
 

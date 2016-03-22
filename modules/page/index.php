@@ -8,13 +8,12 @@ Module::is();
 
 $name = App::param('name');
 
-$data = (new DataOut())
+(new DataOut)
 	->add('name', $name)
 	->add('rendered', (new Page($name))->render())
-	->out();
+	->bind();
 ?><div
 	v-module
-    data="<?php echo $data?>"
 	class="container">
 
 	<h3>{{ name }}

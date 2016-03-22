@@ -8,16 +8,15 @@ Module::is();
 
 $name = App::param('name');
 
-$data = (new DataOut())
-    ->add('editing', empty($name))
+(new DataOut)
+  ->add('editing', empty($name))
 	->add('page', new Page($name))
-	->out();
+	->bind();
 ?>
 
 <form
 	class="container"
 	v-module
-    data="<?php echo $data?>"
 	action="page/editService"
     data-done="page?name={{ page.name }}">
 

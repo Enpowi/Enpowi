@@ -19,7 +19,7 @@ if (App::paramIs('email')) {
 	$pages = User::pages();
 }
 
-$data = (new DataOut())
+(new DataOut)
 	->add('email', App::param('email'))
 	->add('pages', $pages)
 	->add('page', $page)
@@ -27,11 +27,10 @@ $data = (new DataOut())
 	->add('availableGroups', Group::groups())
 	->add('impersonateUser', $auth->isImpersonate() ? $auth->getUser() : [])
 	->add('action', '')
-	->out();
+	->bind();
 
 ?><form
 	v-module
-    data="<?php echo $data?>"
 	action="users/listService"
 	v-bind:data-done="page ? 'users/list?page=' + page : 'users/list'"
 	class="container">

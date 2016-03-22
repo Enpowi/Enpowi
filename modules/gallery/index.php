@@ -28,17 +28,16 @@ if ($galleryId > 0) {
 	}
 }
 
-$data = (new DataOut())
+(new DataOut)
 	->add('galleries', $galleries)
 	->add('galleriesImages', $galleriesImages)
 	->add('gallery', $gallery)
 	->add('images', $images)
 	->add('g', $galleryId)
-	->out();
+	->bind();
 ?>
 <title>{{session.siteName}} - Gallery</title>
 <div
-	data="<?php echo $data;?>"
 	v-module
 	class="container">
 	<!--galleries list-->
@@ -91,7 +90,7 @@ $data = (new DataOut())
 <link href="vendor/galereya/dist/css/jquery.galereya.css" rel="stylesheet"/>
 <script src="vendor/galereya/dist/js/jquery.galereya.js"></script>
 <script>
-	if (datas[0].galleries === null) {
+	if (data.galleries === null) {
 		app.oneTo()._continue(function () {
 			$('div.gallery')
 				.galereya({

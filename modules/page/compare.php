@@ -8,14 +8,13 @@ Module::is();
 
 $name = App::param('name');
 
-$data = (new DataOut())
+(new DataOut)
 	->add('name', $name)
 	->add('leftPage', Page::byId(App::param('left')))
 	->add('rightPage', Page::byId(App::param('right')))
-	->out();
+	->bind();
 ?><div
 	v-module
-    data="<?php echo $data?>"
 	class="container">
 
 	<h3><span v-t>Comparing: </span>{{ name }}</h3>

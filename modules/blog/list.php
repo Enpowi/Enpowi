@@ -7,17 +7,16 @@ use Enpowi\Modules\Module;
 Module::is();
 $page = App::paramInt('page');
 $showAll = App::user()->hasPerm('blog', 'edit');
-$data = (new DataOut())
+(new DataOut)
 	->add('posts', Post::posts($page, $showAll))
 	->add('pages', Post::pages($showAll))
 	->add('page', $page)
-	->out();
+	->bind();
 
 ?>
 <title>{{session.siteName }} - Blog</title>
 <div
 	v-module
-    data="<?php echo $data?>"
 	class="container">
 	<!--TODO page name-->
 	<h3><span v-t>Blog Posts</span>

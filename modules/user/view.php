@@ -8,20 +8,19 @@ if (!isset($user)) {
   $user = App::user();
 }
 
-$data = (new DataOut())
+(new DataOut())
     ->add('user', $user)
     ->add('email', '')
     ->add('emailUpdated', '')
     ->add('password', '')
     ->add('passwordRepeat', '')
     ->add('passwordUpdated', '')
-    ->out();
+    ->bind();
 
 ?><form
-    data="<?php echo $data ?>"
-	class="container"
+	  class="container"
     listen
-	v-module
+	  v-module
     action="user/viewService"
     data-done="user/view?id={{ user.id }}">
 	<h2 v-t>View User</h2>
