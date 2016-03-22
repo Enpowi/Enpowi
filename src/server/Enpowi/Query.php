@@ -9,6 +9,7 @@
 namespace Enpowi;
 
 
-class Query {
+class Query
+{
 
 }

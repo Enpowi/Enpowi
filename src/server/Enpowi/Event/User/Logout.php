@@ -10,5 +10,6 @@ namespace Enpowi\Event\User;
 
 use Enpowi\Event;
 
-class Logout extends Event\Base {
+class Logout extends Event\Base
+{
 }

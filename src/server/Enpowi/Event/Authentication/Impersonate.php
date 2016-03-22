@@ -10,6 +10,7 @@ namespace Enpowi\Event\Authentication;
 
 use Enpowi\Event;
 
-class Impersonate extends Event\Base {
+class Impersonate extends Event\Base
+{
 
 }

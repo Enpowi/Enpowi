@@ -10,6 +10,7 @@ namespace Enpowi\Event\Blog;
 
 use Enpowi\Event;
 
-class Replace extends Event\Base {
+class Replace extends Event\Base
+{
 
 }

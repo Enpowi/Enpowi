@@ -16,126 +16,126 @@ use WikiLingo\Parser;
 
 class Page
 {
-    public $id;
-	public $name;
-	public $content;
-	public $created;
-	public $user;
-	public $contributors = [];
+  public $id;
+  public $name;
+  public $content;
+  public $created;
+  public $user;
+  public $contributors = [];
 
-	private $_bean;
+  private $_bean;
 
-	public function __construct($name, $bean = null)
-	{
-		if ($bean === null) {
-			$bean = $this->_bean = $bean = R::findOne('page', ' name = ? and is_revision = 0 ', [$name]);
-		} else {
-			$this->_bean = $bean;
-		}
-
-		if ($bean === null) {
-			$this->name = $name;
-		} else {
-			$this->convertFromBean();
-		}
-	}
-
-    public static function byId($id)
-    {
-        $bean = R::findOne('page', ' id = ? ', [$id]);
-        if ($bean !== null) {
-            return new Page($bean->name, $bean);
-        }
-
-        return null;
+  public function __construct($name, $bean = null)
+  {
+    if ($bean === null) {
+      $bean = $this->_bean = $bean = R::findOne('page', ' name = ? and is_revision = 0 ', [$name]);
+    } else {
+      $this->_bean = $bean;
     }
 
-	private function convertFromBean()
-	{
-		$bean = $this->_bean;
+    if ($bean === null) {
+      $this->name = $name;
+    } else {
+      $this->convertFromBean();
+    }
+  }
 
-		if (!$this->exists()) return;
+  public static function byId($id)
+  {
+    $bean = R::findOne('page', ' id = ? ', [$id]);
+    if ($bean !== null) {
+      return new Page($bean->name, $bean);
+    }
 
-        $this->id = $bean->getID();
-		$this->name = $bean->name;
-		$this->content = $bean->content;
-		$this->created = $bean->created;
-		$this->user = new User(null, R::load('user', $bean->userId));
-		$this->contributors = [];
+    return null;
+  }
 
-        foreach ($bean->sharedUser as $contributor) {
-            $this->contributors[] = new User(null, $contributor);
-        }
-	}
+  private function convertFromBean()
+  {
+    $bean = $this->_bean;
 
-	public function exists()
-	{
-		if ($this->_bean === null) {
-			return false;
-		} else {
-			return true;
-		}
-	}
+    if (!$this->exists()) return;
 
-	public function replace($content = '')
-	{
-        if (empty($this->name)) throw new Exception('Page needs name before it can be saved');
+    $this->id = $bean->getID();
+    $this->name = $bean->name;
+    $this->content = $bean->content;
+    $this->created = $bean->created;
+    $this->user = new User(null, R::load('user', $bean->userId));
+    $this->contributors = [];
 
-		$userBean = Enpowi\App::user()->bean();
+    foreach ($bean->sharedUser as $contributor) {
+      $this->contributors[] = new User(null, $contributor);
+    }
+  }
 
-		R::exec( 'UPDATE page SET is_revision = 1 WHERE name = ? and is_revision = 0', [$this->name] );
+  public function exists()
+  {
+    if ($this->_bean === null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
-        $oldBean = $this->_bean;
-        $originalUserBean = $userBean;
+  public function replace($content = '')
+  {
+    if (empty($this->name)) throw new Exception('Page needs name before it can be saved');
 
-        //TODO: ensure createdBy is set once and contributors is an incremental list
-        $bean = R::dispense('page');
-        $bean->name = $this->name;
-        $bean->content = $content;
-        $bean->created = R::isoDateTime();
-        $bean->user = $originalUserBean;
-        $bean->isRevision = false;
+    $userBean = Enpowi\App::user()->bean();
 
-        if ($oldBean !== null) {
-            $bean->sharedUser = $oldBean->sharedUser;
-        }
-        $bean->sharedUser[] = $userBean;
+    R::exec('UPDATE page SET is_revision = 1 WHERE name = ? and is_revision = 0', [$this->name]);
 
-		R::store($bean);
+    $oldBean = $this->_bean;
+    $originalUserBean = $userBean;
 
-        return new Page($this->name, $bean);
-	}
+    //TODO: ensure createdBy is set once and contributors is an incremental list
+    $bean = R::dispense('page');
+    $bean->name = $this->name;
+    $bean->content = $content;
+    $bean->created = R::isoDateTime();
+    $bean->user = $originalUserBean;
+    $bean->isRevision = false;
 
-	public function render()
-	{
-		return (new Parser)->parse($this->content);
-	}
+    if ($oldBean !== null) {
+      $bean->sharedUser = $oldBean->sharedUser;
+    }
+    $bean->sharedUser[] = $userBean;
 
-	public static function pages()
-	{
-		//TODO: paging
+    R::store($bean);
 
-		$beans = R::findAll('page', ' is_revision = 0 order by name ');
-		$pages = [];
+    return new Page($this->name, $bean);
+  }
 
-		foreach($beans as $bean) {
-			$pages[] = new Page($bean->name, $bean);
-		}
+  public function render()
+  {
+    return (new Parser)->parse($this->content);
+  }
 
-		return $pages;
-	}
+  public static function pages()
+  {
+    //TODO: paging
 
-	public function history()
-	{
-		//TODO: paging
+    $beans = R::findAll('page', ' is_revision = 0 order by name ');
+    $pages = [];
 
-		$beans = R::findAll('page', ' order by created ');
-		$pages = [];
+    foreach ($beans as $bean) {
+      $pages[] = new Page($bean->name, $bean);
+    }
 
-		foreach($beans as $bean) {
-			$pages[] = new Page($bean->name, $bean);
-		}
+    return $pages;
+  }
 
-		return $pages;
-	}
+  public function history()
+  {
+    //TODO: paging
+
+    $beans = R::findAll('page', ' order by created ');
+    $pages = [];
+
+    foreach ($beans as $bean) {
+      $pages[] = new Page($bean->name, $bean);
+    }
+
+    return $pages;
+  }
 }

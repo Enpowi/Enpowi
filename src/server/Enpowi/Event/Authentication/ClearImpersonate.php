@@ -10,6 +10,7 @@ namespace Enpowi\Event\Authentication;
 
 use Enpowi\Event;
 
-class ClearImpersonate extends Event\Base {
+class ClearImpersonate extends Event\Base
+{
 
 }

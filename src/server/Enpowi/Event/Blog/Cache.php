@@ -10,6 +10,7 @@ namespace Enpowi\Event\Blog;
 
 use Enpowi\Event;
 
-class Cache extends Event\Base {
+class Cache extends Event\Base
+{
 
 }

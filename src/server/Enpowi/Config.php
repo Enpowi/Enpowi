@@ -12,81 +12,83 @@ use RedBeanPHP\R;
 
 class Config
 {
-	public $moduleDirectory;
+  public $moduleDirectory;
 
-	public $themeModule = 'default';
+  public $themeModule = 'default';
 
-	public $siteName;
-	public $siteUrl;
+  public $siteName;
+  public $siteUrl;
 
-	public $dbHost;
-	public $dbName;
-	public $dbUser;
-	public $dbPassword;
+  public $dbHost;
+  public $dbName;
+  public $dbUser;
+  public $dbPassword;
 
-	public function __construct($moduleDirectory = null)
-	{
-		App::$config = $this;
+  public function __construct($moduleDirectory = null)
+  {
+    App::$config = $this;
 
-		if ($moduleDirectory === null) {
-			$moduleDirectory = dirname(__FILE__) . '/../../../modules/';
-		}
+    if ($moduleDirectory === null) {
+      $moduleDirectory = dirname(__FILE__) . '/../../../modules/';
+    }
 
-		if (file_exists($moduleDirectory)) {
-			$this->moduleDirectory = $moduleDirectory;
-		} else {
-			throw new \Exception("Modules directory, $moduleDirectory, does not exist");
-		}
-	}
+    if (file_exists($moduleDirectory)) {
+      $this->moduleDirectory = $moduleDirectory;
+    } else {
+      throw new \Exception("Modules directory, $moduleDirectory, does not exist");
+    }
+  }
 
-	public function setupSite($name, $url) {
-		$this->siteName = $name;
-		$this->siteUrl = $url;
+  public function setupSite($name, $url)
+  {
+    $this->siteName = $name;
+    $this->siteUrl = $url;
 
-		return $this;
-	}
+    return $this;
+  }
 
-	public function setupMySql($host, $name, $user, $password)
-	{
-		$this->dbHost = $host;
-		$this->dbName = $name;
-		$this->dbUser = $user;
-		$this->dbPassword = $password;
+  public function setupMySql($host, $name, $user, $password)
+  {
+    $this->dbHost = $host;
+    $this->dbName = $name;
+    $this->dbUser = $user;
+    $this->dbPassword = $password;
 
-		R::setup('mysql:host=' . $host . ';dbname=' . $name, $user, $password);
+    R::setup('mysql:host=' . $host . ';dbname=' . $name, $user, $password);
 
-		return $this;
-	}
+    return $this;
+  }
 
-	public function setupThemeModule($moduleName)
-	{
-		$moduleDir = $this->moduleDirectory . $moduleName;
+  public function setupThemeModule($moduleName)
+  {
+    $moduleDir = $this->moduleDirectory . $moduleName;
 
-		if (file_exists($moduleDir)) {
-			$this->themeModule = $moduleName;
-		} else {
-			throw new \Exception("Module directory, $moduleDir, does not exist");
-		}
-	}
+    if (file_exists($moduleDir)) {
+      $this->themeModule = $moduleName;
+    } else {
+      throw new \Exception("Module directory, $moduleDir, does not exist");
+    }
+  }
 
-	public function setupMail($from, $fromName, $host, $username, $password, $smtpAuth = true, $smtpSecure = 'tls', $port = 587) {
-		Mail::setup($from, $fromName, $host, $username, $password, $smtpAuth, $smtpSecure, $port);
+  public function setupMail($from, $fromName, $host, $username, $password, $smtpAuth = true, $smtpSecure = 'tls', $port = 587)
+  {
+    Mail::setup($from, $fromName, $host, $username, $password, $smtpAuth, $smtpSecure, $port);
 
-		return $this;
-	}
+    return $this;
+  }
 
-	public function requireSSL()
-	{
-		App::requireSSL();
+  public function requireSSL()
+  {
+    App::requireSSL();
 
-		return $this;
-	}
+    return $this;
+  }
 
-	public function showErrors()
-	{
-		error_reporting(E_ALL);
-		ini_set("display_errors", 1);
+  public function showErrors()
+  {
+    error_reporting(E_ALL);
+    ini_set("display_errors", 1);
 
-		return $this;
-	}
+    return $this;
+  }
 }

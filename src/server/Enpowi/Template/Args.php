@@ -10,16 +10,18 @@ namespace Enpowi\Template;
 
 use Enpowi\App;
 
-class Args {
+class Args
+{
 
-	static public function get($args = []) {
+  static public function get($args = [])
+  {
 
-		$properties = App::$config;
+    $properties = App::$config;
 
-		foreach ($properties as $field => $value) {
-			$args[$field] = $value;
-		}
+    foreach ($properties as $field => $value) {
+      $args[$field] = $value;
+    }
 
-		return $args;
-	}
+    return $args;
+  }
 }

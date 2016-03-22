@@ -11,6 +11,7 @@ namespace Enpowi\Event\User;
 use Enpowi\Event;
 
 
-class BeforeStore extends Event\Base {
+class BeforeStore extends Event\Base
+{
 
 }

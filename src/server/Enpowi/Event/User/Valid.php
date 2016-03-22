@@ -10,5 +10,6 @@ namespace Enpowi\Event\User;
 
 use Enpowi\Event;
 
-class Valid extends Event\Base {
+class Valid extends Event\Base
+{
 }

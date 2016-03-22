@@ -10,6 +10,7 @@ namespace Enpowi\Event\User;
 
 use Enpowi\Event;
 
-class UpdateEmail extends Event\Base {
+class UpdateEmail extends Event\Base
+{
 
 }

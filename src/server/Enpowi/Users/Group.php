@@ -16,246 +16,246 @@ use Enpowi\Generic;
 class Group extends Generic\PageableDataItem
 {
 
-    public $id;
-	public $name;
-	public $perms;
-	public $isSystem = false;
+  public $id;
+  public $name;
+  public $perms;
+  public $isSystem = false;
 
-	private $_bean;
+  private $_bean;
 
-	public function __construct($name, $bean = null)
-	{
-		$this->name = $name;
+  public function __construct($name, $bean = null)
+  {
+    $this->name = $name;
 
-		if ($bean === null) {
-			$this->_bean = $bean = R::findOne( 'group', ' name = ? ', [ $name ] );
-		} else {
-			$this->_bean = $bean;
-		}
+    if ($bean === null) {
+      $this->_bean = $bean = R::findOne('group', ' name = ? ', [$name]);
+    } else {
+      $this->_bean = $bean;
+    }
 
-		$this->convertFromBean();
-	}
+    $this->convertFromBean();
+  }
 
-	public function convertFromBean()
-	{
-		$bean = $this->_bean;
-		if (
-			$bean !== null
-			&& (
-				$bean->isDefaultRegistered
-				|| $bean->isDefaultAnonymous
-				|| $bean->isEveryone
-				|| $bean->isSuper
-			)
-		) {
-			$this->isSystem = true;
-			$this->id = $bean->getID();
-			$this->name = $this->_bean->name;
-		}
-		return $this;
-	}
+  public function convertFromBean()
+  {
+    $bean = $this->_bean;
+    if (
+      $bean !== null
+      && (
+        $bean->isDefaultRegistered
+        || $bean->isDefaultAnonymous
+        || $bean->isEveryone
+        || $bean->isSuper
+      )
+    ) {
+      $this->isSystem = true;
+      $this->id = $bean->getID();
+      $this->name = $this->_bean->name;
+    }
+    return $this;
+  }
 
-	public static function getWithPermissions($name, $bean = null)
-	{
-		$group = new self($name, $bean);
-		$group->updatePerms();
-		return $group;
-	}
+  public static function getWithPermissions($name, $bean = null)
+  {
+    $group = new self($name, $bean);
+    $group->updatePerms();
+    return $group;
+  }
 
-	public static function create($groupName, $isDefaultRegistered = false, $isDefaultAnonymous = false, $isEveryone = false, $isSuper = false)
-	{
-		$count = R::count( 'group', ' name = ? ', [ $groupName ] );
+  public static function create($groupName, $isDefaultRegistered = false, $isDefaultAnonymous = false, $isEveryone = false, $isSuper = false)
+  {
+    $count = R::count('group', ' name = ? ', [$groupName]);
 
-		if ($count < 1) {
-			$bean = R::dispense('group');
-			$bean->name = $groupName;
-			$bean->isDefaultRegistered = $isDefaultRegistered;
-			$bean->isDefaultAnonymous = $isDefaultAnonymous;
-			$bean->isEveryone = $isEveryone;
-			$bean->isSuper = $isSuper;
-			$bean->ownUserList;
-			$bean->sharedPermList;
+    if ($count < 1) {
+      $bean = R::dispense('group');
+      $bean->name = $groupName;
+      $bean->isDefaultRegistered = $isDefaultRegistered;
+      $bean->isDefaultAnonymous = $isDefaultAnonymous;
+      $bean->isEveryone = $isEveryone;
+      $bean->isSuper = $isSuper;
+      $bean->ownUserList;
+      $bean->sharedPermList;
 
-			$id = R::store($bean);
+      $id = R::store($bean);
 
-			return new Group($groupName, $bean);
-		}
+      return new Group($groupName, $bean);
+    }
 
-		return null;
-	}
+    return null;
+  }
 
-	public function remove()
-	{
-		$bean = R::findOne( 'group', ' name = ? ', [ $this->name ] );
+  public function remove()
+  {
+    $bean = R::findOne('group', ' name = ? ', [$this->name]);
 
-		if ($bean !== null) {
-			R::trash($bean);
-			return true;
-		}
-		return false;
-	}
+    if ($bean !== null) {
+      R::trash($bean);
+      return true;
+    }
+    return false;
+  }
 
-	public function addUser(User $user)
-	{
-		$userBean = $user->bean();
-		$groupBean = $this->_bean;
+  public function addUser(User $user)
+  {
+    $userBean = $user->bean();
+    $groupBean = $this->_bean;
 
-		if ($groupBean !== null) {
-			$userBean->sharedGroupList[] = $groupBean;
+    if ($groupBean !== null) {
+      $userBean->sharedGroupList[] = $groupBean;
 
-			R::store($userBean);
+      R::store($userBean);
 
-			$user->updateGroups();
+      $user->updateGroups();
 
-			return true;
-		}
-		return false;
-	}
+      return true;
+    }
+    return false;
+  }
 
-	public function removeUser(User $user)
-	{
-		$userBean = $user->bean();
-		$groupBean = $this->_bean;
+  public function removeUser(User $user)
+  {
+    $userBean = $user->bean();
+    $groupBean = $this->_bean;
 
-		if ($groupBean !== null && $user !== null) {
+    if ($groupBean !== null && $user !== null) {
 
-			if (
-				!$groupBean->isDefaultRegistered
-				&& !$groupBean->isDefaultAnonymous
-				&& !$groupBean->isEveryone
-			) {
-				unset($userBean->sharedGroupList[$groupBean->getID()]);
+      if (
+        !$groupBean->isDefaultRegistered
+        && !$groupBean->isDefaultAnonymous
+        && !$groupBean->isEveryone
+      ) {
+        unset($userBean->sharedGroupList[$groupBean->getID()]);
 
-				R::store($userBean);
+        R::store($userBean);
 
-				$user->updateGroups();
-			}
+        $user->updateGroups();
+      }
 
-			return false;
-		}
-		return true;
-	}
+      return false;
+    }
+    return true;
+  }
 
-	public function countUsers()
-	{
-		return R::count( 'group', ' name = ? ', [ $this->name ] );
-	}
+  public function countUsers()
+  {
+    return R::count('group', ' name = ? ', [$this->name]);
+  }
 
-	public function users()
-	{
-		$groupBean = $this->_bean;
-		$users = [];
-		foreach($groupBean->sharedUserList as $userBean) {
-			$users[] = new User($userBean->email, $userBean);
-		}
-		return $users;
-	}
+  public function users()
+  {
+    $groupBean = $this->_bean;
+    $users = [];
+    foreach ($groupBean->sharedUserList as $userBean) {
+      $users[] = new User($userBean->email, $userBean);
+    }
+    return $users;
+  }
 
-	public static function groups($pageNumber = 1)
-	{
-		$beans = R::find('group', ' order by name limit :offset, :count', [
-			'offset' => App::pageOffset($pageNumber),
-			'count' => App::$pagingSize
-		]);
-		$groups = [];
+  public static function groups($pageNumber = 1)
+  {
+    $beans = R::find('group', ' order by name limit :offset, :count', [
+      'offset' => App::pageOffset($pageNumber),
+      'count' => App::$pagingSize
+    ]);
+    $groups = [];
 
-		foreach($beans as $groupBean) {
-			$groups[] = new Group($groupBean->name, $groupBean);
-		}
+    foreach ($beans as $groupBean) {
+      $groups[] = new Group($groupBean->name, $groupBean);
+    }
 
-		return $groups;
-	}
+    return $groups;
+  }
 
-	public static function editableGroups($updatePerms = false, $excludeSuper = false, $pageNumber = 1)
-	{
-		$beans = null;
-		$groups = [];
+  public static function editableGroups($updatePerms = false, $excludeSuper = false, $pageNumber = 1)
+  {
+    $beans = null;
+    $groups = [];
 
-		if ($excludeSuper) {
-			$beans = R::find('group', '
+    if ($excludeSuper) {
+      $beans = R::find('group', '
 				is_default_anonymous = 0
 				and is_default_registered = 0
 				and is_everyone = 0
 				and is_super = 0
 				order by name
 				limit :offset, :count', [
-				'offset' => App::pageOffset($pageNumber),
-				'count' => App::$pagingSize
-			]);
-		} else {
-			$beans = R::find('group', '
+        'offset' => App::pageOffset($pageNumber),
+        'count' => App::$pagingSize
+      ]);
+    } else {
+      $beans = R::find('group', '
 				is_default_anonymous = 0
 				and is_default_registered = 0
 				and is_everyone = 0
 				order by name
 				limit :offset, :count', [
-				'offset' => App::pageOffset($pageNumber),
-				'count' => App::$pagingSize
-			]);
-		}
+        'offset' => App::pageOffset($pageNumber),
+        'count' => App::$pagingSize
+      ]);
+    }
 
-		foreach($beans as $groupBean) {
-			$group = new Group( $groupBean->name, $groupBean );
+    foreach ($beans as $groupBean) {
+      $group = new Group($groupBean->name, $groupBean);
 
-			$groups[] = $group;
+      $groups[] = $group;
 
-			if ($updatePerms) {
-				$group->updatePerms();
-			}
-		}
+      if ($updatePerms) {
+        $group->updatePerms();
+      }
+    }
 
-		return $groups;
-	}
+    return $groups;
+  }
 
-	public static function isValidGroupName($groupName)
-	{
-		return v::alnum()
-			->noWhitespace()
-			->length(3,200)
-			->validate($groupName);
-	}
+  public static function isValidGroupName($groupName)
+  {
+    return v::alnum()
+      ->noWhitespace()
+      ->length(3, 200)
+      ->validate($groupName);
+  }
 
-	public function bean()
-	{
-		return $this->_bean;
-	}
+  public function bean()
+  {
+    return $this->_bean;
+  }
 
-	public function ensureExists()
-	{
-		if ($this->_bean === null) {
-			$this->_bean = R::findOne('group', ' name = ? ', [$this->name]);
-		}
+  public function ensureExists()
+  {
+    if ($this->_bean === null) {
+      $this->_bean = R::findOne('group', ' name = ? ', [$this->name]);
+    }
 
-		return $this;
-	}
+    return $this;
+  }
 
-	public function updatePerms()
-	{
-		$perms = [];
-		$permBeans = R::findAll('perm', ' group_name = ? ', [$this->name]);
+  public function updatePerms()
+  {
+    $perms = [];
+    $permBeans = R::findAll('perm', ' group_name = ? ', [$this->name]);
 
-		foreach($permBeans as $permBean) {
-			$perms[$permBean->module . '/' . $permBean->component] = new Perm($permBean->module, $permBean->component, $this);
-		}
+    foreach ($permBeans as $permBean) {
+      $perms[$permBean->module . '/' . $permBean->component] = new Perm($permBean->module, $permBean->component, $this);
+    }
 
-		$this->perms = $perms;
+    $this->perms = $perms;
 
-		return $this;
-	}
+    return $this;
+  }
 
-	public function removePerms()
-	{
-		if ($this->name !== 'Administrator') {
-			$beans = R::findAll('perm', ' group_name = ? ', [$this->name]);
+  public function removePerms()
+  {
+    if ($this->name !== 'Administrator') {
+      $beans = R::findAll('perm', ' group_name = ? ', [$this->name]);
 
-			R::trashAll($beans);
-		}
+      R::trashAll($beans);
+    }
 
-		return $this;
-	}
+    return $this;
+  }
 
-	public static function pages()
-	{
-		return R::count('group') / App::$pagingSize;
-	}
+  public static function pages()
+  {
+    return R::count('group') / App::$pagingSize;
+  }
 }

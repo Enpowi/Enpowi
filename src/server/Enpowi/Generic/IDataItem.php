@@ -11,7 +11,9 @@ namespace Enpowi\Generic;
 
 interface IDataItem
 {
-	public function convertFromBean();
-	public function bean();
-	public function exists();
+  public function convertFromBean();
+
+  public function bean();
+
+  public function exists();
 }
