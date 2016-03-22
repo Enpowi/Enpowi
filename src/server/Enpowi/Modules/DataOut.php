@@ -10,27 +10,30 @@ namespace Enpowi\Modules;
 
 use mindplay\jsonfreeze\JsonSerializer;
 
-class DataOut {
+class DataOut
+{
 
-	public $serializer;
-	public $objects = [];
-	public $json;
-	public $id;
+  public $serializer;
+  public $objects = [];
+  public $json;
+  public $id;
 
-	public function __construct()
-	{
-		$this->serializer = new JsonSerializer();
-		$this->serializer->skipPrivateProperties();
-	}
+  public function __construct()
+  {
+    $this->serializer = new JsonSerializer();
+    $this->serializer->skipPrivateProperties();
+  }
 
-	public function add($key, $object)
-	{
-		$this->objects[$key] = $object;
-		return $this;
-	}
+  public function add($key, $object)
+  {
+    $this->objects[$key] = $object;
+    return $this;
+  }
 
-	public function out()
-	{
-		return rawurlencode($this->serializer->serialize($this->objects));
-	}
+  public function bind()
+  {
+    $data = $this->serializer->serialize($this->objects);
+    echo "<script type='text/data'>$data</script>";
+    return $this;
+  }
 }

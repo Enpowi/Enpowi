@@ -114,6 +114,7 @@ Namespace('Enpowi').Class('App', {
       _continue: 'continue',
       delay: 'delay',
       deny: 'deny',
+      directiveReady: 'directiveReady',
       go: 'go',
       land: 'land',
       listened: 'listened',
@@ -328,6 +329,7 @@ Namespace('Enpowi').Class('App', {
       scriptXSS = [],
       scriptsRemote = [],
       scriptsLocal = [],
+      scriptsData = [],
       vue,
       vues = [],
       datas = [],
@@ -336,8 +338,13 @@ Namespace('Enpowi').Class('App', {
         if (scriptsLocal.length > 0) {
           for (var i = 0; i < scriptsLocal.length; i++) {
             try {
-              (new Function('datas', 'vues', 'elements', scriptsLocal[i]))
-              (datas, vues, elements);
+              if (datas.length === 1) {
+                (new Function('data', 'vues', 'elements', scriptsLocal[i]))
+                (datas[0], vues, elements);
+              } else {
+                (new Function('datas', 'vues', 'elements', scriptsLocal[i]))
+                (datas, vues, elements);
+              }
             } catch (e) {
               console.log(e);
               console.log(scriptsLocal[i]);
@@ -357,6 +364,17 @@ Namespace('Enpowi').Class('App', {
 
     for (; i < max; i++) {
       script = scripts[i];
+      if (script.hasAttribute('type')) {
+        switch (script.getAttribute('type')) {
+          case '':
+          case 'text/javascript':break;
+          case 'text/data':
+            scriptsData.push(script.innerHTML);
+            break;
+          default: continue;
+        }
+      }
+
       if (script.hasAttribute('src')) {
         if (script.hasAttribute('xss')) {
           scriptXSS.push(script);
@@ -367,7 +385,6 @@ Namespace('Enpowi').Class('App', {
         scriptsLocal.push(script.innerHTML);
       }
     }
-
 
     //process html
     while (el.children.length > 0) {
@@ -381,23 +398,18 @@ Namespace('Enpowi').Class('App', {
           el: child,
           data: (function () {
             var data = {
-                'global': Enpowi.App.global === undefined ? {} : Enpowi.App.global,
-                'session': Enpowi.session,
-                'module': m,
-                'component': c,
-                'appModule': Enpowi.App.m,
-                'appComponent': Enpowi.App.c
+                global: Enpowi.App.global === undefined ? {} : Enpowi.App.global,
+                session: Enpowi.session,
+                module: m,
+                component: c,
+                appModule: Enpowi.App.m,
+                appComponent: Enpowi.App.c
               },
-              jsonEncoded = child.getAttribute('data'),
-              jsonDecoded,
               moduleData,
               i;
 
-            if (jsonEncoded) {
-              child.removeAttribute('data');
-
-              jsonDecoded = decodeURIComponent(jsonEncoded);
-              moduleData = JSON.parse(jsonDecoded);
+            if (scriptsData.length > 0) {
+              moduleData = JSON.parse(scriptsData[0]);
 
               for (i in moduleData) if (i && moduleData.hasOwnProperty(i)) {
                 data[i] = moduleData[i];
