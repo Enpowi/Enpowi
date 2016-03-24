@@ -156,7 +156,6 @@ Namespace('Enpowi').Class('App', {
     this.loadingElement = null;
     this.routeCallback = callback;
 
-    Enpowi.directives.setup();
     Enpowi.translation.setup();
 
     this
@@ -199,22 +198,25 @@ Namespace('Enpowi').Class('App', {
               return;
             }
           }
-          app.loadScript('modules/?module=app&component=session.js', function () {
-            completed = true;
-            Enpowi.App.m = m;
-            Enpowi.App.c = c;
-            var result = app.process(data, m, c),
-              title = result.querySelector('title');
 
-            if (title) {
-              app.changeTitle(title.textContent);
-              title.parentNode.removeChild(title);
-            } else {
-              app.changeTitle(Enpowi.session.siteName);
-            }
+          Enpowi.directives.loadDirectivesFromHtml(data, function() {
+            app.loadScript('modules/?module=app&component=session.js', function () {
+              completed = true;
+              Enpowi.App.m = m;
+              Enpowi.App.c = c;
+              var result = app.process(data, m, c),
+                title = result.querySelector('title');
 
-            app.routeCallback(result);
-            pubTo.land([m, c, route, url]);
+              if (title) {
+                app.changeTitle(title.textContent);
+                title.parentNode.removeChild(title);
+              } else {
+                app.changeTitle(Enpowi.session.siteName);
+              }
+
+              app.routeCallback(result);
+              pubTo.land([m, c, route, url]);
+            });
           });
         });
       };
@@ -579,8 +581,10 @@ Namespace('Enpowi').Class('App', {
     var app = this,
       url;
 
-    this.load(url = Enpowi.utilities.url(urlRaw), function (moduleHtml) {
-      callback(app.process(moduleHtml, url.m, url.c));
+    this.load(url = Enpowi.utilities.url(urlRaw), function(moduleHtml) {
+      Enpowi.directives.loadDirectivesFromHtml(moduleHtml, function() {
+        callback(app.process(moduleHtml, url.m, url.c));
+      });
     });
 
     return this;

@@ -26,8 +26,10 @@ app.load('modules/default/loading.html', function (html) {
   app.loadingElement = html;
 });
 
-new Vue({
-  el: document.body
+Enpowi.directives.loadDirectivesFromHtml(document.body.innerHTML, function() {
+  new Vue({
+    el: document.body
+  });
 });
 
 $(document).keydown(function (e) {

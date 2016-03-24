@@ -3,7 +3,7 @@ Vue.directive('side', {
     var directive = this,
       el = this.el;
 
-    me.setBinding(directive);
+    Enpowi.directives.setBinding(directive);
 
     while (el.firstChild !== null) {
       el.removeChild(el.lastChild);
@@ -11,7 +11,7 @@ Vue.directive('side', {
 
     app.loadModule(Enpowi.session.theme + '/' + this.expression, function (html) {
       el.appendChild(html);
-      me.doneBinding(directive);
+      Enpowi.directives.doneBinding(directive);
     });
   }
 });

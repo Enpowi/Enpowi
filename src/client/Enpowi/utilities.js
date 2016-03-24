@@ -109,6 +109,9 @@ Namespace('Enpowi').Class('utilities', {
       }
 
       return parser.children;
+    },
+    removeScripts: function(html) {
+      return html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
     }
   }
 });

@@ -3,7 +3,7 @@ Vue.directive('header', {
     var el = this.el,
       directive = this;
 
-    me.setBinding(directive);
+    Enpowi.directives.setBinding(directive);
 
     while (el.firstChild !== null) {
       el.removeChild(el.lastChild);
@@ -11,7 +11,7 @@ Vue.directive('header', {
 
     app.loadModule(Enpowi.session.theme + '/header', function (html) {
       el.appendChild(html);
-      me.doneBinding(directive);
+      Enpowi.directives.doneBinding(directive);
     });
   }
 });

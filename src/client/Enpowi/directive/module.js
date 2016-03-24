@@ -3,12 +3,12 @@ Vue.directive('module', {
     var el = this.el,
       directive = this;
 
-    Enpowi.directive.setBinding(directive);
+    Enpowi.directives.setBinding(directive);
 
     switch (el.nodeName) {
       case 'FORM':
         Enpowi.forms.strategy(el, this.vm, this);
-        Enpowi.directive.doneBinding(directive);
+        Enpowi.directives.doneBinding(directive);
     }
   }
 });
