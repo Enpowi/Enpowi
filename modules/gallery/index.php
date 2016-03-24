@@ -57,7 +57,7 @@ if ($galleryId > 0) {
 				v-for="gallery in galleries"
 				title="{{ gallery.name }}"
 				v-show="galleriesImages[ $index ]"
-				src="modules/?m=gallery&c=image&image={{ galleriesImages[ $index ] }}&thumb"
+				v-bind:src="modules/?m=gallery&c=image&image={{ galleriesImages[ $index ] }}&thumb"
 				href="#/gallery?g={{ gallery.id }}">
 		</div>
 	</div>
@@ -81,7 +81,7 @@ if ($galleryId > 0) {
 			<img
 				v-for="image in images"
 				title="{{ image.name }}"
-				src="modules/?m=gallery&c=image&image={{ image.hash }}&thumb"
+				v-bind:src="modules/?m=gallery&c=image&image={{ image.hash }}&thumb"
 				data-fullsrc="modules/?m=gallery&c=image&image={{ image.hash }}"
 				data-desc="{{ image.description }}">
 		</div>
