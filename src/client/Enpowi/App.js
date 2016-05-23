@@ -338,10 +338,14 @@ Namespace('Enpowi').Class('App', {
         if (scriptsLocal.length > 0) {
           for (var i = 0; i < scriptsLocal.length; i++) {
             try {
-              if (datas.length === 1) {
+              if (datas.length === 0) {
+                (new Function(vues', 'elements', scriptsLocal[i]))
+                (vues, elements);
+              } else if (datas.length === 1) {
                 (new Function('data', 'vues', 'elements', scriptsLocal[i]))
                 (datas[0], vues, elements);
               } else {
+                console.log('warning: multiple module datas are defined.  make sure you know what you are doing.');
                 (new Function('datas', 'vues', 'elements', scriptsLocal[i]))
                 (datas, vues, elements);
               }
@@ -369,7 +373,7 @@ Namespace('Enpowi').Class('App', {
           case '':
           case 'text/javascript':break;
           case 'text/data':
-            scriptsData.push(script.innerHTML);
+            datas.push(JSON.parse(script.innerHTML));
             break;
           default: continue;
         }
@@ -406,15 +410,18 @@ Namespace('Enpowi').Class('App', {
                 appComponent: Enpowi.App.c
               },
               moduleData,
+              max = datas.length,
+              key,
               i;
 
-            if (scriptsData.length > 0) {
-              moduleData = JSON.parse(scriptsData[0]);
+            for (i = 0; i < max; i++) {
+              moduleData = datas[i];
+              for (key in moduleData) {
+                if (!moduleData.hasOwnProperty(key)) continue;
+                if (data.hasOwnProperty(key)) throw new Error('key of ' + key + ' already defined for module data');
 
-              for (i in moduleData) if (i && moduleData.hasOwnProperty(i)) {
-                data[i] = moduleData[i];
+                data[key] = moduleData[key]
               }
-              datas.push(data);
             }
 
             return data;
