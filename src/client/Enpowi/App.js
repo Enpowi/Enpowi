@@ -339,7 +339,7 @@ Namespace('Enpowi').Class('App', {
           for (var i = 0; i < scriptsLocal.length; i++) {
             try {
               if (datas.length === 0) {
-                (new Function(vues', 'elements', scriptsLocal[i]))
+                (new Function('vues', 'elements', scriptsLocal[i]))
                 (vues, elements);
               } else if (datas.length === 1) {
                 (new Function('data', 'vues', 'elements', scriptsLocal[i]))
