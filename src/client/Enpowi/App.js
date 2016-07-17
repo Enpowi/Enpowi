@@ -370,12 +370,15 @@ Namespace('Enpowi').Class('App', {
       script = scripts[i];
       if (script.hasAttribute('type')) {
         switch (script.getAttribute('type')) {
-          case '':
+          case '':break;
           case 'text/javascript':break;
           case 'text/data':
             datas.push(JSON.parse(script.innerHTML));
+            continue;
             break;
-          default: continue;
+          default:
+            continue;
+            break;
         }
       }
 
