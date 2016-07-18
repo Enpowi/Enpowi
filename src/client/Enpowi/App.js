@@ -203,18 +203,19 @@ Namespace('Enpowi').Class('App', {
             completed = true;
             Enpowi.App.m = m;
             Enpowi.App.c = c;
-            var result = app.process(data, m, c),
-              title = result.querySelector('title');
+            app.process(data, m, c, function(result) {
+              var title = result.querySelector('title');
 
-            if (title) {
-              app.changeTitle(title.textContent);
-              title.parentNode.removeChild(title);
-            } else {
-              app.changeTitle(Enpowi.session.siteName);
-            }
+              if (title) {
+                app.changeTitle(title.textContent);
+                title.parentNode.removeChild(title);
+              } else {
+                app.changeTitle(Enpowi.session.siteName);
+              }
 
-            app.routeCallback(result);
-            pubTo.land([m, c, route, url]);
+              app.routeCallback(result);
+              pubTo.land([m, c, route, url]);
+            });
           });
         });
       };
@@ -318,7 +319,15 @@ Namespace('Enpowi').Class('App', {
    * @type {DocumentFragment}
    */
   processContainer: null,
-  process: function (html, m, c) {
+  /**
+   *
+   * @param {String} html
+   * @param {String} m
+   * @param {String} c
+   * @param {Function} [callback]
+   * @returns {DocumentFragment}
+   */
+  process: function (html, m, c, callback) {
     var el = document.createElement('div'),
       frag = this.processContainer = document.createDocumentFragment(),
       child,
@@ -491,9 +500,11 @@ Namespace('Enpowi').Class('App', {
     if (scriptsRemote.length > 0) {
       this.loadScripts(scriptsRemote, function () {
         runJS();
+        if (typeof callback !== 'undefined') callback(frag);
       });
     } else {
       runJS();
+      if (typeof callback !== 'undefined') callback(frag);
     }
 
     if (scriptXSS.length > 0) {
