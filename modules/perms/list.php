@@ -41,9 +41,9 @@ Module::is();
 				</th>
 			</tr>
 		</thead>
-		<tbody v-for="components in moduleMap">
+		<tbody v-for="(moduleName, components) in moduleMap">
 			<tr v-for="component in components">
-				<td>{{ $key }}</td>
+				<td>{{ moduleName }}</td>
 				<td>{{ component }}</td>
 
 
