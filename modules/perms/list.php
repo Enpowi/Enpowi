@@ -52,8 +52,8 @@ Module::is();
                     <input
                         v-module-item
                         type="checkbox"
-                        v-model="anonymousGroup.perms[ $key + '/' + component ]"
-                        value="{{ anonymousGroup.name + '@' + $key + '/' + component }}"
+                        v-model="anonymousGroup.perms[ moduleName + '/' + component ]"
+                        value="{{ anonymousGroup.name + '@' + moduleName + '/' + component }}"
                         name="perm[]">
 				</td>
 
@@ -62,8 +62,8 @@ Module::is();
                     <input
                         v-module-item
                         type="checkbox"
-                        v-model="registeredGroup.perms[ $key + '/' + component ]"
-                        value="{{ registeredGroup.name + '@' + $key + '/' + component }}"
+                        v-model="registeredGroup.perms[ moduleName + '/' + component ]"
+                        value="{{ registeredGroup.name + '@' + moduleName + '/' + component }}"
                         name="perm[]">
 				</td>
 
@@ -72,8 +72,8 @@ Module::is();
                     <input
                         v-module-item
                         type="checkbox"
-                        v-model="group.perms[ $key + '/' + component ]"
-                        value="{{ group.name + '@' + $key + '/' + component }}"
+                        v-model="group.perms[ moduleName + '/' + component ]"
+                        value="{{ group.name + '@' + moduleName + '/' + component }}"
                         name="perm[]">
 				</td>
 			</tr>
