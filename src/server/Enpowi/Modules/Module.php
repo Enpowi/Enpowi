@@ -47,7 +47,9 @@ class Module
     ];
 
     foreach ($moduleFolders as $moduleFolder) {
-      $componentsRaw = array_diff(scandir($parentDir . $moduleFolder), $notComponent);
+      $path = $parentDir . $moduleFolder;
+      if (!is_dir($path)) continue;
+      $componentsRaw = array_diff(scandir($path), $notComponent);
 
       $components = [];
       foreach ($componentsRaw as $componentRaw) {
