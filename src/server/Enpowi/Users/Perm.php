@@ -87,7 +87,7 @@ class Perm
     //*/component
     //*/*
 
-    preg_match('/(?P<group>[a-zA-Z][a-zA-Z0-9-_]+)[@](?P<module>([a-zA-Z][a-zA-Z0-9-_]+|[*]))[\/]?(?P<component>([a-zA-Z][a-zA-Z0-9-_]+|[*]))?/', $string, $matches);
+    preg_match('/(?P<group>[a-zA-Z][a-zA-Z0-9-_ ]+)[@](?P<module>([a-zA-Z][a-zA-Z0-9-_]+|[*]))[\/]?(?P<component>([a-zA-Z][a-zA-Z0-9-_]+|[*]))?/', $string, $matches);
 
     return [
       'group' => $matches['group'],
