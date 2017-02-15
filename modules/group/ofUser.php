@@ -6,10 +6,25 @@ use Enpowi\Modules\DataOut;
 use Enpowi\Modules\Module;
 
 Module::is();
+$userGroupMap = [];
+$editableGroups = Group::editableGroups();
+$user = new User(App::param('email'));
+foreach($editableGroups as $editableGroup) {
+	foreach($user->groups as $userGroup) {
+		if ($editableGroup->id === $userGroup->id) {
+			$userGroupMap[$userGroup->name] = true;
+		}
+	}
+
+	if (empty($userGroupMap[$userGroup->id])) {
+		$userGroupMap[$userGroup->name] = false;
+	}
+}
 
 (new DataOut)
-	->add('user', $user = new User(App::param('email')))
-	->add('groups', Group::editableGroups())
+	->add('user', $user)
+	->add('groups', $editableGroups)
+	->add('userGroupMap', $userGroupMap)
 	->bind();
 
 ?><form
@@ -29,13 +44,12 @@ Module::is();
 		value="{{ stringify( user ) }}">
 
 	<div v-for=" group in groups ">
-
 		<input
 			v-module-item
 			name="groups[]"
 			type="checkbox"
 			value="{{ stringify( group ) }}"
-		    v-model=" arrayLookup(user.groups, 'id', group.id) !== null ">
+			v-model=" userGroupMap[group.name] ">
 
 		<label>{{ group.name }}</label>
 	</div>
